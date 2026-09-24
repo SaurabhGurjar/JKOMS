@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .production-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .production-nav-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        min-height: 62px;
+    }
+
+    .production-nav-heading {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        padding-right: 20px;
+        color: white;
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        font-size: 0.95rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .production-nav-links {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+    }
+
+    .production-nav-link {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 13px;
+        color: #cbd5e1;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: 0.25s ease;
+    }
+
+    .production-nav-link:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .production-nav-link.active {
+        color: white;
+        background: linear-gradient(
+            135deg,
+            #2563eb,
+            #7c3aed
+        );
+        border-color: rgba(147, 197, 253, 0.35);
+    }
+
+    @media (max-width: 767.98px) {
+        .production-nav-wrapper {
+            display: block;
+            padding-top: 10px;
+            padding-bottom: 8px;
+        }
+
+        .production-nav-heading {
+            padding-right: 0;
+            padding-bottom: 8px;
+            border-right: 0;
+        }
+
+        .production-nav-links {
+            padding-bottom: 4px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+    }
+
+</style>
+
+{% block production_extra_css %}{% endblock %}
+{% endblock %}
+
+
+{% block content %}
+
+{% include "production/includes/production_navbar.html" %}
+
+{% block production_content %}
+{% endblock %}
+
+{% endblock %}
+
+
+{% block extra_js %}
+    {% block production_extra_js %}
+    {% endblock %}
+{% endblock %}

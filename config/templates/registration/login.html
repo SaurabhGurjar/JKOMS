@@ -1,0 +1,388 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | JKOMS</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --dark-blue: #0f172a;
+            --dark-slate: #1e293b;
+            --primary-blue: #2563eb;
+            --primary-purple: #7c3aed;
+            --muted-text: #cbd5e1;
+            --glass-background: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(37, 99, 235, 0.25),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(124, 58, 237, 0.25),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--dark-blue),
+                    var(--dark-slate)
+                );
+            background-attachment: fixed;
+            font-family: "Segoe UI", sans-serif;
+            color: white;
+        }
+
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1020px;
+            overflow: hidden;
+            background: var(--glass-background);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.40);
+        }
+
+        .brand-panel {
+            min-height: 590px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 55px;
+            background: linear-gradient(
+                135deg,
+                rgba(37, 99, 235, 0.92),
+                rgba(124, 58, 237, 0.92)
+            );
+        }
+
+        .brand-content {
+            display: flex;
+
+        }
+        .brand-icon {
+            width: 85px;
+            height: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 24px;
+            font-size: 38px;
+        }
+
+        .brand-panel h1 {
+            font-size: 2.3rem;
+            font-weight: 750;
+        }
+
+        .brand-panel p {
+            max-width: 420px;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.7;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .feature-item i {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .form-panel {
+            min-height: 590px;
+            display: flex;
+            align-items: center;
+            padding: 55px;
+        }
+
+        .form-content {
+            width: 100%;
+        }
+
+        .form-content h2 {
+            font-weight: 700;
+        }
+
+        .form-content .subtitle {
+            color: var(--muted-text);
+        }
+
+        .form-label {
+            margin-bottom: 8px;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .input-group-text {
+            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.17);
+            border-right: 0;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .form-control {
+            min-height: 50px;
+            color: white;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.17);
+            border-left: 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .form-control:focus {
+            color: white;
+            background: rgba(255, 255, 255, 0.11);
+            border-color: #60a5fa;
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .login-button {
+            min-height: 50px;
+            background: linear-gradient(
+                135deg,
+                var(--primary-blue),
+                var(--primary-purple)
+            );
+            border: 0;
+            border-radius: 12px;
+            font-weight: 650;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .error-box {
+            padding: 14px;
+            margin-bottom: 20px;
+            color: #fecaca;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+        }
+
+        .login-footer {
+            margin-top: 25px;
+            color: var(--muted-text);
+            font-size: 0.82rem;
+            text-align: center;
+        }
+
+        @media (max-width: 767px) {
+            .brand-panel {
+                min-height: auto;
+                padding: 35px;
+            }
+
+            .brand-panel h1 {
+                font-size: 1.8rem;
+            }
+
+            .feature-list {
+                display: none;
+            }
+
+            .form-panel {
+                min-height: auto;
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+    <div class="login-container">
+
+        <div class="row g-0">
+
+            <!-- JKOMS information panel -->
+
+            <div class="col-md-6">
+                
+                <section class="brand-panel">
+                    <div class="brand-content">
+
+                    <span class="">
+                    <div class="brand-icon">
+                        <img src="{% static 'images/jk_favicon.png' %}" alt="" class="w-100 z-10">
+                    </div>
+                    <h1>JKOMS</h1>
+
+                    </span>
+                        <!-- <img src="{% static 'images/jk_vision_mission.gif' %}" alt="" class="w-50 z-10"> -->
+                    </div>
+
+                    <h5 class="mb-3">
+                        JK Operations Management System
+                    </h5>
+
+                    <p>
+                        An Integrated Digital Platform for End-to-End Manufacturing Operations, Quality, Compliance, and Plant Performance Management.
+                    </p>
+
+                    <div class="feature-list">
+
+                        <div class="feature-item">
+                            <i class="fa-solid fa-industry"></i>
+                            <span>Production monitoring</span>
+                        </div>
+
+                        <div class="feature-item">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Quality and compliance management</span>
+                        </div>
+
+                        <div class="feature-item">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Operational reports and analytics</span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <!-- Login form -->
+<div class="col-md-6">
+  <section class="form-panel">
+    <div class="form-content">
+      <div class="mb-4">
+        <h2>Welcome Back</h2>
+        <p class="subtitle mb-0">
+          Sign in to access the JKOMS dashboard.
+        </p>
+      </div>
+
+      {% if form.errors %}
+      <div class="error-box">
+        <i class="fa-solid fa-circle-exclamation me-2"></i> Invalid username or password. Please try again.
+      </div>
+      {% endif %}
+
+      {% if next and user.is_authenticated %}
+      <div class="error-box">
+        Your account does not have permission to access this page.
+      </div>
+      {% endif %}
+
+      <!-- FIXED: Added the opening form tag here -->
+      <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+          <label for="id_username" class="form-label"> Username </label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Enter your username" autocomplete="username" required autofocus>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="id_password" class="form-label"> Password </label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" name="password" id="id_password" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+          </div>
+        </div>
+
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary login-button w-100">
+          <i class="fa-solid fa-right-to-bracket me-2"></i> Login
+        </button>
+      </form>
+    </div>
+  </section>
+</div>
+
+
+                        <div class="login-footer">
+                            &copy; 2026 JKOMS |
+                            JK Tyre Operations Management System
+                            | Developed By LTP QA
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,652 @@
+{% extends "base.html" %}
+
+{% block title %}
+    User Management | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    /* Statistics */
+
+    .stat-card {
+        height: 100%;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .stat-title {
+        color: var(--muted-text);
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+    }
+
+    .stat-icon {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        font-size: 22px;
+    }
+
+    /* Filter Section */
+
+    .filter-card {
+        padding: 18px;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 44px;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+    }
+
+    .form-control::placeholder {
+        color: #94a3b8;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        color: white;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.2);
+    }
+
+    .form-select option {
+        color: #111827;
+        background: white;
+    }
+
+    /* User Table */
+
+    .table-card {
+        overflow: hidden;
+    }
+
+    .user-table {
+        margin-bottom: 0;
+        color: white;
+    }
+
+    .user-table > :not(caption) > * > * {
+        padding: 15px;
+        color: white;
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.10);
+        vertical-align: middle;
+    }
+
+    .user-table thead th {
+        color: var(--muted-text);
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.78rem;
+        font-weight: 650;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        white-space: nowrap;
+    }
+
+    .user-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .user-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Avatar */
+
+    .user-avatar {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        border-radius: 50%;
+        font-weight: 700;
+    }
+
+    .user-secondary-text {
+        color: var(--muted-text);
+        font-size: 0.82rem;
+    }
+
+    /* Role Badge */
+
+    .role-badge {
+        display: inline-block;
+        padding: 5px 9px;
+        margin: 2px;
+        color: #bfdbfe;
+        background: rgba(37, 99, 235, 0.18);
+        border: 1px solid rgba(96, 165, 250, 0.32);
+        border-radius: 20px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    /* Status */
+
+    .status-active,
+    .status-inactive {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-active {
+        color: #86efac;
+        background: rgba(34, 197, 94, 0.17);
+        border: 1px solid rgba(34, 197, 94, 0.28);
+    }
+
+    .status-inactive {
+        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.17);
+        border: 1px solid rgba(239, 68, 68, 0.28);
+    }
+
+    /* Action Buttons */
+
+    .action-button {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2px;
+        padding: 0;
+        border-radius: 9px;
+    }
+
+    .action-form {
+        display: inline-block;
+        margin: 0;
+    }
+
+    /* Empty State */
+
+    .empty-state {
+        padding: 55px 20px;
+        text-align: center;
+    }
+
+    @media (max-width: 767.98px) {
+        .page-header-actions {
+            width: 100%;
+        }
+
+        .page-header-actions .btn {
+            width: 100%;
+        }
+
+        .user-table {
+            min-width: 1050px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <!-- Page Header -->
+
+    <section class="page-header mb-4">
+
+        <div
+            class="d-flex flex-column flex-md-row
+                   align-items-md-center justify-content-between gap-3"
+        >
+            <div>
+                <h2>
+                    <i class="fa-solid fa-users-gear me-2"></i>
+                    User Management
+                </h2>
+
+                <p>
+                    Create users, assign roles, manage passwords,
+                    and control system access.
+                </p>
+            </div>
+
+            <div class="page-header-actions"> 
+    <a href="{% url 'usermanagement:user_create' %}" class="btn btn-light bg-white border"> 
+        <i class="fa-solid fa-user-plus me-2"></i> Add User 
+    </a> 
+</div>
+
+
+    </section>
+
+    <!-- Statistics -->
+
+    <section class="row g-4 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="glass-card stat-card">
+
+                <div class="d-flex align-items-center justify-content-between">
+
+                    <div>
+                        <div class="stat-title">
+                            TOTAL USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ total_users }}
+                        </h2>
+                    </div>
+
+                    <div
+                        class="stat-icon text-primary
+                               bg-primary bg-opacity-10"
+                    >
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="glass-card stat-card">
+
+                <div class="d-flex align-items-center justify-content-between">
+
+                    <div>
+                        <div class="stat-title">
+                            ACTIVE USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ active_users }}
+                        </h2>
+                    </div>
+
+                    <div
+                        class="stat-icon text-success
+                               bg-success bg-opacity-10"
+                    >
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="glass-card stat-card">
+
+                <div class="d-flex align-items-center justify-content-between">
+
+                    <div>
+                        <div class="stat-title">
+                            INACTIVE USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ inactive_users }}
+                        </h2>
+                    </div>
+
+                    <div
+                        class="stat-icon text-danger
+                               bg-danger bg-opacity-10"
+                    >
+                        <i class="fa-solid fa-user-slash"></i>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="glass-card stat-card">
+
+                <div class="d-flex align-items-center justify-content-between">
+
+                    <div>
+                        <div class="stat-title">
+                            STAFF USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ staff_users }}
+                        </h2>
+                    </div>
+
+                    <div
+                        class="stat-icon text-warning
+                               bg-warning bg-opacity-10"
+                    >
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Search and Filters -->
+
+    <section class="glass-card filter-card mb-4">
+
+       <form method="get" action="{% url 'usermanagement:user_list' %}">
+
+            <div class="row g-3">
+
+                <div class="col-lg-5">
+
+                    <label
+                        for="userSearch"
+                        class="visually-hidden"
+                    >
+                        Search Users
+                    </label>
+
+                    <input
+                        type="search"
+                        id="userSearch"
+                        name="search"
+                        value="{{ search_query }}"
+                        class="form-control"
+                        placeholder="Search name, username, or email"
+                    >
+
+                </div>
+
+                <div class="col-lg-2">
+
+                    <label
+                        for="statusFilter"
+                        class="visually-hidden"
+                    >
+                        User Status
+                    </label>
+
+                    <select
+                        id="statusFilter"
+                        name="status"
+                        class="form-select"
+                    >
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option
+                            value="active"
+                            {% if status_filter == "active" %}
+                                selected
+                            {% endif %}
+                        >
+                            Active
+                        </option>
+
+                        <option
+                            value="inactive"
+                            {% if status_filter == "inactive" %}
+                                selected
+                            {% endif %}
+                        >
+                            Inactive
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <label
+                        for="roleFilter"
+                        class="visually-hidden"
+                    >
+                        User Role
+                    </label>
+
+                    <select
+                        id="roleFilter"
+                        name="role"
+                        class="form-select"
+                    >
+                        <option value="">
+                            All Roles
+                        </option>
+
+                        {% for group in groups %}
+
+                            <option
+                                value="{{ group.id }}"
+                                {% if role_filter == group.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ group.name }}
+                            </option>
+
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <div class="col-lg-2">
+
+                    <div class="d-grid gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            <i class="fa-solid fa-magnifying-glass me-1"></i>
+                            Search
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+           {% if search_query or status_filter or role_filter %}
+
+    <div class="mt-3">
+
+        <a href="{% url 'usermanagement:user_list' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-filter-circle-xmark me-1"></i>
+            Clear Filters
+        </a>
+
+    </div>
+
+{% endif %}
+
+        </form>
+
+    </section>
+
+    <!-- User Table -->
+
+    <section class="glass-card table-card">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Staff</th>
+                        <th>Date Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for user_item in users %}
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <span class="user-avatar">
+                                        {{ user_item.username|first|upper }}
+                                    </span>
+
+                                    <div>
+                                        <div class="fw-semibold">
+                                            {% if user_item.get_full_name %}
+                                                {{ user_item.get_full_name }}
+                                            {% else %}
+                                                {{ user_item.username }}
+                                            {% endif %}
+                                        </div>
+
+                                        <small>
+                                            @{{ user_item.username }}
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                {{ user_item.email|default:"Not provided" }}
+                            </td>
+
+                            <td>
+                                {% for group in user_item.groups.all %}
+                                    <span class="role-badge">
+                                        {{ group.name }}
+                                    </span>
+                                {% empty %}
+                                    <span   >
+                                        No role
+                                    </span>
+                                {% endfor %}
+                            </td>
+
+                            <td>
+                                {% if user_item.is_active %}
+                                    <span class="status-active">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        Active
+                                    </span>
+                                {% else %}
+                                    <span class="status-inactive">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                        Inactive
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if user_item.is_staff %}
+                                    <span class="badge bg-warning text-dark">
+                                        Yes
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        No
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {{ user_item.date_joined|date:"d M Y" }}
+                            </td>
+
+                            <td class="text-nowrap">
+
+                                <a href={% url 'usermanagement:user_edit' user_item.id %}>
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+
+                                <a href={% url 'usermanagement:user_password_reset' user_item.id %}>
+                                    <i class="fa-solid fa-key"></i>
+                                </a>
+
+                                <a href={% url 'usermanagement:user_status_toggle' user_item.id %}>
+                                    {% csrf_token %}
+                                </a>
+                                    <button
+                                        type="submit"
+                                        class="action-button btn
+                                        {% if user_item.is_active %}
+                                            btn-danger
+                                        {% else %}
+                                            btn-success
+                                        {% endif %}"
+                                        title="Change user status"
+                                        onclick="return confirm('Change status for this user?');"
+                                    >
+                                        {% if user_item.is_active %}
+                                            <i class="fa-solid fa-user-slash"></i>
+                                        {% else %}
+                                            <i class="fa-solid fa-user-check"></i>
+                                        {% endif %}
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+
+                                <i
+                                    class="fa-solid fa-users-slash
+                                           fa-3x text-secondary mb-3"
+                                ></i>
+
+                                <h5>No users found</h5>
+
+                                <p class="text-light-emphasis mb-0">
+                                    Add a user or change the search filter.
+                                </p>
+
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+</main>
+{% endblock %}

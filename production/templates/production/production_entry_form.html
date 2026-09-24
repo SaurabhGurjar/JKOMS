@@ -1,0 +1,1316 @@
+{% extends "production/production_base.html" %}
+
+{% block title %}
+    {{ entry_config.title }} | {{ selected_department.name }} | JKOMS
+{% endblock %}
+
+
+{% block production_extra_css %}
+<style>
+    .entry-form-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .department-summary {
+        padding: 20px;
+        margin-bottom: 24px;
+        background: rgba(37, 99, 235, 0.12);
+        border: 1px solid rgba(96, 165, 250, 0.25);
+        border-radius: 16px;
+    }
+
+    .department-summary-icon {
+        width: 58px;
+        height: 58px;
+        flex: 0 0 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #93c5fd;
+        background: rgba(37, 99, 235, 0.18);
+        border: 1px solid rgba(96, 165, 250, 0.25);
+        border-radius: 16px;
+        font-size: 24px;
+    }
+
+    .department-summary h5 {
+        margin-bottom: 4px;
+        font-weight: 700;
+    }
+
+    .department-summary p {
+        margin-bottom: 0;
+        color: var(--muted-text);
+    }
+
+    .entry-form-card {
+        padding: 40px;
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .form-section:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        font-size: 1.05rem;
+        font-weight: 700;
+    }
+
+    .form-label {
+        margin-bottom: 8px;
+        color: #e2e8f0;
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+
+    .required-mark {
+        color: #f87171;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 46px;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+    }
+
+    .form-control::placeholder {
+        color: #94a3b8;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        color: white;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.20);
+    }
+
+    .form-select option {
+        color: #111827;
+        background: white;
+    }
+
+    textarea.form-control {
+        min-height: 105px;
+        resize: vertical;
+    }
+
+    .form-control::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+    }
+
+    .read-only-field {
+        color: #cbd5e1;
+        background: rgba(255, 255, 255, 0.04);
+        cursor: not-allowed;
+    }
+
+    .form-help {
+        margin-top: 6px;
+        color: var(--muted-text);
+        font-size: 0.79rem;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding-top: 24px;
+        margin-top: 28px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .entry-notice {
+        padding: 15px 18px;
+        margin-bottom: 24px;
+        color: #fde68a;
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.25);
+        border-radius: 12px;
+    }
+
+    @media (max-width: 767.98px) {
+        .entry-form-card {
+            padding: 22px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block production_content %}
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <!-- Page Header -->
+
+    <section class="page-header mb-4">
+        <div
+            class="d-flex flex-column flex-md-row
+                   align-items-md-center justify-content-between gap-3"
+        >
+            <div>
+                <h2>
+                    <i class="{{ entry_config.icon }} me-2"></i>
+                    {{ entry_config.title }}
+                </h2>
+
+                <p>
+                    Enter production information for
+                    <strong>{{ selected_department.name }}</strong>.
+                </p>
+            </div>
+
+            <a href="{% url 'production:department_selection' entry_type %}" class="btn btn-outline">
+                <i class="fa-solid fa-arrow-left me-2"></i>
+                Change Department
+            </a>
+        </div>
+    </section>
+
+    <div class="entry-form-container">
+
+        <!-- Selected Department -->
+
+        <section class="department-summary">
+            <div class="d-flex align-items-center gap-3">
+
+                <div class="department-summary-icon">
+                    <i class="{{ selected_department.icon }}"></i>
+                </div>
+
+                <div>
+                    <h5>{{ selected_department.name }}</h5>
+
+                    <p>
+                        {{ selected_department.description }}
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Design Notice -->
+
+        <div class="entry-notice">
+            <i class="fa-solid fa-circle-info me-2"></i>
+
+            This is currently a design-only form. Database saving and
+            department-based authorization will be added later.
+        </div>
+
+        <!-- Entry Form -->
+
+        <section class="glass-card entry-form-card p-4 mt-2">
+
+            <form method="post" id="entryForm">
+                {% csrf_token %}
+
+                <!-- Common Entry Information -->
+
+                <div class="form-section mt-2 mb-2">
+
+                    <div class="form-section-title">
+                        <i class="fa-solid fa-clipboard-list text-primary"></i>
+                        Entry Information
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <label
+                                for="entryDate"
+                                class="form-label"
+                            >
+                                Entry Date
+                                <span class="required-mark">*</span>
+                            </label>
+
+                            <input
+                                type="date"
+                                id="entryDate"
+                                name="entry_date"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <label
+                                for="departmentName"
+                                class="form-label"
+                            >
+                                Department
+                            </label>
+
+                            <input
+                                type="text"
+                                id="departmentName"
+                                class="form-control read-only-field"
+                                value="{{ selected_department.name }}"
+                                readonly
+                            >
+
+                            <input
+                                type="hidden"
+                                name="department"
+                                value="{{ selected_department.slug }}"
+                            >
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <label
+                                for="shift"
+                                class="form-label"
+                            >
+                                Shift
+                                <span class="required-mark">*</span>
+                            </label>
+
+                            <select
+                                id="shift"
+                                name="shift"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">Select Shift</option>
+                                <option value="a">Shift A</option>
+                                <option value="b">Shift B</option>
+                                <option value="c">Shift C</option>
+                                <option value="general">General Shift</option>
+                            </select>
+
+                        </div>
+
+                        <!-- <div class="col-lg-4 col-md-6">
+
+                            <label
+                                for="productionLine"
+                                class="form-label"
+                            >
+                                Production Line
+                            </label>
+
+                            <select
+                                id="productionLine"
+                                name="production_line"
+                                class="form-select"
+                            >
+                                <option value="">Select Production Line</option>
+                                <option value="line-1">Line 1</option>
+                                <option value="line-2">Line 2</option>
+                                <option value="line-3">Line 3</option>
+                            </select>
+
+                        </div> -->
+
+                        {% if entry_type != "machine-status" %}
+                        <div class="col-lg-4 col-md-6">
+
+                            <label
+                                for="machine"
+                                class="form-label"
+                            >
+                                Machine
+                            </label>
+
+                            <select
+                                id="machine"
+                                name="machine"
+                                class="form-select"
+                            >
+                                <option value="">Select Machine</option>
+                                <option value="machine-1">Machine 1</option>
+                                <option value="machine-2">Machine 2</option>
+                                <option value="machine-3">Machine 3</option>
+                                <option value="machine-4">Machine 4</option>
+                                <option value="machine-5">Machine 5</option>
+                                <option value="machine-6">Machine 6</option>
+                                <option value="machine-7">Machine 7</option>
+                                <option value="machine-8">Machine 8</option>
+                            </select>
+
+                        </div>
+                        {% endif %}
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <label
+                                for="enteredBy"
+                                class="form-label"
+                            >
+                                Entered By
+                            </label>
+
+                            <input
+                                type="text"
+                                id="enteredBy"
+                                class="form-control read-only-field"
+                                value="{{ request.user.get_full_name|default:request.user.username }}"
+                                readonly
+                            >
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Daily and Shift Production Fields -->
+
+                {% if entry_type == "daily" or entry_type == "shift" %}
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-industry text-success"></i>
+                            Production Details
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="productCode"
+                                    class="form-label"
+                                >
+                                    Product / SKU Code
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="productCode"
+                                    name="product_code"
+                                    class="form-control"
+                                    placeholder="Enter product or SKU code"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="productDescription"
+                                    class="form-label"
+                                >
+                                    Product Description
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="productDescription"
+                                    name="product_description"
+                                    class="form-control"
+                                    placeholder="Enter product description"
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="unit"
+                                    class="form-label"
+                                >
+                                    Unit of Measurement
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <select
+                                    id="unit"
+                                    name="unit"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select Unit</option>
+                                    <option value="nos">Numbers</option>
+                                    <option value="kg">Kilograms</option>
+                                    <option value="meter">Meters</option>
+                                    <option value="batch">Batches</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="targetQuantity"
+                                    class="form-label"
+                                >
+                                    Target Quantity
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="targetQuantity"
+                                    name="target_quantity"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="Enter target quantity"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="actualQuantity"
+                                    class="form-label"
+                                >
+                                    Actual Quantity
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="actualQuantity"
+                                    name="actual_quantity"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="Enter actual quantity"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="rejectionQuantity"
+                                    class="form-label"
+                                >
+                                    Rejection Quantity
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="rejectionQuantity"
+                                    name="rejection_quantity"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    value="0"
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="goodQuantity"
+                                    class="form-label"
+                                >
+                                    Good Quantity
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="goodQuantity"
+                                    name="good_quantity"
+                                    class="form-control read-only-field"
+                                    readonly
+                                >
+
+                                <div class="form-help">
+                                    Calculated as actual quantity minus rejection.
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="achievement"
+                                    class="form-label"
+                                >
+                                    Achievement %
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="achievement"
+                                    class="form-control read-only-field"
+                                    readonly
+                                >
+
+                                <div class="form-help">
+                                    Calculated from target and actual quantities.
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="downtimeMinutes"
+                                    class="form-label"
+                                >
+                                    Downtime in Minutes
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="downtimeMinutes"
+                                    name="downtime_minutes"
+                                    class="form-control"
+                                    min="0"
+                                    value="0"
+                                >
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <!-- Target Entry Fields -->
+
+                {% if entry_type == "target" %}
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-bullseye text-info"></i>
+                            Target Details
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="targetType"
+                                    class="form-label"
+                                >
+                                    Target Type
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <select
+                                    id="targetType"
+                                    name="target_type"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select Target Type</option>
+                                    <option value="daily">Daily Target</option>
+                                    <option value="shift">Shift Target</option>
+                                    <option value="monthly">Monthly Target</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="targetProduct"
+                                    class="form-label"
+                                >
+                                    Product / SKU Code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="targetProduct"
+                                    name="product_code"
+                                    class="form-control"
+                                    placeholder="Enter product or SKU code"
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="targetValue"
+                                    class="form-label"
+                                >
+                                    Target Quantity
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="targetValue"
+                                    name="target_quantity"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="effectiveFrom"
+                                    class="form-label"
+                                >
+                                    Effective From
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="effectiveFrom"
+                                    name="effective_from"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="effectiveTo"
+                                    class="form-label"
+                                >
+                                    Effective To
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="effectiveTo"
+                                    name="effective_to"
+                                    class="form-control"
+                                >
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <!-- Rejection Entry Fields -->
+
+                {% if entry_type == "rejection" %}
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                            Rejection Details
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="rejectionProduct"
+                                    class="form-label"
+                                >
+                                    Product / SKU Code
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="rejectionProduct"
+                                    name="product_code"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="defectCategory"
+                                    class="form-label"
+                                >
+                                    Defect Category
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <select
+                                    id="defectCategory"
+                                    name="defect_category"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select Category</option>
+                                    <option value="material">Material Defect</option>
+                                    <option value="process">Process Defect</option>
+                                    <option value="machine">Machine-Related Defect</option>
+                                    <option value="handling">Handling Damage</option>
+                                    <option value="other">Other</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="rejectionReason"
+                                    class="form-label"
+                                >
+                                    Rejection Reason
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="rejectionReason"
+                                    name="rejection_reason"
+                                    class="form-control"
+                                    placeholder="Enter rejection reason"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="rejectedQuantity"
+                                    class="form-label"
+                                >
+                                    Rejected Quantity
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="rejectedQuantity"
+                                    name="rejected_quantity"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="disposition"
+                                    class="form-label"
+                                >
+                                    Disposition
+                                </label>
+
+                                <select
+                                    id="disposition"
+                                    name="disposition"
+                                    class="form-select"
+                                >
+                                    <option value="">Select Disposition</option>
+                                    <option value="rework">Rework</option>
+                                    <option value="scrap">Scrap</option>
+                                    <option value="hold">Hold</option>
+                                    <option value="use-as-is">Use As Is</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <!-- Downtime Entry Fields -->
+
+                {% if entry_type == "downtime" %}
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-stopwatch text-warning"></i>
+                            Downtime Details
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="downtimeType"
+                                    class="form-label"
+                                >
+                                    Downtime Type
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <select
+                                    id="downtimeType"
+                                    name="downtime_type"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select Downtime Type</option>
+                                    <option value="breakdown">Breakdown</option>
+                                    <option value="planned">Planned Maintenance</option>
+                                    <option value="changeover">Changeover</option>
+                                    <option value="material">Material Shortage</option>
+                                    <option value="power">Power Failure</option>
+                                    <option value="manpower">Manpower Shortage</option>
+                                    <option value="other">Other</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="startTime"
+                                    class="form-label"
+                                >
+                                    Start Time
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="startTime"
+                                    name="start_time"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="endTime"
+                                    class="form-label"
+                                >
+                                    End Time
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="endTime"
+                                    name="end_time"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="downtimeDuration"
+                                    class="form-label"
+                                >
+                                    Duration in Minutes
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="downtimeDuration"
+                                    name="duration_minutes"
+                                    class="form-control read-only-field"
+                                    readonly
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="productionLoss"
+                                    class="form-label"
+                                >
+                                    Estimated Production Loss
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="productionLoss"
+                                    name="production_loss"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="downtimeReason"
+                                    class="form-label"
+                                >
+                                    Downtime Reason
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="downtimeReason"
+                                    name="downtime_reason"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <!-- Machine Status Fields -->
+
+                {% if entry_type == "machine-status" %}
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            <i class="fa-solid fa-screwdriver-wrench text-info"></i>
+                            Machine Status Details
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="machineName"
+                                    class="form-label"
+                                >
+                                    Machine Name
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="machineName"
+                                    name="machine_name"
+                                    class="form-control"
+                                    placeholder="Enter machine name or code"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="machineStatus"
+                                    class="form-label"
+                                >
+                                    Machine Status
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <select
+                                    id="machineStatus"
+                                    name="machine_status"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select Status</option>
+                                    <option value="running">Running</option>
+                                    <option value="idle">Idle</option>
+                                    <option value="breakdown">Breakdown</option>
+                                    <option value="maintenance">Under Maintenance</option>
+                                    <option value="setup">Setup / Changeover</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="statusTime"
+                                    class="form-label"
+                                >
+                                    Status Time
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="statusTime"
+                                    name="status_time"
+                                    class="form-control"
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="operatorName"
+                                    class="form-label"
+                                >
+                                    Operator Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="operatorName"
+                                    name="operator_name"
+                                    class="form-control"
+                                >
+
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <label
+                                    for="maintenanceTicket"
+                                    class="form-label"
+                                >
+                                    Maintenance Ticket
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="maintenanceTicket"
+                                    name="maintenance_ticket"
+                                    class="form-control"
+                                    placeholder="Enter ticket number, if applicable"
+                                >
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <!-- Common Remarks -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+                        <i class="fa-solid fa-message text-secondary"></i>
+                        Remarks
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-12">
+
+                            <label
+                                for="remarks"
+                                class="form-label"
+                            >
+                                Remarks
+                            </label>
+
+                            <textarea
+                                id="remarks"
+                                name="remarks"
+                                class="form-control"
+                                placeholder="Enter additional remarks or observations"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+
+                <div class="form-actions mt-4">
+
+                    <a href="{% url 'production:department_selection' entry_type %}" class="btn btn-secondary">
+                        <i class="fa-solid fa-xmark me-2"></i>
+                        Cancel
+                    </a>
+
+                    <button
+                        type="reset"
+                        class="btn btn-outline-warning"
+                    >
+                        <i class="fa-solid fa-rotate-left me-2"></i>
+                        Reset
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-4"
+                    >
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+                        Save Entry
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</main>
+{% endblock %}
+
+
+{% block production_extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const entryDate = document.getElementById("entryDate");
+
+        if (entryDate && !entryDate.value) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(
+                today.getMonth() + 1
+            ).padStart(2, "0");
+            const day = String(
+                today.getDate()
+            ).padStart(2, "0");
+
+            const todayValue = `${year}-${month}-${day}`;
+
+            // defaultValue makes the Reset button restore today's date
+            entryDate.defaultValue = todayValue;
+            entryDate.value = todayValue;
+        }
+
+        const targetQuantity =
+            document.getElementById("targetQuantity");
+
+        const actualQuantity =
+            document.getElementById("actualQuantity");
+
+        const rejectionQuantity =
+            document.getElementById("rejectionQuantity");
+
+        const goodQuantity =
+            document.getElementById("goodQuantity");
+
+        const achievement =
+            document.getElementById("achievement");
+
+        function calculateProduction() {
+            if (!actualQuantity) {
+                return;
+            }
+
+            const target =
+                parseFloat(targetQuantity?.value) || 0;
+
+            const actual =
+                parseFloat(actualQuantity.value) || 0;
+
+            const rejection =
+                parseFloat(rejectionQuantity?.value) || 0;
+
+            if (goodQuantity) {
+                goodQuantity.value = Math.max(
+                    actual - rejection,
+                    0
+                ).toFixed(2);
+            }
+
+            if (achievement) {
+                achievement.value =
+                    target > 0
+                        ? `${((actual / target) * 100).toFixed(2)}%`
+                        : "";
+            }
+        }
+
+        targetQuantity?.addEventListener(
+            "input",
+            calculateProduction
+        );
+
+        actualQuantity?.addEventListener(
+            "input",
+            calculateProduction
+        );
+
+        rejectionQuantity?.addEventListener(
+            "input",
+            calculateProduction
+        );
+
+        const startTime =
+            document.getElementById("startTime");
+
+        const endTime =
+            document.getElementById("endTime");
+
+        const downtimeDuration =
+            document.getElementById("downtimeDuration");
+
+        function calculateDowntime() {
+            if (
+                !startTime ||
+                !endTime ||
+                !downtimeDuration ||
+                !startTime.value ||
+                !endTime.value
+            ) {
+                return;
+            }
+
+            const start = new Date(
+                `1970-01-01T${startTime.value}:00`
+            );
+
+            let end = new Date(
+                `1970-01-01T${endTime.value}:00`
+            );
+
+            if (end < start) {
+                end.setDate(end.getDate() + 1);
+            }
+
+            const minutes =
+                (end - start) / 60000;
+
+            downtimeDuration.value =
+                Math.round(minutes);
+        }
+
+        startTime?.addEventListener(
+            "change",
+            calculateDowntime
+        );
+
+        endTime?.addEventListener(
+            "change",
+            calculateDowntime
+        );
+    });
+</script>
+{% endblock %}

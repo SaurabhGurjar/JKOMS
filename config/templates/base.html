@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            JKOMS
+        {% endblock %}
+    </title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --dark-blue: #0f172a;
+            --dark-slate: #1e293b;
+            --primary-blue: #2563eb;
+            --primary-purple: #7c3aed;
+            --muted-text: #cbd5e1;
+            --glass-background: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(
+                135deg,
+                var(--dark-blue),
+                var(--dark-slate)
+            );
+            background-attachment: fixed;
+            font-family: "Segoe UI", sans-serif;
+            color: white;
+        }
+
+        
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Common navbar */
+
+        .navbar {
+            min-height: 68px;
+            padding: 12px 0;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .navbar-brand:hover,
+        .navbar-brand:focus {
+            color: white;
+        }
+
+        .navbar .nav-link {
+            color: white;
+        }
+
+        .navbar .nav-link:hover {
+            color: #bfdbfe;
+        }
+
+        .brand-logo {
+            width: 40px;
+        }
+
+        /* Common reusable cards */
+
+        .glass-card {
+            color: white;
+            background: var(--glass-background);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+        }
+
+        .page-header {
+            padding: 28px;
+            background: linear-gradient(
+                135deg,
+                var(--primary-blue),
+                var(--primary-purple)
+            );
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.30);
+        }
+
+        .page-header p {
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .text-muted {
+            color: var(--muted-text) !important;
+        }
+
+        /* Common footer */
+
+        .app-footer {
+            padding: 25px 15px;
+            margin-top: 30px;
+            color: var(--muted-text);
+            font-size: 0.88rem;
+            text-align: center;
+        }
+
+        @media (max-width: 575px) {
+            .navbar {
+                min-height: 60px;
+            }
+
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+
+    <!-- Page-specific CSS -->
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <!-- Common Navbar -->
+    {% include "includes/navbar.html" %}
+
+    <!-- Messages common to all screens -->
+    {% if messages %}
+
+        <div class="container-fluid px-3 px-lg-4 pt-3">
+
+            {% for message in messages %}
+
+                <div
+                    class="alert alert-{{ message.tags|default:'info' }}
+                           alert-dismissible fade show"
+                    role="alert"
+                >
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+    <!-- Page Content -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Common Footer -->
+    <footer class="app-footer">
+        &copy; 2026 JKOMS |
+        JK Tyre Operations Management System |
+        Developed By LTP QA
+    </footer>
+
+    <!-- Bootstrap JavaScript -->
+    <!-- https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.jsscript> -->
+
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+</html>

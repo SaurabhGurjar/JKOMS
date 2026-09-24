@@ -1,0 +1,87 @@
+{% extends "base.html" %} 
+
+{% block title %} Home Dashboard | JKOMS {% endblock %} 
+
+{% block extra_css %} 
+<style> 
+  .welcome-card { 
+    padding: 30px; 
+    background: linear-gradient(135deg, #2563eb, #7c3aed); 
+    border-radius: 20px; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.30); 
+  } 
+  .stat-card { 
+    color: white; 
+    background: rgba(255, 255, 255, 0.08); 
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(255, 255, 255, 0.12); 
+    border-radius: 20px; 
+    transition: 0.3s; 
+  } 
+  .stat-card:hover { 
+    transform: translateY(-5px); 
+  } 
+  .module-card { 
+    height: 180px; 
+    color: white; 
+    background: rgba(255, 255, 255, 0.08); 
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(255, 255, 255, 0.12); 
+    border-radius: 20px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+  } 
+  .module-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); 
+  } 
+  .module-icon { 
+    margin-bottom: 15px; 
+    font-size: 50px; 
+  } 
+  /* Added to remove default link underlining on text elements */
+  .module-link {
+    text-decoration: none !important;
+  }
+</style> 
+{% endblock %} 
+
+{% block content %} 
+<main class="container py-4"> 
+  <section class="welcome-card mb-4 text-white"> 
+    <h2>JK Operations Management System</h2> 
+    <p class="mb-0"> An Integrated Digital Platform for End-to-End Manufacturing Operations, Quality, Compliance, and Plant Performance Management.</p> 
+  </section> 
+  
+  <h4 class="mb-3">Modules</h4> 
+  <section class="row g-4"> 
+    
+    <!-- User Management --> 
+    <div class="col-lg-3 col-md-4 col-sm-6"> 
+      <a href="{% url 'usermanagement:user_list' %}" class="module-link">
+        <div class="card module-card h-100"> 
+          <div class="card-body text-center d-flex flex-column justify-content-center"> 
+            <i class="fas fa-users module-icon text-primary"></i> 
+            <h5 class="text-white"> User Management </h5> 
+            <small class="text-muted"> Users &amp; Permissions </small> 
+          </div> 
+        </div> 
+      </a> 
+    </div> 
+    
+    <!-- Production --> 
+    <div class="col-lg-3 col-md-4 col-sm-6"> 
+      <a href="{% url 'production:dashboard' %}" class="module-link">
+        <div class="card module-card h-100"> 
+          <div class="card-body text-center d-flex flex-column justify-content-center"> 
+            <i class="fas fa-industry module-icon text-danger"></i> 
+            <h5 class="text-white"> Production </h5> 
+            <small class="text-muted"> Production Monitoring </small> 
+          </div> 
+        </div> 
+      </a> 
+    </div> 
+    
+  </section> 
+</main> 
+{% endblock %}

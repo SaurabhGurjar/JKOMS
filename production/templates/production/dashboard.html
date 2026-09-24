@@ -1,0 +1,941 @@
+{% extends "production/production_base.html" %}
+
+{% block title %}
+    Production Dashboard | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    .header-icon {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 60px;
+    }
+
+    /* Filter Section */
+
+    .filter-bar {
+        padding: 18px;
+        margin-bottom: 25px;
+        background: var(--glass-background);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 18px;
+    }
+
+    .form-label {
+        color: var(--muted-text);
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .form-select,
+    .form-control {
+        min-height: 44px;
+        color: white;
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+    }
+
+    .form-select:focus,
+    .form-control:focus {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.12);
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+    }
+
+    .form-select option {
+        color: #111827;
+        background: white;
+    }
+
+    .form-control::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
+    /* KPI Cards */
+
+    .kpi-card {
+        position: relative;
+        height: 100%;
+        padding: 22px;
+        overflow: hidden;
+        color: white;
+        background: var(--glass-background);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        transition: 0.3s ease;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .kpi-title {
+        margin-bottom: 10px;
+        color: var(--muted-text);
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .kpi-value {
+        margin-bottom: 3px;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .kpi-description {
+        color: var(--muted-text);
+        font-size: 0.82rem;
+    }
+
+    .kpi-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        font-size: 25px;
+    }
+
+    .icon-production {
+        color: #60a5fa;
+        background: rgba(37, 99, 235, 0.20);
+    }
+
+    .icon-target {
+        color: #4ade80;
+        background: rgba(34, 197, 94, 0.20);
+    }
+
+    .icon-achievement {
+        color: #facc15;
+        background: rgba(234, 179, 8, 0.20);
+    }
+
+    .icon-rejection {
+        color: #f87171;
+        background: rgba(239, 68, 68, 0.20);
+    }
+
+    /* Progress Bars */
+
+    .progress {
+        height: 7px;
+        margin-top: 15px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+    }
+
+    .progress-bar {
+        border-radius: 10px;
+    }
+
+    /* Production Data Cards */
+
+    .production-card {
+        height: 100%;
+        overflow: hidden;
+        color: white;
+        background: var(--glass-background);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+    }
+
+    .production-card .card-header {
+        padding: 18px 22px;
+        background: rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .production-card .card-header h5 {
+        margin: 0;
+        font-weight: 650;
+    }
+
+    .production-card .card-body {
+        padding: 0;
+    }
+
+    /* Production Tables */
+
+    .production-table {
+        margin-bottom: 0;
+        color: white;
+    }
+
+    .production-table > :not(caption) > * > * {
+        padding: 15px 18px;
+        color: white;
+        background: transparent;
+        border-bottom-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .production-table thead th {
+        color: var(--muted-text);
+        background: rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        font-size: 0.82rem;
+        font-weight: 650;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .production-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .production-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Status Badges */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 650;
+        white-space: nowrap;
+    }
+
+    .status-running {
+        color: #86efac;
+        background: rgba(34, 197, 94, 0.18);
+        border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .status-breakdown {
+        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.18);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        display: inline-block;
+        border-radius: 50%;
+    }
+
+    .status-running .status-dot {
+        background: #22c55e;
+        box-shadow: 0 0 8px #22c55e;
+    }
+
+    .status-breakdown .status-dot {
+        background: #ef4444;
+        box-shadow: 0 0 8px #ef4444;
+    }
+
+    .achievement-text {
+        min-width: 45px;
+        font-weight: 650;
+    }
+
+    .department-progress {
+        min-width: 100px;
+        height: 6px;
+        margin-top: 0;
+    }
+
+    /* Production Secondary Navbar */
+
+    .production-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .production-nav-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        min-height: 62px;
+    }
+
+    .production-nav-heading {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        padding-right: 20px;
+        color: white;
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        font-size: 0.95rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .production-nav-links {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color:
+            rgba(255, 255, 255, 0.25)
+            transparent;
+    }
+
+    .production-nav-links::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .production-nav-links::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .production-nav-links::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 10px;
+    }
+
+    .production-nav-link {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 13px;
+        color: #cbd5e1;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        transition:
+            color 0.25s ease,
+            background 0.25s ease,
+            border-color 0.25s ease;
+    }
+
+    .production-nav-link:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .production-nav-link.active {
+        color: white;
+        background: linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.90),
+            rgba(124, 58, 237, 0.90)
+        );
+        border-color: rgba(147, 197, 253, 0.35);
+        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.20);
+    }
+
+    .production-nav-link i {
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 767.98px) {
+        .production-nav-wrapper {
+            display: block;
+            padding-top: 10px;
+            padding-bottom: 8px;
+        }
+
+        .production-nav-heading {
+            padding-right: 0;
+            padding-bottom: 8px;
+            border-right: 0;
+        }
+
+        .production-nav-links {
+            padding-bottom: 4px;
+        }
+
+        .production-nav-link {
+            padding: 9px 12px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .header-icon {
+            display: none;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+        }
+
+        .production-table {
+            min-width: 650px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+{% include "production/includes/production_navbar.html" %}
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <!-- Page Header -->
+
+    <section class="page-header mb-4">
+        <div class="d-flex align-items-center justify-content-between">
+
+            <div>
+                <h2>
+                    <i class="fa-solid fa-industry me-2"></i>
+                    Production Dashboard
+                </h2>
+
+                <p>
+                    Monitor production targets, achievement, rejection,
+                    and machine status.
+                </p>
+            </div>
+
+            <i class="fa-solid fa-chart-line header-icon"></i>
+
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+
+    <section class="filter-bar">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-lg-3 col-md-6">
+
+                <label
+                    for="productionDate"
+                    class="form-label"
+                >
+                    Production Date
+                </label>
+
+                <input
+                    type="date"
+                    id="productionDate"
+                    name="production_date"
+                    class="form-control"
+                >
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <label
+                    for="shift"
+                    class="form-label"
+                >
+                    Shift
+                </label>
+
+                <select
+                    id="shift"
+                    name="shift"
+                    class="form-select"
+                >
+                    <option value="all">All Shifts</option>
+                    <option value="a">Shift A</option>
+                    <option value="b">Shift B</option>
+                    <option value="c">Shift C</option>
+                </select>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <label
+                    for="department"
+                    class="form-label"
+                >
+                    Department
+                </label>
+
+                <select
+                    id="department"
+                    name="department"
+                    class="form-select"
+                >
+                    <option value="all">All Departments</option>
+                    <option value="mixing">Mixing</option>
+                    <option value="bias-cutter">Bias Cutter</option>
+                    <option value="building">Building</option>
+                    <option value="curing">Curing</option>
+                </select>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <button
+                    type="button"
+                    class="btn btn-primary w-100 py-2"
+                >
+                    <i class="fa-solid fa-filter me-2"></i>
+                    Apply Filter
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- KPI Cards -->
+
+    <section class="row g-4 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon icon-production">
+                    <i class="fa-solid fa-industry"></i>
+                </div>
+
+                <div class="kpi-title">
+                    TOTAL PRODUCTION
+                </div>
+
+                <div class="kpi-value">
+                    6,343
+                </div>
+
+                <div class="kpi-description">
+                    Tyres produced today
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar bg-primary"
+                        role="progressbar"
+                        style="width: 97.58%;"
+                        aria-valuenow="97.58"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon icon-target">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+
+                <div class="kpi-title">
+                    PRODUCTION TARGET
+                </div>
+
+                <div class="kpi-value">
+                    6,500
+                </div>
+
+                <div class="kpi-description">
+                    Planned tyres for today
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar bg-success"
+                        role="progressbar"
+                        style="width: 100%;"
+                        aria-valuenow="100"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon icon-achievement">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+
+                <div class="kpi-title">
+                    ACHIEVEMENT
+                </div>
+
+                <div class="kpi-value">
+                    97.58%
+                </div>
+
+                <div class="kpi-description">
+                    Overall target achievement
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar bg-warning"
+                        role="progressbar"
+                        style="width: 97.58%;"
+                        aria-valuenow="97.58"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon icon-rejection">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <div class="kpi-title">
+                    REJECTION
+                </div>
+
+                <div class="kpi-value">
+                    1.8%
+                </div>
+
+                <div class="kpi-description">
+                    Current rejection percentage
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        style="width: 18%;"
+                        aria-valuenow="18"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    ></div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Data Tables -->
+
+    <section class="row g-4">
+
+        <!-- Department-Wise Production -->
+
+        <div class="col-xl-7">
+
+            <div class="card production-card">
+
+                <div
+                    class="card-header d-flex align-items-center
+                           justify-content-between"
+                >
+                    <h5>
+                        <i class="fa-solid fa-building me-2 text-primary"></i>
+                        Department-Wise Production
+                    </h5>
+
+                    <span class="badge bg-primary">
+                        Today
+                    </span>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table production-table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Department</th>
+                                    <th>Production</th>
+                                    <th>Target</th>
+                                    <th>Achievement</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <i class="fa-solid fa-gears me-2 text-success"></i>
+                                        Mixing
+                                    </td>
+
+                                    <td>3,200</td>
+                                    <td>3,500</td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <span class="achievement-text">
+                                                91%
+                                            </span>
+
+                                            <div
+                                                class="progress department-progress flex-grow-1"
+                                            >
+                                                <div
+                                                    class="progress-bar bg-success"
+                                                    style="width: 91%;"
+                                                ></div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <i class="fa-solid fa-scissors me-2 text-info"></i>
+                                        Bias Cutter
+                                    </td>
+
+                                    <td>2,800</td>
+                                    <td>3,000</td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <span class="achievement-text">
+                                                93%
+                                            </span>
+
+                                            <div
+                                                class="progress department-progress flex-grow-1"
+                                            >
+                                                <div
+                                                    class="progress-bar bg-info"
+                                                    style="width: 93%;"
+                                                ></div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <i
+                                            class="fa-solid fa-screwdriver-wrench
+                                                   me-2 text-warning"
+                                        ></i>
+                                        Building
+                                    </td>
+
+                                    <td>3,500</td>
+                                    <td>4,000</td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <span class="achievement-text">
+                                                88%
+                                            </span>
+
+                                            <div
+                                                class="progress department-progress flex-grow-1"
+                                            >
+                                                <div
+                                                    class="progress-bar bg-warning"
+                                                    style="width: 88%;"
+                                                ></div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <i
+                                            class="fa-solid fa-temperature-high
+                                                   me-2 text-danger"
+                                        ></i>
+                                        Curing
+                                    </td>
+
+                                    <td>3,000</td>
+                                    <td>4,500</td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <span class="achievement-text">
+                                                67%
+                                            </span>
+
+                                            <div
+                                                class="progress department-progress flex-grow-1"
+                                            >
+                                                <div
+                                                    class="progress-bar bg-danger"
+                                                    style="width: 67%;"
+                                                ></div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Machine Status -->
+
+        <div class="col-xl-5">
+
+            <div class="card production-card">
+
+                <div
+                    class="card-header d-flex align-items-center
+                           justify-content-between"
+                >
+                    <h5>
+                        <i class="fa-solid fa-gears me-2 text-warning"></i>
+                        Machine Status
+                    </h5>
+
+                    <span class="badge bg-success">
+                        3 Running
+                    </span>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table production-table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Machine</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>Banbury-01</td>
+                                    <td>Mixing</td>
+                                    <td>
+                                        <span class="status-badge status-running">
+                                            <span class="status-dot"></span>
+                                            Running
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Bias Cutter-02</td>
+                                    <td>Preparation</td>
+                                    <td>
+                                        <span class="status-badge status-running">
+                                            <span class="status-dot"></span>
+                                            Running
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Building-03</td>
+                                    <td>Building</td>
+                                    <td>
+                                        <span class="status-badge status-breakdown">
+                                            <span class="status-dot"></span>
+                                            Breakdown
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Curing Press-05</td>
+                                    <td>Curing</td>
+                                    <td>
+                                        <span class="status-badge status-running">
+                                            <span class="status-dot"></span>
+                                            Running
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</main>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dateInput = document.getElementById("productionDate");
+
+        if (dateInput && !dateInput.value) {
+            const today = new Date();
+
+            const year = today.getFullYear();
+
+            const month = String(
+                today.getMonth() + 1
+            ).padStart(2, "0");
+
+            const day = String(
+                today.getDate()
+            ).padStart(2, "0");
+
+            dateInput.value = `${year}-${month}-${day}`;
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-dark"> 
+    <div class="container-fluid px-3 px-lg-4"> 
+        <!-- JKOMS Home Link (Fixed missing opening tag) --> 
+        <a class="navbar-brand" href="{% url 'home' %}">
+            
+            <img src="{% static 'images/jk_favicon.png' %}" alt="jk_logo" class="brand-logo">
+            <!-- <i class="fa-solid fa-layer-group me-2"></i>  -->
+            JKOMS 
+        </a> 
+        
+        <div class="d-flex align-items-center gap-3"> 
+            {% if request.user.is_authenticated %} 
+                <!-- Logged-in User --> 
+                <span class="text-light d-none d-sm-inline"> 
+                    <i class="fa-solid fa-user-circle me-1"></i> Welcome, 
+                    {% if request.user.get_full_name %} 
+                        {{ request.user.get_full_name }} 
+                    {% else %} 
+                        {{ request.user.username }} 
+                    {% endif %} 
+                </span> 
+                
+                <!-- Logout Form (Fixed missing opening form tag) --> 
+                <form action="{% url 'logout' %}" method="post" class="m-0">
+                    {% csrf_token %} 
+                    <button type="submit" class="btn btn-outline-light btn-sm"> 
+                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout 
+                    </button> 
+                </form> 
+            {% else %} 
+                <!-- Login Link (Fixed missing opening tag) --> 
+                <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">
+                    <i class="fa-solid fa-right-to-bracket me-1"></i> Login 
+                </a> 
+            {% endif %} 
+        </div> 
+    </div> 
+</nav>

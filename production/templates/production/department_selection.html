@@ -1,0 +1,235 @@
+{% extends "production/production_base.html" %}
+
+{% block title %}
+  {{ entry_config.title }} | JKOMS
+{% endblock %}
+
+{% block production_extra_css %}
+<style>
+  .department-intro {
+    padding: 18px 22px;
+    margin-bottom: 25px;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.13);
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    border-radius: 16px;
+  }
+  
+  .department-card-link {
+    display: block;
+    height: 100%;
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  
+  .department-card-link:hover {
+    color: inherit !important;
+  }
+  
+  .department-card {
+    position: relative;
+    height: 100%;
+    min-height: 240px;
+    padding: 25px;
+    overflow: hidden;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    height: 180px; 
+  }
+  
+  .department-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(96, 165, 250, 0.50);
+    box-shadow: 0 15px 32px rgba(0, 0, 0, 0.28);
+  }
+  
+  .department-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-radius: 18px;
+    font-size: 28px;
+  }
+  
+  .department-card h5 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  
+  .department-description {
+    margin-bottom: 42px;
+    color: var(--muted-text);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  
+  .department-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    right: 25px;
+    bottom: 20px;
+    left: 25px;
+    color: #93c5fd;
+    font-size: 0.85rem;
+    font-weight: 650;
+  }
+  
+  .department-arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .department-card:hover .department-arrow {
+    transform: translateX(6px);
+  }
+  
+  .department-decoration {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    width: 110px;
+    height: 110px;
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 50%;
+  }
+  
+  /* Department icon colors */
+  .department-blue {
+    color: #60a5fa;
+    background: rgba(37, 99, 235, 0.18);
+    border: 1px solid rgba(96, 165, 250, 0.25);
+  }
+  
+  .department-purple {
+    color: #c084fc;
+    background: rgba(147, 51, 234, 0.18);
+    border: 1px solid rgba(192, 132, 252, 0.25);
+  }
+  
+  .department-cyan {
+    color: #22d3ee;
+    background: rgba(6, 182, 212, 0.18);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+  }
+  
+  .department-green {
+    color: #4ade80;
+    background: rgba(34, 197, 94, 0.18);
+    border: 1px solid rgba(74, 222, 128, 0.25);
+  }
+  
+  .department-yellow {
+    color: #facc15;
+    background: rgba(234, 179, 8, 0.18);
+    border: 1px solid rgba(250, 204, 21, 0.25);
+  }
+  
+  .department-orange {
+    color: #fb923c;
+    background: rgba(249, 115, 22, 0.18);
+    border: 1px solid rgba(251, 146, 60, 0.25);
+  }
+  
+  .department-teal {
+    color: #2dd4bf;
+    background: rgba(20, 184, 166, 0.18);
+    border: 1px solid rgba(45, 212, 191, 0.25);
+  }
+  
+  .empty-department-list {
+    padding: 55px 25px;
+    text-align: center;
+  }
+  
+  @media (max-width: 575.98px) {
+    .department-card {
+      min-height: 215px;
+      padding: 22px;
+    }
+    .department-action {
+      right: 22px;
+      left: 22px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block production_content %}
+<main class="container-fluid px-3 px-lg-4 py-4">
+  <!-- Page Header -->
+  <section class="page-header mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+      <div>
+        <h2>
+          <i class="{{ entry_config.icon }} me-2"></i>
+          {{ entry_config.title }}
+        </h2>
+        <p class="mb-0">{{ entry_config.description }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Information Panel -->
+  <section class="department-intro">
+    <div class="d-flex align-items-start gap-3">
+      <i class="fa-solid fa-circle-info fa-lg mt-1"></i>
+      <div>
+        <div class="fw-semibold mb-1">Select Production Department</div>
+        <div>Choose the department for which you want to open the {{ entry_config.short_title|lower }} form.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Department Cards Section -->
+  <section>
+    <div class="mb-3">
+      <h4 class="mb-1">Departments</h4>
+      <p class="text-muted mb-0">Click a department card to continue to the entry form.</p>
+    </div>
+    
+    <div class="row g-4 mt-1">
+      {% for department in departments %}
+        <div class="col-xl-3 col-lg-4 col-md-6">
+              
+            <a href="{% url 'production:entry_form' entry_type department.slug %}" class="d-block h-100 text-decoration-none text-reset">
+          
+            <article class="department-card">
+              <div class="department-decoration"></div>
+              
+              <div class="department-icon {{ department.color_class }}">
+                <i class="{{ department.icon }}"></i>
+              </div>
+              
+              <h5>{{ department.name }}</h5>
+              <p class="department-description">{{ department.description }}</p>
+              
+              <div class="department-action">
+                <span>Open {{ entry_config.short_title }}</span>
+                <i class="fa-solid fa-arrow-right department-arrow"></i>
+              </div>
+            </article>
+          </a>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <section class="glass-card empty-department-list">
+            <i class="fa-solid fa-building-circle-xmark fa-3x text-warning mb-3"></i>
+            <h4>No Departments Available</h4>
+            <p class="text-muted mb-0">No production departments are currently available for this entry.</p>
+          </section>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}
