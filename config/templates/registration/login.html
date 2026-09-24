@@ -25,13 +25,13 @@
 
     <style>
         :root {
-            --dark-blue: #0f172a;
-            --dark-slate: #1e293b;
-            --primary-blue: #2563eb;
-            --primary-purple: #7c3aed;
-            --muted-text: #cbd5e1;
-            --glass-background: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #FFEB00;
+            --background: #EDEDED;
+            --secondary: #334D42;
+            --white: #FFFFFF;
+            --muted-text: #5f6b65;
+            --glass-background: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(51, 77, 66, 0.14);
         }
 
         * {
@@ -44,22 +44,18 @@
             background:
                 radial-gradient(
                     circle at top left,
-                    rgba(37, 99, 235, 0.25),
+                    rgba(255, 235, 0, 0.20),
                     transparent 35%
                 ),
                 radial-gradient(
                     circle at bottom right,
-                    rgba(124, 58, 237, 0.25),
-                    transparent 35%
+                    rgba(51, 77, 66, 0.16),
+                    transparent 40%
                 ),
-                linear-gradient(
-                    135deg,
-                    var(--dark-blue),
-                    var(--dark-slate)
-                );
+                var(--background);
             background-attachment: fixed;
             font-family: "Segoe UI", sans-serif;
-            color: white;
+            color: var(--secondary);
         }
 
         .login-wrapper {
@@ -79,7 +75,7 @@
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--glass-border);
             border-radius: 28px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.40);
+            box-shadow: 0 25px 60px rgba(51, 77, 66, 0.18);
         }
 
         .brand-panel {
@@ -90,8 +86,8 @@
             padding: 55px;
             background: linear-gradient(
                 135deg,
-                rgba(37, 99, 235, 0.92),
-                rgba(124, 58, 237, 0.92)
+                var(--secondary),
+                #3f5f51
             );
         }
 
@@ -106,8 +102,8 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 25px;
-            background: rgba(255, 255, 255, 0.16);
-            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: var(--accent);
+            border: 1px solid rgba(255, 235, 0, 0.55);
             border-radius: 24px;
             font-size: 38px;
         }
@@ -115,11 +111,17 @@
         .brand-panel h1 {
             font-size: 2.3rem;
             font-weight: 750;
+            color: var(--accent);
+        }
+
+        .brand-panel h5 {
+            color: var(--accent);
+            font-weight: 700;
         }
 
         .brand-panel p {
             max-width: 420px;
-            color: rgba(255, 255, 255, 0.82);
+            color: rgba(255, 255, 255, 0.86);
             line-height: 1.7;
         }
 
@@ -128,7 +130,7 @@
             align-items: center;
             gap: 12px;
             margin-top: 16px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.92);
         }
 
         .feature-item i {
@@ -146,6 +148,7 @@
             display: flex;
             align-items: center;
             padding: 55px;
+            background: var(--white);
         }
 
         .form-content {
@@ -162,45 +165,42 @@
 
         .form-label {
             margin-bottom: 8px;
-            color: #e2e8f0;
+            color: var(--secondary);
             font-weight: 600;
         }
 
         .input-group-text {
-            color: #94a3b8;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.17);
+            color: var(--secondary);
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(51, 77, 66, 0.18);
             border-right: 0;
             border-radius: 12px 0 0 12px;
         }
 
         .form-control {
             min-height: 50px;
-            color: white;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.17);
+            color: var(--secondary);
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(51, 77, 66, 0.18);
             border-left: 0;
             border-radius: 0 12px 12px 0;
         }
 
         .form-control:focus {
-            color: white;
-            background: rgba(255, 255, 255, 0.11);
-            border-color: #60a5fa;
+            color: var(--secondary);
+            background: var(--white);
+            border-color: var(--accent);
             box-shadow: none;
         }
 
         .form-control::placeholder {
-            color: #94a3b8;
+            color: #718078;
         }
 
         .login-button {
             min-height: 50px;
-            background: linear-gradient(
-                135deg,
-                var(--primary-blue),
-                var(--primary-purple)
-            );
+            color: var(--secondary);
+            background: var(--accent);
             border: 0;
             border-radius: 12px;
             font-weight: 650;
@@ -209,16 +209,24 @@
 
         .login-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+            background: var(--secondary);
+            color: var(--white);
+            box-shadow: 0 10px 25px rgba(51, 77, 66, 0.25);
         }
 
         .error-box {
             padding: 14px;
             margin-bottom: 20px;
-            color: #fecaca;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #FFFFFF;
+            background: #DC2626;
+            border: 2px solid #B91C1C;
             border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.20);
+        }
+
+        .error-box i {
+            color: #FFEB00;
         }
 
         .login-footer {
@@ -276,7 +284,7 @@
                     </div>
 
                     <h5 class="mb-3">
-                        JK Operations Management System
+                        JK Tyre Operations Management System
                     </h5>
 
                     <p>

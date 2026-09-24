@@ -1,123 +1,129 @@
-{% extends "base.html" %}
-
-{% block title %}
-    Access Denied | JKOMS
-{% endblock %}
-
+{% extends "base.html" %} {% block title %} Access Denied | JKOMS {% endblock %}
 {% block extra_css %}
 <style>
-    .access-denied-wrapper {
-        min-height: calc(100vh - 180px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 30px 15px;
-    }
+  .access-denied-wrapper {
+    min-height: calc(100vh - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+  }
 
+  .access-denied-card {
+    width: 100%;
+    max-width: 650px;
+    padding: 45px 30px;
+    text-align: center;
+  }
+
+  .access-denied-icon {
+    width: 90px;
+    height: 90px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+
+    color: var(--white);
+    background: rgba(220, 38, 38, 0.12);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+
+    border-radius: 24px;
+    font-size: 42px;
+
+    box-shadow: 0 8px 20px rgba(51, 77, 66, 0.08);
+  }
+
+  .error-code {
+    color: var(--error);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  .access-denied-title {
+    margin-top: 10px;
+    color: var(--secondary);
+    font-weight: 700;
+  }
+
+  .access-denied-message {
+    max-width: 480px;
+    margin: 15px auto 28px;
+    color: var(--muted-text);
+    line-height: 1.7;
+  }
+
+  .access-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .access-actions .btn {
+    min-height: 44px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .access-actions .btn-outline-light {
+    color: var(--secondary);
+    background: var(--white);
+    border: 1px solid rgba(51, 77, 66, 0.25);
+  }
+
+  .access-actions .btn-outline-light:hover,
+  .access-actions .btn-outline-light:focus {
+    color: var(--secondary);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 575.98px) {
     .access-denied-card {
-        width: 100%;
-        max-width: 650px;
-        padding: 45px 30px;
-        text-align: center;
-    }
-
-    .access-denied-icon {
-        width: 90px;
-        height: 90px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 24px;
-        color: #fca5a5;
-        background: rgba(239, 68, 68, 0.16);
-        border: 1px solid rgba(239, 68, 68, 0.32);
-        border-radius: 24px;
-        font-size: 42px;
-    }
-
-    .error-code {
-        color: #f87171;
-        font-size: 0.85rem;
-        font-weight: 700;
-        letter-spacing: 2px;
-    }
-
-    .access-denied-title {
-        margin-top: 10px;
-        font-weight: 700;
-    }
-
-    .access-denied-message {
-        max-width: 480px;
-        margin: 15px auto 28px;
-        color: var(--muted-text);
-        line-height: 1.7;
+      padding: 35px 20px;
     }
 
     .access-actions {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
+      flex-direction: column;
     }
 
-    @media (max-width: 575.98px) {
-        .access-denied-card {
-            padding: 35px 20px;
-        }
-
-        .access-actions {
-            flex-direction: column;
-        }
-
-        .access-actions .btn {
-            width: 100%;
-        }
+    .access-actions .btn {
+      width: 100%;
     }
+  }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <main class="access-denied-wrapper">
+  <section class="glass-card access-denied-card">
+    <div class="access-denied-icon">
+      <i class="fa-solid fa-lock"></i>
+    </div>
 
-    <section class="glass-card access-denied-card">
+    <div class="error-code">ERROR 403</div>
 
-        <div class="access-denied-icon">
-            <i class="fa-solid fa-lock"></i>
-        </div>
+    <h2 class="access-denied-title">Access Denied</h2>
 
-        <div class="error-code">
-            ERROR 403
-        </div>
+    <p class="access-denied-message">
+      You are not authorized to access this page. Please contact the system
+      administrator if you believe you should have access to this module.
+    </p>
 
-        <h2 class="access-denied-title">
-            Access Denied
-        </h2>
+    <div class="access-actions">
+      <a href="{% url 'home' %}" class="btn btn-outline-light">
+        <i class="fa-solid fa-house me-2"></i>
+        Return to Home
+      </a>
 
-        <p class="access-denied-message">
-            You are not authorized to access this page.
-            Please contact the system administrator if you believe
-            you should have access to this module.
-        </p>
-
-        <div class="access-actions">
-
-            <a href="{% url 'home' %}" class="btn btn-outline-light">
-                <i class="fa-solid fa-house me-2"></i>
-                Return to Home
-            </a>
-
-            <button
-                type="button"
-                class="btn btn-outline-light px-4"
-                onclick="history.back();"
-            >
-                <i class="fa-solid fa-arrow-left me-2"></i>
-                Go Back
-            </button>
-
-        </div>
-
-    </section>
-
+      <button
+        type="button"
+        class="btn btn-outline-light px-4"
+        onclick="history.back()"
+      >
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Go Back
+      </button>
+    </div>
+  </section>
 </main>
 {% endblock %}

@@ -1,211 +1,433 @@
 {% load static %}
-<!DOCTYPE html>
+
+<!doctype html>
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>
-        {% block title %}
-            JKOMS
-        {% endblock %}
-    </title>
+    <title>{% block title %} JKOMS {% endblock %}</title>
 
     <!-- Bootstrap CSS -->
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
     <!-- Font Awesome -->
     <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        rel="stylesheet"
-    >
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
 
     <style>
-        :root {
-            --dark-blue: #0f172a;
-            --dark-slate: #1e293b;
-            --primary-blue: #2563eb;
-            --primary-purple: #7c3aed;
-            --muted-text: #cbd5e1;
-            --glass-background: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.12);
-        }
+      :root {
+        --accent: #ffeb00;
+        --background: #ededed;
+        --secondary: #334d42;
+        --white: #ffffff;
 
-        * {
-            box-sizing: border-box;
-        }
+        --error: #dc2626;
+        --error-border: #b91c1c;
 
-        body {
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(
-                135deg,
-                var(--dark-blue),
-                var(--dark-slate)
-            );
-            background-attachment: fixed;
-            font-family: "Segoe UI", sans-serif;
-            color: white;
-        }
+        --muted-text: #5f6b65;
 
-        
+        --glass-background: rgba(255, 255, 255, 0.78);
+        --glass-border: rgba(51, 77, 66, 0.14);
+      }
 
-        a {
-            text-decoration: none;
-        }
+      * {
+        box-sizing: border-box;
+      }
 
-        /* Common navbar */
+      body {
+        min-height: 100vh;
+        margin: 0;
 
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(255, 235, 0, 0.2),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(51, 77, 66, 0.16),
+            transparent 40%
+          ),
+          var(--background);
+
+        background-attachment: fixed;
+
+        font-family: "Segoe UI", sans-serif;
+        color: var(--secondary);
+      }
+
+      a {
+        text-decoration: none;
+        color: var(--secondary);
+      }
+
+      a:hover {
+        color: #263b32;
+      }
+
+      /* =========================================
+       COMMON NAVBAR
+       ========================================= */
+
+      .navbar {
+        min-height: 68px;
+        padding: 12px 0;
+
+        background: rgba(51, 77, 66, 0.96);
+
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+
+        border-bottom: 3px solid var(--accent);
+
+        box-shadow: 0 4px 18px rgba(51, 77, 66, 0.12);
+      }
+
+      .navbar-brand {
+        color: var(--white);
+
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 10px;
+      }
+
+      .navbar-brand:hover,
+      .navbar-brand:focus {
+        color: var(--accent);
+      }
+
+      .navbar .nav-link {
+        color: var(--white);
+        transition: color 0.2s ease;
+      }
+
+      .navbar .nav-link:hover,
+      .navbar .nav-link:focus {
+        color: var(--accent);
+      }
+
+      .navbar .nav-link.active {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .brand-logo {
+        width: 40px;
+      }
+
+      /* =========================================
+       COMMON REUSABLE CARDS
+       ========================================= */
+
+      .glass-card {
+        color: var(--secondary);
+
+        background: var(--glass-background);
+
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+
+        box-shadow: 0 10px 30px rgba(51, 77, 66, 0.08);
+      }
+
+      /* =========================================
+       PAGE HEADER
+       ========================================= */
+
+      .page-header {
+        padding: 28px;
+
+        background: linear-gradient(135deg, var(--secondary), #3f5f51);
+
+        color: var(--white);
+
+        border-radius: 20px;
+
+        border-left: 6px solid var(--accent);
+
+        box-shadow: 0 8px 25px rgba(51, 77, 66, 0.18);
+      }
+
+      .page-header h1,
+      .page-header h2,
+      .page-header h3,
+      .page-header h4,
+      .page-header h5,
+      .page-header h6 {
+        color: var(--white);
+      }
+
+      .page-header p {
+        margin-bottom: 0;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* =========================================
+       COMMON TEXT
+       ========================================= */
+
+      .text-muted {
+        color: var(--muted-text) !important;
+      }
+
+      /* =========================================
+       COMMON BUTTONS
+       ========================================= */
+
+      .btn-primary {
+        color: var(--secondary);
+        background: var(--accent);
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+
+      .btn-primary:hover,
+      .btn-primary:focus,
+      .btn-primary:active {
+        color: var(--white) !important;
+        background: var(--secondary) !important;
+        border-color: var(--secondary) !important;
+      }
+
+      .btn-outline-primary {
+        color: var(--secondary);
+        border-color: var(--secondary);
+      }
+
+      .btn-outline-primary:hover,
+      .btn-outline-primary:focus,
+      .btn-outline-primary:active {
+        color: var(--secondary) !important;
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+      }
+
+      .btn-secondary {
+        color: var(--white);
+        background: var(--secondary);
+        border-color: var(--secondary);
+      }
+
+      .btn-secondary:hover,
+      .btn-secondary:focus,
+      .btn-secondary:active {
+        color: var(--secondary) !important;
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+      }
+
+      /* =========================================
+       COMMON FORM CONTROLS
+       ========================================= */
+
+      .form-label {
+        color: var(--secondary);
+        font-weight: 600;
+      }
+
+      .form-control,
+      .form-select {
+        color: var(--secondary);
+        background: var(--white);
+        border: 1px solid rgba(51, 77, 66, 0.2);
+        border-radius: 10px;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        color: var(--secondary);
+        background: var(--white);
+
+        border-color: var(--accent);
+
+        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.25);
+      }
+
+      .form-control::placeholder {
+        color: #718078;
+      }
+
+      /* 
+        =========================================
+        COMMON ALERTS
+        =========================================  */
+      .alert {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 48px 14px 16px;
+        color: var(--secondary);
+        background: var(--white);
+        border: 1px solid rgba(51, 77, 66, 0.14);
+        border-left-width: 5px;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(51, 77, 66, 0.08);
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+      /* ----------------------------------------- ALERT CLOSE BUTTON ----------------------------------------- */
+      .alert .btn-close {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        width: 10px;
+        height: 10px;
+        padding: 10px;
+        transform: translateY(-50%);
+        opacity: 0.55;
+        background-size: 10px;
+      }
+      .alert .btn-close:hover,
+      .alert .btn-close:focus {
+        opacity: 1;
+      } /* ----------------------------------------- SUCCESS ----------------------------------------- */
+      .alert-success {
+        color: var(--secondary);
+        background: rgba(51, 77, 66, 0.07);
+        border-color: rgba(51, 77, 66, 0.18);
+        border-left-color: var(--secondary);
+      } /* ----------------------------------------- WARNING ----------------------------------------- */
+      .alert-warning {
+        color: var(--secondary);
+        background: rgba(255, 235, 0, 0.16);
+        border-color: rgba(255, 235, 0, 0.35);
+        border-left-color: var(--accent);
+      } /* ----------------------------------------- DANGER / ERROR ----------------------------------------- */
+      .alert-danger {
+        color: var(--error);
+        background: rgba(220, 38, 38, 0.07);
+        border-color: rgba(220, 38, 38, 0.18);
+        border-left-color: var(--error);
+      } /* ----------------------------------------- INFO ----------------------------------------- */
+      .alert-info {
+        color: var(--secondary);
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(51, 77, 66, 0.16);
+        border-left-color: var(--secondary);
+      } /* ----------------------------------------- ALERT HOVER ----------------------------------------- */
+      .alert {
+        transition:
+          box-shadow 0.2s ease,
+          transform 0.2s ease;
+      }
+      .alert:hover {
+        box-shadow: 0 6px 18px rgba(51, 77, 66, 0.11);
+      } /* ----------------------------------------- ALERT TEXT ----------------------------------------- */
+      .alert strong {
+        font-weight: 700;
+      }
+      .alert p:last-child {
+        margin-bottom: 0;
+      }
+      
+      .app-footer {
+        text-align: center;
+        padding: 12px 0;
+        /* background: rgba(51, 77, 66, 0.96); */
+        color: var(--secondary);
+        font-size: 0.88rem;
+        /* border-top: 3px solid var(--accent); */
+      }
+
+      /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+      @media (max-width: 575px) {
         .navbar {
-            min-height: 68px;
-            padding: 12px 0;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--glass-border);
+          min-height: 60px;
         }
 
         .navbar-brand {
-            color: white;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .navbar-brand:hover,
-        .navbar-brand:focus {
-            color: white;
-        }
-
-        .navbar .nav-link {
-            color: white;
-        }
-
-        .navbar .nav-link:hover {
-            color: #bfdbfe;
-        }
-
-        .brand-logo {
-            width: 40px;
-        }
-
-        /* Common reusable cards */
-
-        .glass-card {
-            color: white;
-            background: var(--glass-background);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
+          font-size: 1.1rem;
         }
 
         .page-header {
-            padding: 28px;
-            background: linear-gradient(
-                135deg,
-                var(--primary-blue),
-                var(--primary-purple)
-            );
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.30);
+          padding: 22px;
+          border-radius: 16px;
         }
 
-        .page-header p {
-            margin-bottom: 0;
-            color: rgba(255, 255, 255, 0.85);
+        .glass-card {
+          border-radius: 16px;
         }
 
-        .text-muted {
-            color: var(--muted-text) !important;
+        .alert {
+          padding: 13px 42px 13px 14px;
+          border-radius: 10px;
+          font-size: 0.88rem;
         }
-
-        /* Common footer */
-
-        .app-footer {
-            padding: 25px 15px;
-            margin-top: 30px;
-            color: var(--muted-text);
-            font-size: 0.88rem;
-            text-align: center;
+        .alert .btn-close {
+          right: 10px;
         }
-
-        @media (max-width: 575px) {
-            .navbar {
-                min-height: 60px;
-            }
-
-            .navbar-brand {
-                font-size: 1.1rem;
-            }
-        }
+      }
     </style>
 
     <!-- Page-specific CSS -->
-    {% block extra_css %}
-    {% endblock %}
-</head>
+    {% block extra_css %} {% endblock %}
+  </head>
 
-<body>
-
+  <body>
     <!-- Common Navbar -->
     {% include "includes/navbar.html" %}
 
     <!-- Messages common to all screens -->
     {% if messages %}
 
-        <div class="container-fluid px-3 px-lg-4 pt-3">
+    <div class="container-fluid px-3 px-lg-4 pt-3">
+      {% for message in messages %}
 
-            {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags|default:'info' }}
+                       alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
 
-                <div
-                    class="alert alert-{{ message.tags|default:'info' }}
-                           alert-dismissible fade show"
-                    role="alert"
-                >
-                    {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"
-                    ></button>
-                </div>
-
-            {% endfor %}
-
-        </div>
+      {% endfor %}
+    </div>
 
     {% endif %}
 
     <!-- Page Content -->
-    {% block content %}
-    {% endblock %}
+    {% block content %} {% endblock %}
 
     <!-- Common Footer -->
     <footer class="app-footer">
-        &copy; 2026 JKOMS |
-        JK Tyre Operations Management System |
-        Developed By LTP QA
+      &copy; 2026 JKOMS | JK Tyre Operations Management System | Developed By
+      LTP QA
     </footer>
 
     <!-- Bootstrap JavaScript -->
-    <!-- https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.jsscript> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Page-specific JavaScript -->
-    {% block extra_js %}
-    {% endblock %}
-
-</body>
+    {% block extra_js %} {% endblock %}
+  </body>
 </html>

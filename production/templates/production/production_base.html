@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
+
 <style>
     .production-navbar {
         position: sticky;
         top: 0;
         z-index: 1020;
-        background: rgba(15, 23, 42, 0.96);
+        background: rgba(51, 77, 66, 0.97);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+        border-bottom: 1px solid rgba(255, 235, 0, 0.25);
+        box-shadow: 0 5px 18px rgba(51, 77, 66, 0.22);
     }
 
     .production-nav-wrapper {
@@ -25,8 +26,8 @@
         flex: 0 0 auto;
         align-items: center;
         padding-right: 20px;
-        color: white;
-        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        color: #FFEB00;
+        border-right: 1px solid rgba(255, 255, 255, 0.18);
         font-size: 0.95rem;
         font-weight: 700;
         white-space: nowrap;
@@ -46,7 +47,7 @@
         align-items: center;
         gap: 7px;
         padding: 10px 13px;
-        color: #cbd5e1;
+        color: rgba(255, 255, 255, 0.78);
         border: 1px solid transparent;
         border-radius: 10px;
         font-size: 0.82rem;
@@ -57,19 +58,16 @@
     }
 
     .production-nav-link:hover {
-        color: white;
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.12);
+        color: #334D42;
+        background: #FFEB00;
+        border-color: #FFEB00;
     }
 
     .production-nav-link.active {
-        color: white;
-        background: linear-gradient(
-            135deg,
-            #2563eb,
-            #7c3aed
-        );
-        border-color: rgba(147, 197, 253, 0.35);
+        color: #334D42;
+        background: #FFEB00;
+        border-color: #FFEB00;
+        box-shadow: 0 3px 10px rgba(255, 235, 0, 0.22);
     }
 
     @media (max-width: 767.98px) {
@@ -91,14 +89,11 @@
             justify-content: center;
             gap: 8px;
         }
-
     }
-
 </style>
 
 {% block production_extra_css %}{% endblock %}
 {% endblock %}
-
 
 {% block content %}
 
@@ -109,8 +104,7 @@
 
 {% endblock %}
 
-
 {% block extra_js %}
-    {% block production_extra_js %}
-    {% endblock %}
+{% block production_extra_js %}
+{% endblock %}
 {% endblock %}

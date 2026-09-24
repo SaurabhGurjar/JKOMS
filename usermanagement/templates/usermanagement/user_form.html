@@ -14,50 +14,59 @@
 
     .user-form-card {
         padding: 28px;
+        background: #FFFFFF;
+        border: 1px solid rgba(51, 77, 66, 0.12);
+        border-radius: 14px;
+        box-shadow: 0 4px 18px rgba(51, 77, 66, 0.08);
     }
 
     .form-section-title {
         margin-bottom: 22px;
         padding-bottom: 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        border-bottom: 1px solid rgba(51, 77, 66, 0.15);
+        color: #334D42;
         font-size: 1.05rem;
         font-weight: 650;
     }
 
+    .form-section-title .text-primary {
+        color: #334D42 !important;
+    }
+
     .form-label {
         margin-bottom: 8px;
-        color: #e2e8f0;
+        color: #334D42;
         font-weight: 600;
     }
 
     .required-mark {
-        color: #f87171;
+        color: #DC2626;
     }
 
     .form-control,
     .form-select {
         min-height: 46px;
-        color: white;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #334D42;
+        background: #FFFFFF;
+        border: 1px solid rgba(51, 77, 66, 0.22);
         border-radius: 10px;
     }
 
     .form-control:focus,
     .form-select:focus {
-        color: white;
-        background: rgba(255, 255, 255, 0.12);
-        border-color: #60a5fa;
-        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.20);
+        color: #334D42;
+        background: #FFFFFF;
+        border-color: #FFEB00;
+        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
     }
 
     .form-control::placeholder {
-        color: #94a3b8;
+        color: rgba(51, 77, 66, 0.55);
     }
 
     .form-select option {
-        color: #111827;
-        background: white;
+        color: #334D42;
+        background: #FFFFFF;
     }
 
     select[multiple].form-select {
@@ -71,16 +80,16 @@
     }
 
     select[multiple].form-select option:checked {
-        color: white;
-        background: #2563eb;
+        color: #334D42;
+        background: #FFEB00;
     }
 
     .form-check-container {
         height: 100%;
         min-height: 110px;
         padding: 18px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #EDEDED;
+        border: 1px solid rgba(51, 77, 66, 0.14);
         border-radius: 12px;
     }
 
@@ -88,29 +97,29 @@
         width: 1.15rem;
         height: 1.15rem;
         margin-top: 0.15rem;
-        background-color: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.35);
+        background-color: #FFFFFF;
+        border-color: rgba(51, 77, 66, 0.35);
     }
 
     .form-check-input:checked {
-        background-color: #2563eb;
-        border-color: #2563eb;
+        background-color: #FFEB00;
+        border-color: #334D42;
     }
 
     .form-check-input:focus {
-        border-color: #60a5fa;
-        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.20);
+        border-color: #FFEB00;
+        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
     }
 
     .form-check-label {
-        color: white;
+        color: #334D42;
         font-weight: 600;
     }
 
     .form-text,
     .helptext {
         margin-top: 7px;
-        color: #cbd5e1 !important;
+        color: rgba(51, 77, 66, 0.72) !important;
         font-size: 0.82rem;
     }
 
@@ -125,22 +134,22 @@
         padding-left: 0;
         margin-top: 7px;
         margin-bottom: 0;
-        color: #fca5a5;
+        color: #DC2626;
         list-style: none;
         font-size: 0.86rem;
     }
 
     .field-error .form-control,
     .field-error .form-select {
-        border-color: #ef4444;
+        border-color: #DC2626;
     }
 
     .selected-user-card {
         padding: 15px 18px;
         margin-bottom: 24px;
-        color: #bfdbfe;
-        background: rgba(37, 99, 235, 0.14);
-        border: 1px solid rgba(96, 165, 250, 0.28);
+        color: #334D42;
+        background: rgba(255, 235, 0, 0.16);
+        border: 1px solid rgba(255, 235, 0, 0.65);
         border-radius: 12px;
     }
 
@@ -151,16 +160,64 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #334D42;
+        background: #FFEB00;
+        border: 1px solid rgba(51, 77, 66, 0.15);
         border-radius: 50%;
         font-weight: 700;
+    }
+
+    .selected-user-card .fw-semibold {
+        color: #334D42 !important;
+    }
+
+    .selected-user-card small {
+        color: rgba(51, 77, 66, 0.70);
     }
 
     .form-actions {
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+    }
+
+    .form-actions .btn-primary {
+        color: #334D42;
+        background: #FFEB00;
+        border-color: #FFEB00;
+        font-weight: 700;
+    }
+
+    .form-actions .btn-primary:hover,
+    .form-actions .btn-primary:focus {
+        color: #334D42;
+        background: #e6d300;
+        border-color: #e6d300;
+    }
+
+    .form-actions .btn-secondary {
+        color: #FFFFFF;
+        background: #334D42;
+        border-color: #334D42;
+    }
+
+    .form-actions .btn-secondary:hover,
+    .form-actions .btn-secondary:focus {
+        color: #FFFFFF;
+        background: #263a32;
+        border-color: #263a32;
+    }
+
+    .alert-danger {
+        color: #DC2626;
+        background: rgba(220, 38, 38, 0.08);
+        border: 1px solid rgba(220, 38, 38, 0.25);
+        border-radius: 10px;
+    }
+
+    hr.border-secondary {
+        border-color: rgba(51, 77, 66, 0.15) !important;
+        opacity: 1;
     }
 
     @media (max-width: 575.98px) {
@@ -198,7 +255,7 @@
                         </div>
 
                         <div>
-                            <div class="fw-semibold text-white">
+                            <div class="fw-semibold">
                                 {% if selected_user.get_full_name %}
                                     {{ selected_user.get_full_name }}
                                 {% else %}
@@ -345,3 +402,4 @@
 
 </main>
 {% endblock %}
+

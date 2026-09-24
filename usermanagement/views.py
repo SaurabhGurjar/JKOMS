@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from .decorators import staff_required
+from .decorators import staff_required, can_manage_user
 
 from .forms import (
     CreateUserForm,
@@ -72,6 +72,7 @@ def user_list(request):
 
 
 @staff_required
+@can_manage_user
 def user_create(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
@@ -108,6 +109,7 @@ def user_create(request):
 
 
 @staff_required
+@can_manage_user
 def user_edit(request, user_id):
     selected_user = get_object_or_404(User, id=user_id)
 
@@ -146,6 +148,7 @@ def user_edit(request, user_id):
 
 
 @staff_required
+@can_manage_user
 def user_password_reset(request, user_id):
     selected_user = get_object_or_404(User, id=user_id)
 
@@ -182,6 +185,7 @@ def user_password_reset(request, user_id):
 
 
 @staff_required
+@can_manage_user
 def user_status_toggle(request, user_id):
     if request.method != "POST":
         return redirect("usermanagement:user_list")
