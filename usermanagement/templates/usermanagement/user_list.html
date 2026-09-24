@@ -869,32 +869,29 @@ User Management | JKOMS
                                 <i class="fa-solid fa-key"></i>
                             </a>
 
-                            <a
-                                href={% url 'usermanagement:user_status_toggle' user_item.id %}
+                            
+                            <form
+                                method="post"
+                                action="{% url 'usermanagement:user_status_toggle' user_item.id %}"
+                                class="d-inline"
                             >
                                 {% csrf_token %}
-                            </a>
 
                                 <button
                                     type="submit"
-                                    class="action-button btn
-                                    {% if user_item.is_active %}
-                                        btn-danger
-                                    {% else %}
-                                        btn-success
-                                    {% endif %}"
-                                    title="Change user status"
-                                    onclick="return confirm('Change status for this user?');"
+                                    class="btn btn-sm {% if user_item.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}"
+                                    {% if user_item == request.user %}disabled{% endif %}
+                                    title="{% if user_item.is_active %}Deactivate{% else %}Activate{% endif %} user"
                                 >
                                     {% if user_item.is_active %}
-                                        <i class="fa-solid fa-user-slash"></i>
+                                        <i class="fa-solid fa-user-slash me-1"></i>
+                                        Deactivate
                                     {% else %}
-                                        <i class="fa-solid fa-user-check"></i>
+                                        <i class="fa-solid fa-user-check me-1"></i>
+                                        Activate
                                     {% endif %}
                                 </button>
-
                             </form>
-
                         </td>
 
                     </tr>
@@ -935,3 +932,4 @@ User Management | JKOMS
 
 </main>
 {% endblock %}
+
