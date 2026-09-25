@@ -72,7 +72,6 @@ def user_list(request):
 
 
 @staff_required
-@can_manage_user
 def user_create(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
