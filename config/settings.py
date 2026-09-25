@@ -175,6 +175,10 @@ SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://jkoms.sarvans.com",
+]
+
 if not DEBUG:
     # Start low (e.g. 3600 = 1 hour), raise once you've confirmed HTTPS
     # works site-wide. A bad HSTS rollout can lock users out for as long
