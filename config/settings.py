@@ -10,27 +10,38 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
+from dotenv import load_dotenv
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
+# --- Core toggles, driven by environment ---
+# Locally: leave DJANGO_DEBUG unset (or "True") to get dev behavior.
+# In production: set DJANGO_DEBUG=False and provide the other env vars below.
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xap@y_s9)-yxbcz0(c0wm+eyvtr0p4r%_po4*8=yfw0ny-+9tm'
+# The hardcoded value below is ONLY a fallback for local development.
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-xap@y_s9)-yxbcz0(c0wm+eyvtr0p4r%_po4*8=yfw0ny-+9tm",
+)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
-ALLOWED_HOSTS = [
-    '194.9.11.172',
-    '127.0.0.1',
-    '*'
-]
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -50,6 +61,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -125,16 +137,51 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "config" / "static",]
 STATIC_ROOT = BASE_DIR / "config" / "staticfiles"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+if DEBUG:
+    MAILERS = {
+        'default': {
+            'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        },
+    }
+else:
+    MAILERS = {
+        'default': {
+            'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+            'HOST': os.environ.get("EMAIL_HOST"),
+            'PORT': int(os.environ.get("EMAIL_PORT", 587)),
+            'USE_TLS': True,
+            'USER': os.environ.get("EMAIL_HOST_USER"),
+            'PASSWORD': os.environ.get("EMAIL_HOST_PASSWORD"),
+        },
+    }
+
+
+# Security
+# https://docs.djangoproject.com/en/6.1/ref/settings/#security
+# These are only enforced when DEBUG=False, so local dev is unaffected.
+
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+if not DEBUG:
+    # Start low (e.g. 3600 = 1 hour), raise once you've confirmed HTTPS
+    # works site-wide. A bad HSTS rollout can lock users out for as long
+    # as this value, so don't jump straight to 31536000 (1 year).
+    SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_HSTS_SECONDS", 3600))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Only needed if a reverse proxy (nginx, load balancer, etc.) terminates
+    # TLS and forwards requests to Django over plain HTTP.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
