@@ -152,14 +152,19 @@ if DEBUG:
 else:
     MAILERS = {
         'default': {
-            'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
-            'HOST': os.environ.get("EMAIL_HOST"),
-            'PORT': int(os.environ.get("EMAIL_PORT", 587)),
-            'USE_TLS': True,
-            'USER': os.environ.get("EMAIL_HOST_USER"),
-            'PASSWORD': os.environ.get("EMAIL_HOST_PASSWORD"),
+            'BACKEND': 'django.core.mail.backends.console.EmailBackend',
         },
     }
+    # MAILERS = {
+    #     'default': {
+    #         'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+    #         'HOST': os.environ.get("EMAIL_HOST"),
+    #         'PORT': int(os.environ.get("EMAIL_PORT", 587)),
+    #         'USE_TLS': True,
+    #         'USER': os.environ.get("EMAIL_HOST_USER"),
+    #         'PASSWORD': os.environ.get("EMAIL_HOST_PASSWORD"),
+    #     },
+    # }
 
 
 # Security
