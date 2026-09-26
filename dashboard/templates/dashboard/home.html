@@ -1,6 +1,6 @@
-{% extends "base.html" %} 
-{% block title %} Home Dashboard | JKOMS 
-{% endblock%} 
+{% extends "base.html" %}
+{% block title %} Home Dashboard | JKOMS
+{% endblock%}
 {% block extra_css %}
 
 <style>
@@ -102,9 +102,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6">
       <a href="{% url 'usermanagement:user_list' %}" class="module-link">
         <div class="card module-card h-100">
-          <div
-            class="card-body text-center d-flex flex-column justify-content-center"
-          >
+          <div class="card-body text-center d-flex flex-column justify-content-center">
             <i class="fas fa-users module-icon"></i>
 
             <h5>User Management</h5>
@@ -119,9 +117,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6">
       <a href="{% url 'production:dashboard' %}" class="module-link">
         <div class="card module-card h-100">
-          <div
-            class="card-body text-center d-flex flex-column justify-content-center"
-          >
+          <div class="card-body text-center d-flex flex-column justify-content-center">
             <i class="fas fa-industry module-icon"></i>
 
             <h5>Production</h5>
@@ -133,17 +129,56 @@
     </div>
 
     <!-- Quality -->
-<div class="col-lg-3 col-md-4 col-sm-6">
-{% url 'quality:dashboard' %}
-<div class="card module-card h-100">
-<div class="card-body text-center d-flex flex-column justify-content-center">
-<i class="fas fa-check-circle module-icon"></i>
-<h5>Quality</h5>
-<small>Inspection, CAPA & Audits</small>
-</div>
-</div>
-</a>
-</div>
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <a href="{% url 'quality:dashboard' %}" class="module-link">
+      <div class="card module-card h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <i class="fas fa-check-circle module-icon"></i>
+          <h5>Quality</h5>
+          <small>Inspection, CAPA & Audits</small>
+        </div>
+      </div>
+      </a>
+    </div>
+
+    <!-- Technology -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <a href="{% url 'technology:dashboard' %}" class="module-link">
+      <div class="card module-card h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <i class="fas fa-check-circle module-icon"></i>
+          <h5>Technology</h5>
+          <small>Inspection, CAPA & Audits</small>
+        </div>
+      </div>
+      </a>
+    </div>
+
+    <!-- Engineering -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <a href="{% url 'engineering:dashboard' %}" class="module-link">
+      <div class="card module-card h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <i class="fas fa-check-circle module-icon"></i>
+          <h5>Engineering</h5>
+          <small>Inspection, CAPA & Audits</small>
+        </div>
+      </div>
+      </a>
+    </div>
+
+    <!-- HR -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <a href="{% url 'HR:dashboard' %}" class="module-link">
+      <div class="card module-card h-100">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+          <i class="fas fa-check-circle module-icon"></i>
+          <h5>HR</h5>
+          <small>Inspection, CAPA & Audits</small>
+        </div>
+      </div>
+      </a>
+    </div>
   </section>
 </main>
 {% endblock %}
