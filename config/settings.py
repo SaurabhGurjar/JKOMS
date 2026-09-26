@@ -37,7 +37,15 @@ SECRET_KEY = os.environ.get(
     "django-insecure-xap@y_s9)-yxbcz0(c0wm+eyvtr0p4r%_po4*8=yfw0ny-+9tm",
 )
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = os.environ.get(
+        "DJANGO_ALLOWED_HOSTS",
+        "127.0.0*1,localhost"
+    ).split(",")
+
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
