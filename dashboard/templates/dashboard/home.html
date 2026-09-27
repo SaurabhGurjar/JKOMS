@@ -1,184 +1,829 @@
 {% extends "base.html" %}
-{% block title %} Home Dashboard | JKOMS
-{% endblock%}
+{% load static %}
+
+{% block title %}Home Dashboard | JKOMS{% endblock %}
+
 {% block extra_css %}
-
 <style>
-  .welcome-card {
-    padding: 30px;
-    background: #334d42;
-    border: 1px solid rgba(255, 235, 0, 0.35);
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.22);
-  }
 
-  .welcome-card h2 {
-    color: #ffeb00;
+/* ==================================================
+   JKOMS DASHBOARD THEME
+================================================== */
+
+.welcome-banner{
+    background:linear-gradient(135deg,#334d42 0%,#446055 100%);
+    border-radius:20px;
+    padding:35px;
+    color:#fff;
+    box-shadow:0 12px 25px rgba(51,77,66,.15);
+}
+
+.welcome-content{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.welcome-banner h2{
+    color:#ffeb00;
+    font-weight:700;
+}
+
+.welcome-icon{
+    font-size:70px;
+    color:#ffeb00;
+}
+
+.quality-card,
+.info-card{
+    background:#fff;
+    border-radius:20px;
+    border:1px solid rgba(51,77,66,.12);
+    box-shadow:0 8px 25px rgba(51,77,66,.06);
+    overflow:hidden;
+    transition:.3s;
+}
+
+.quality-card:hover,
+.info-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(51,77,66,.12);
+}
+
+.quality-card{
+    padding:22px;
+    position:relative;
+}
+
+.kpi-title{
+    font-size:.85rem;
+    font-weight:600;
+    color:rgba(51,77,66,.65);
+}
+
+.kpi-value{
+    font-size:2rem;
+    font-weight:700;
+    color:#334d42;
+}
+
+.kpi-description{
+    font-size:.85rem;
+    color:rgba(51,77,66,.65);
+}
+
+.kpi-icon{
+    position:absolute;
+    top:20px;
+    right:20px;
+
+    width:58px;
+    height:58px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:16px;
+    font-size:22px;
+}
+
+.icon-yellow{
+    background:rgba(255,235,0,.25);
+    color:#334d42;
+}
+
+.icon-green{
+    background:#334d42;
+    color:#fff;
+}
+
+.icon-blue{
+    background:rgba(59,130,246,.15);
+    color:#2563eb;
+}
+
+.icon-red{
+    background:rgba(220,38,38,.15);
+    color:#dc2626;
+}
+
+.info-card .card-header{
+    background:rgba(51,77,66,.04);
+    color:#334d42;
+    border-bottom:1px solid rgba(51,77,66,.10);
+    padding:18px 22px;
+    font-weight:650;
+}
+
+.news-item{
+    padding:12px 0;
+    border-bottom:1px solid rgba(51,77,66,.08);
+}
+
+.news-item:last-child{
+    border-bottom:none;
+}
+
+.news-scroll{
+    max-height:450px;
+    overflow-y:auto;
+}
+
+.attention-sticky{
+    position:sticky;
+    top:90px;
+}
+
+.table thead th{
+    color:#334d42;
+    background:#f8f9fa;
+}
+
+@media(max-width:768px){
+
+    .welcome-content{
+        flex-direction:column;
+        gap:20px;
+        text-align:center;
+    }
+
+    .welcome-icon{
+        font-size:50px;
+    }
+
+}
+
+
+/* =========================================
+   JKOMS COMMON MODULE NAVBAR
+   ========================================= */
+
+.module-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+
+    overflow: visible;
+
+    background: rgba(51, 77, 66, 0.97);
+
+    border-bottom: 3px solid var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 18px rgba(51, 77, 66, 0.16);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.module-nav-wrapper {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    min-height: 62px;
+
+    overflow: visible;
+}
+
+/* Module name on the left */
+
+.module-nav-heading {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    padding-right: 20px;
+
+    color: var(--white, #ffffff);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+
+    font-size: 0.95rem;
     font-weight: 700;
-  }
 
-  .welcome-card p {
-    color: #ffffff;
-  }
+    white-space: nowrap;
+}
 
-  .stat-card {
-    color: #334d42;
-    background: #ffffff;
-    border: 1px solid rgba(51, 77, 66, 0.12);
-    border-radius: 20px;
-    transition: 0.3s;
-  }
+.module-nav-heading i {
+    color: var(--accent, #ffeb00);
+    font-size: 1rem;
+}
 
-  .stat-card:hover {
-    transform: translateY(-5px);
-  }
+/* =========================================
+   NAVIGATION LINKS
+   ========================================= */
 
-  .module-card {
-    height: 180px;
-    color: #334d42;
-    background: #ffffff;
-    border: 1px solid rgba(51, 77, 66, 0.15);
-    border-radius: 20px;
+.module-nav-links {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+
+    gap: 5px;
+
+    min-width: 0;
+    padding: 7px 0;
+
+    /*
+      Do not use overflow-x: auto here.
+      It causes dropdown menus to create scrollbars.
+    */
+    overflow: visible;
+}
+
+.module-nav-link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 13px;
+
+    color: rgba(255, 255, 255, 0.8);
+    background-color: transparent;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    line-height: 1.5;
+    text-decoration: none;
+    white-space: nowrap;
+
     cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 4px 14px rgba(51, 77, 66, 0.08);
-  }
 
-  .module-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(255, 235, 0, 0.75);
-    box-shadow: 0 10px 25px rgba(51, 77, 66, 0.16);
-  }
+    transition:
+        color 0.25s ease,
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
 
-  .module-icon {
-    margin-bottom: 15px;
-    color: #334d42 !important;
-    font-size: 50px;
-  }
+.module-nav-link:hover,
+.module-nav-link:focus {
+    color: var(--secondary, #334d42);
 
-  .module-card h5 {
-    color: #334d42 !important;
-    font-weight: 700;
-  }
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
 
-  .module-card small {
-    color: #6b7280 !important;
-  }
+    text-decoration: none;
+    outline: none;
 
-  .module-link {
-    text-decoration: none !important;
-  }
+    transform: translateY(-1px);
+}
 
-  .module-link:hover {
-    text-decoration: none !important;
-  }
+.module-nav-link.active {
+    color: var(--secondary, #334d42);
 
-  .module-card:hover .module-icon {
-    color: #334d42 !important;
-  }
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
 
-  main h4 {
-    color: #334d42;
-    font-weight: 700;
-  }
+    box-shadow: 0 5px 15px rgba(255, 235, 0, 0.2);
+}
+
+.module-nav-link i {
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   DROPDOWN BUTTON
+   ========================================= */
+
+.module-nav-dropdown {
+    position: relative;
+
+    display: inline-flex;
+    flex: 0 0 auto;
+
+    overflow: visible;
+}
+
+.module-nav-dropdown > .module-nav-link {
+    margin: 0;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.module-nav-dropdown > .module-nav-link.show,
+.module-nav-dropdown > .module-nav-link[aria-expanded="true"] {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 15px rgba(255, 235, 0, 0.2);
+}
+
+.module-nav-dropdown .dropdown-toggle::after {
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* =========================================
+   DROPDOWN MENU
+   ========================================= */
+
+.module-dropdown-menu {
+    z-index: 1100;
+
+    min-width: 250px;
+    margin-top: 8px !important;
+    padding: 8px;
+
+    background-color: var(--white, #ffffff);
+
+    border: 1px solid rgba(51, 77, 66, 0.14);
+    border-radius: 14px;
+
+    box-shadow: 0 14px 35px rgba(51, 77, 66, 0.2);
+}
+
+.module-dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 11px 13px;
+
+    color: var(--secondary, #334d42);
+    background-color: transparent;
+
+    border-radius: 9px;
+
+    font-size: 0.86rem;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.module-dropdown-menu .dropdown-item i {
+    width: 22px;
+
+    color: var(--secondary, #334d42);
+
+    text-align: center;
+}
+
+.module-dropdown-menu .dropdown-item:hover,
+.module-dropdown-menu .dropdown-item:focus {
+    color: var(--secondary, #334d42);
+
+    background-color: rgba(255, 235, 0, 0.18);
+
+    outline: none;
+
+    transform: translateX(3px);
+}
+
+.module-dropdown-menu .dropdown-item.active {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+}
+
+/* Prevent Bootstrap active item text from becoming white */
+
+.module-dropdown-menu .dropdown-item.active i {
+    color: var(--secondary, #334d42);
+}
+
+/* =========================================
+   RESPONSIVE NAVBAR
+   ========================================= */
+
+@media (max-width: 1199.98px) {
+    .module-nav-wrapper {
+        align-items: flex-start;
+
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .module-nav-links {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .module-nav-wrapper {
+        display: block;
+
+        padding-top: 10px;
+        padding-bottom: 8px;
+    }
+
+    .module-nav-heading {
+        padding-right: 0;
+        padding-bottom: 8px;
+
+        border-right: 0;
+    }
+
+    .module-nav-links {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 6px;
+
+        padding-bottom: 4px;
+
+        overflow: visible;
+    }
+
+    .module-nav-link {
+        padding: 9px 12px;
+    }
+
+    .module-dropdown-menu {
+        min-width: 230px;
+    }
+}
+
 </style>
+{% endblock %}
 
-{% endblock %} {% block content %}
 
-<main class="container py-4">
-  <section class="welcome-card mb-4 text-white">
-    <h2>JK Operations Management System</h2>
+{% block content %}
+{% include "dashboard/includes/module_navbar.html" %}
 
-    <p class="mb-0">
-      An Integrated Digital Platform for End-to-End Manufacturing Operations,
-      Quality, Compliance, and Plant Performance Management.
-    </p>
-  </section>
+<main class="container-fluid px-3 px-lg-4 py-4">
 
-  <h4 class="mb-3">Modules</h4>
+    <!-- Welcome Banner -->
 
-  <section class="row g-4">
-    <!-- User Management -->
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <a href="{% url 'usermanagement:user_list' %}" class="module-link">
-        <div class="card module-card h-100">
-          <div class="card-body text-center d-flex flex-column justify-content-center">
-            <i class="fas fa-users module-icon"></i>
+    <section class="welcome-banner mb-4">
 
-            <h5>User Management</h5>
+        <div class="welcome-content">
 
-            <small> Users &amp; Permissions </small>
-          </div>
+            <div>
+                <h2>
+                    <i class="fas fa-industry me-2"></i>
+                    JK Operations Management System
+                </h2>
+
+                <p>
+                    Integrated Digital Platform for Manufacturing Operations,
+                    Quality, Maintenance, Safety, Compliance and Business Excellence.
+                </p>
+            </div>
+
+            <div class="welcome-icon">
+                <i class="fas fa-gauge-high"></i>
+            </div>
+
         </div>
-      </a>
-    </div>
 
-    <!-- Production -->
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <a href="{% url 'production:dashboard' %}" class="module-link">
-        <div class="card module-card h-100">
-          <div class="card-body text-center d-flex flex-column justify-content-center">
-            <i class="fas fa-industry module-icon"></i>
+    </section>
 
-            <h5>Production</h5>
+    <!-- KPI ROW -->
 
-            <small> Production Monitoring </small>
-          </div>
+    <section class="row g-4 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-green">
+                    <i class="fas fa-users"></i>
+                </div>
+
+                <div class="kpi-title">TOTAL EMPLOYEES</div>
+                <div class="kpi-value">5,000</div>
+                <div class="kpi-description">
+                    Current Workforce
+                </div>
+
+            </div>
         </div>
-      </a>
-    </div>
 
-    <!-- Quality -->
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <a href="{% url 'quality:dashboard' %}" class="module-link">
-      <div class="card module-card h-100">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <i class="fas fa-check-circle module-icon"></i>
-          <h5>Quality</h5>
-          <small>Inspection, CAPA & Audits</small>
-        </div>
-      </div>
-      </a>
-    </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
 
-    <!-- Technology -->
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <a href="" class="module-link">
-      <div class="card module-card h-100">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <i class="fas fa-check-circle module-icon"></i>
-          <h5>Technology</h5>
-          <small>Inspection, CAPA & Audits</small>
-        </div>
-      </div>
-      </a>
-    </div>
+                <div class="kpi-icon icon-yellow">
+                    <i class="fas fa-industry"></i>
+                </div>
 
-    <!-- Engineering -->
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <a href="" class="module-link">
-      <div class="card module-card h-100">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <i class="fas fa-check-circle module-icon"></i>
-          <h5>Engineering</h5>
-          <small>Inspection, CAPA & Audits</small>
-        </div>
-      </div>
-      </a>
-    </div>
+                <div class="kpi-title">PRODUCTION</div>
+                <div class="kpi-value">98%</div>
+                <div class="kpi-description">
+                    Against Monthly Plan
+                </div>
 
-    <!-- HR -->
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <a href="" class="module-link">
-      <div class="card module-card h-100">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <i class="fas fa-check-circle module-icon"></i>
-          <h5>HR</h5>
-          <small>Inspection, CAPA & Audits</small>
+            </div>
         </div>
-      </div>
-      </a>
-    </div>
-  </section>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-blue">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+
+                <div class="kpi-title">SAFETY</div>
+                <div class="kpi-value">120</div>
+                <div class="kpi-description">
+                    Accident Free Days
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-red">
+                    <i class="fas fa-award"></i>
+                </div>
+
+                <div class="kpi-title">PLANT FTQ</div>
+                <div class="kpi-value">98.4%</div>
+                <div class="kpi-description">
+                    Current Month
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <section class="row g-4">
+
+        <!-- LEFT COLUMN -->
+
+        <div class="col-xxl-9 col-xl-8">
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <div class="card info-card h-100">
+
+                        <div class="card-header">
+                            <i class="fas fa-bullhorn text-warning me-2"></i>
+                            Important Announcements
+                        </div>
+
+                        <div class="card-body">
+
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">ISO Surveillance Audit scheduled on 05-Oct-2026.</li>
+                                <li class="list-group-item">Annual Stock Verification from 15-Oct-2026.</li>
+                                <li class="list-group-item">Safety Week Celebration starts from 01-Oct-2026.</li>
+                                <li class="list-group-item">Energy Conservation Campaign launched across plant.</li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card info-card h-100">
+
+                        <div class="card-header">
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            Awards & Recognition
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="news-item">
+                                <strong>Employee of the Month</strong><br>
+                                Rajesh Kumar
+                            </div>
+
+                            <div class="news-item">
+                                <strong>Best Department</strong><br>
+                                Curing Department
+                            </div>
+
+                            <div class="news-item">
+                                <strong>Best Kaizen Award</strong><br>
+                                FTQ Improvement Initiative
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card info-card h-100">
+
+                        <div class="card-header">
+                            <i class="fas fa-calendar-days text-warning me-2"></i>
+                            Key Schedules
+                        </div>
+
+                        <div class="card-body">
+
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Activity</th>
+                                        <th>Department</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>05-Oct-26</td>
+                                        <td>Internal Audit</td>
+                                        <td>Mixing</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>10-Oct-26</td>
+                                        <td>MRM Meeting</td>
+                                        <td>Plant</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>15-Oct-26</td>
+                                        <td>Calibration Review</td>
+                                        <td>QA</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>20-Oct-26</td>
+                                        <td>Customer Audit</td>
+                                        <td>Quality</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card info-card h-100">
+
+                        <div class="card-header">
+                            <i class="fas fa-calendar-check text-warning me-2"></i>
+                            Upcoming Activities
+                        </div>
+
+                        <div class="card-body">
+
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">SPC Training Program</li>
+                                <li class="list-group-item">Safety Awareness Workshop</li>
+                                <li class="list-group-item">Blood Donation Camp</li>
+                                <li class="list-group-item">Quality Circle Presentation</li>
+                                <li class="list-group-item">Kaizen Competition</li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-12">
+
+                    <div class="card info-card">
+
+                        <div class="card-header">
+                            <i class="fas fa-newspaper text-warning me-2"></i>
+                            Plant News & Updates
+                        </div>
+
+                        <div class="card-body news-scroll">
+
+                            <div class="news-item">
+                                <strong>FTQ achieved 98.4% this month.</strong>
+                                <div class="text-muted small">27-Sep-2026</div>
+                            </div>
+
+                            <div class="news-item">
+                                <strong>New Inspection Equipment Installed in Final Inspection Area.</strong>
+                                <div class="text-muted small">25-Sep-2026</div>
+                            </div>
+
+                            <div class="news-item">
+                                <strong>Plant completed 120 Accident-Free Days.</strong>
+                                <div class="text-muted small">20-Sep-2026</div>
+                            </div>
+
+                            <div class="news-item">
+                                <strong>Digital Quality Dashboard Successfully Go-Live.</strong>
+                                <div class="text-muted small">15-Sep-2026</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+
+        <div class="col-xxl-3 col-xl-4">
+
+            <div class="attention-sticky">
+
+                <div class="card info-card mb-4">
+
+                    <div class="card-header">
+                        <i class="fas fa-trophy text-warning me-2"></i>
+                        Our Accolades
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="news-item">
+                            <strong>Manufacturing Excellence Award</strong>
+                        </div>
+
+                        <div class="news-item">
+                            <strong>Zero Complaint Month</strong>
+                        </div>
+
+                        <div class="news-item">
+                            <strong>Safety Excellence Award</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card info-card mb-4">
+
+                    <div class="card-header">
+                        <i class="fas fa-cake-candles text-warning me-2"></i>
+                        Our Celebrations
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="news-item">
+                            <strong>Employee Birthdays</strong>
+                        </div>
+
+                        <div class="news-item">
+                            <strong>Work Anniversaries</strong>
+                        </div>
+
+                        <div class="news-item">
+                            <strong>Festival Celebrations</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card info-card">
+
+                    <div class="card-header">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Key Highlights
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="news-item">
+                            <strong>FTQ:</strong> 98.4%
+                        </div>
+
+                        <div class="news-item">
+                            <strong>PQR:</strong> 97.8%
+                        </div>
+
+                        <div class="news-item">
+                            <strong>Safety Days:</strong> 120
+                        </div>
+
+                        <div class="news-item">
+                            <strong>Production Achievement:</strong> 98%
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </main>
+
 {% endblock %}
