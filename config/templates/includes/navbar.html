@@ -4,12 +4,12 @@
         <!-- JKOMS Home Link (Fixed missing opening tag) --> 
         <a class="navbar-brand" href="{% url 'home' %}">
             
-            <img src="{% static 'images/jk_favicon.png' %}" alt="jk_logo" class="brand-logo">
+            <img src="{% static 'images/jk_logo_square.svg' %}" alt="jk_logo" class="brand-logo">
             <!-- <i class="fa-solid fa-layer-group me-2"></i>  -->
             JKOMS 
         </a> 
         
-        <div class="d-flex align-items-center gap-3"> 
+        <div class="d-flex align-items-center gap-3 nav-user"> 
             {% if request.user.is_authenticated %} 
                 <!-- Logged-in User --> 
                 <span class="text-light d-none d-sm-inline"> 

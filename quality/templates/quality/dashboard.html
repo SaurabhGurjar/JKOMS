@@ -511,6 +511,12 @@ Quality Dashboard | JKOMS
     }
 }
 
+.reports-section {
+    display: grid;
+    grid-column: 2;
+
+}
+
 /* =========================================
    ATTENTION REQUIRED PANEL
    ========================================= */
@@ -621,6 +627,170 @@ Quality Dashboard | JKOMS
 .attention-item:hover .attention-arrow{
     transform:translateX(3px);
     color:var(--secondary);
+}
+
+/* =========================================
+   CURING FTQ REPORT CARD
+   ========================================= */
+
+.ftq-report-card{
+    background: var(--white);
+    border: 1px solid rgba(51,77,66,0.12);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(51,77,66,0.06);
+}
+
+.ftq-report-card .card-header{
+    padding: 18px 22px;
+    background: rgba(51,77,66,0.04);
+    border-bottom: 1px solid rgba(51,77,66,0.10);
+}
+
+.ftq-report-card .card-header h5{
+    margin: 0;
+    color: var(--secondary);
+    font-weight: 650;
+}
+
+/* =========================================
+   SCROLLABLE TABLE
+   ========================================= */
+
+.ftq-table-container{
+    height: 450px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.ftq-table-container::-webkit-scrollbar{
+    width: 8px;
+    height: 8px;
+}
+
+.ftq-table-container::-webkit-scrollbar-track{
+    background: #f4f5f6;
+}
+
+.ftq-table-container::-webkit-scrollbar-thumb{
+    background: rgba(51,77,66,0.25);
+    border-radius: 10px;
+}
+
+.ftq-table-container::-webkit-scrollbar-thumb:hover{
+    background: rgba(51,77,66,0.45);
+}
+
+/* =========================================
+   TABLE
+   ========================================= */
+
+.ftq-table{
+    margin-bottom: 0;
+    color: var(--secondary);
+}
+
+.ftq-table > :not(caption) > * > *{
+    padding: 14px 18px;
+    border-bottom-color: rgba(51,77,66,0.10);
+}
+
+.ftq-table thead th{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    background: #f7f9f8;
+    color: rgba(51,77,66,0.72);
+
+    font-size: 0.85rem;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+
+    border-bottom: 1px solid rgba(51,77,66,0.15);
+}
+
+.ftq-table tbody tr{
+    transition: all .2s ease;
+}
+
+.ftq-table tbody tr:hover{
+    background: rgba(255,235,0,0.08);
+}
+
+/* =========================================
+   STICKY TOTAL ROW
+   ========================================= */
+
+.ftq-table tfoot{
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+.ftq-table tfoot td{
+    background: #ffffff;
+    color: var(--secondary);
+
+    font-weight: 700;
+
+    border-top: 2px solid rgba(51,77,66,0.15);
+}
+
+/* =========================================
+   FTQ BADGES
+   ========================================= */
+
+.ftq-badge-good{
+    display: inline-block;
+    padding: 5px 12px;
+
+    color: #15803d;
+    background: rgba(34,197,94,0.15);
+
+    border-radius: 30px;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.ftq-badge-warning{
+    display: inline-block;
+    padding: 5px 12px;
+
+    color: #b45309;
+    background: rgba(255,235,0,0.35);
+
+    border-radius: 30px;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.ftq-badge-danger{
+    display: inline-block;
+    padding: 5px 12px;
+
+    color: #dc2626;
+    background: rgba(220,38,38,0.15);
+
+    border-radius: 30px;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 767.98px){
+
+    .ftq-table{
+        min-width: 700px;
+    }
+
+    .ftq-table-container{
+        height: 400px;
+    }
 }
 </style>
 {% endblock %}
@@ -760,212 +930,320 @@ Quality Dashboard | JKOMS
         </div>
 
     </section>
-<!-- Tables -->
 <section class="row g-4">
 
-    <!-- Module Status -->
-    <!-- FTQ Department-Wise Status -->
-<div class="col-xl-8">
-    <div class="card quality-table-card h-100">
+    <!-- LEFT SIDE REPORTS -->
+    <div class="col-xxl-9 col-xl-8">
 
-        <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="mb-0">
-                <i class="fa-solid fa-circle-check me-2"></i>
-                Department-Wise FTQ Status
-            </h5>
+        <!-- FTQ DAILY REPORT -->
+        <div class="card quality-table-card ftq-report-card mb-4">
 
-            <span class="badge bg-warning text-dark">
-                Target: 98.00%
-            </span>
-        </div>
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-chart-line me-2"></i>
+                    Curing FTQ Daily Report
+                </h5>
 
-        <div class="card-body p-0">
-            <div class="table-responsive">
+                <span class="badge bg-warning text-dark">
+                    September 2026
+                </span>
+            </div>
 
-                <table class="table quality-table align-middle">
+            <div class="ftq-table-container">
+
+                <table class="table quality-table ftq-table align-middle">
+
                     <thead>
                         <tr>
-                            <th>Department</th>
-                            <th>Inspected</th>
-                            <th>Passed First Time</th>
-                            <th>FTQ</th>
-                            <th>Target</th>
-                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Total Checked Tyres</th>
+                            <th>Defective Tyres</th>
+                            <th>FTQ (%)</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>
-                                <i class="fa-solid fa-gears me-2"></i>
-                                Mixing
-                            </td>
-                            <td>3,200</td>
-                            <td>3,152</td>
-                            <td><strong>98.50%</strong></td>
-                            <td>98.00%</td>
-                            <td>
-                                <span class="status-badge status-closed">
-                                    On Target
-                                </span>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td>
-                                <i class="fa-solid fa-layer-group me-2"></i>
-                                Preparation
-                            </td>
-                            <td>2,850</td>
-                            <td>2,776</td>
-                            <td><strong>97.40%</strong></td>
-                            <td>98.00%</td>
-                            <td>
-                                <span class="status-badge status-active">
-                                    Attention
-                                </span>
-                            </td>
-                        </tr>
+    {% for row in ftq_report %}
 
-                        <tr>
-                            <td>
-                                <i class="fa-solid fa-circle-notch me-2"></i>
-                                Tyre Building
-                            </td>
-                            <td>3,500</td>
-                            <td>3,360</td>
-                            <td><strong>96.00%</strong></td>
-                            <td>98.00%</td>
-                            <td>
-                                <span class="status-badge status-open">
-                                    Below Target
-                                </span>
-                            </td>
-                        </tr>
+    <tr>
+        <td>{{ row.date }}</td>
 
-                        <tr>
-                            <td>
-                                <i class="fa-solid fa-temperature-high me-2"></i>
-                                Curing
-                            </td>
-                            <td>3,100</td>
-                            <td>3,047</td>
-                            <td><strong>98.30%</strong></td>
-                            <td>98.00%</td>
-                            <td>
-                                <span class="status-badge status-closed">
-                                    On Target
-                                </span>
-                            </td>
-                        </tr>
+        <td>{{ row.total_checked_tyres }}</td>
 
-                        <tr>
-                            <td>
-                                <i class="fa-solid fa-magnifying-glass me-2"></i>
-                                Final Inspection
-                            </td>
-                            <td>3,025</td>
-                            <td>2,964</td>
-                            <td><strong>98.00%</strong></td>
-                            <td>98.00%</td>
-                            <td>
-                                <span class="status-badge status-closed">
-                                    On Target
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
+        <td>{{ row.defective_tyres }}</td>
+
+        <td>
+
+            {% if row.ftq >= 98 %}
+
+                <span class="ftq-badge-good">
+                    {{ row.ftq|floatformat:2 }}%
+                </span>
+
+            {% elif row.ftq >= 97 %}
+
+                <span class="ftq-badge-warning">
+                    {{ row.ftq|floatformat:2 }}%
+                </span>
+
+            {% else %}
+
+                <span class="ftq-badge-danger">
+                    {{ row.ftq|floatformat:2 }}%
+                </span>
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="4" class="text-center py-4">
+            No FTQ data available.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</tbody>
+
+                    <tfoot>
+    <tr class="fw-bold">
+        <td>Total</td>
+
+        <td>
+            {{ total_checked_tyres }}
+        </td>
+
+        <td>
+            {{ total_defective_tyres }}
+        </td>
+
+        <td>
+            <span class="ftq-badge-good">
+                {{ overall_ftq }}%
+            </span>
+        </td>
+    </tr>
+</tfoot>
+
                 </table>
 
             </div>
+
         </div>
+
+        <div class="card quality-table-card mb-4">
+
+    <div class="card-header d-flex align-items-center justify-content-between">
+
+        <h5 class="mb-0">
+            <i class="fa-solid fa-award me-2"></i>
+            Plant Quality Rating
+        </h5>
+
+        <span class="badge bg-warning text-dark">
+            Current Month
+        </span>
+
     </div>
+
+    <div class="ftq-table-container">
+
+        <table class="table quality-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Quality Rating (%)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for row in plant_quality_rating %}
+
+                <tr>
+
+                    <td>
+                        {{ row.department }}
+                    </td>
+
+                    <td>
+
+                        {% if row.rating >= 98 %}
+
+                        <span class="ftq-badge-good">
+                            {{ row.rating }}%
+                        </span>
+
+                        {% elif row.rating >= 97 %}
+
+                        <span class="ftq-badge-warning">
+                            {{ row.rating }}%
+                        </span>
+
+                        {% else %}
+
+                        <span class="ftq-badge-danger">
+                            {{ row.rating }}%
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if row.rating >= 98 %}
+
+                        <span class="status-badge status-closed">
+                            Excellent
+                        </span>
+
+                        {% elif row.rating >= 97 %}
+
+                        <span class="status-badge status-active">
+                            Good
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge status-open">
+                            Need Improvement
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+            <tfoot>
+                <tr class="fw-bold">
+                    <td>Plant Average</td>
+                    <td>
+                        <span class="ftq-badge-good">
+                            97.76%
+                        </span>
+                    </td>
+                    <td>Good</td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    </div>
+
 </div>
-<!-- Attention Required --><div class="col-xl-4"> 
-    <div class="card quality-table-card attention-card h-100">
-  <div class="card-header d-flex align-items-center justify-content-between">
-    <h5 class="mb-0">
-      <i class="fa-solid fa-bell me-2"></i> Attention Required
-    </h5>
-    <span class="attention-count">5</span>
-  </div>
-  <div class="attention-list">
-    <!-- Item 1 -->
-    <a href="#" class="attention-item d-flex align-items-center justify-content-between text-decoration-none">
-      <div class="attention-left d-flex align-items-center">
-        <div class="attention-icon attention-warning me-3">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-        </div>
-        <div>
-          <span class="attention-title d-block fw-bold text-dark">12 NCMRs Overdue</span>
-          <div class="attention-text text-muted small">Immediate closure action required</div>
-        </div>
-      </div>
-      <i class="fa-solid fa-chevron-right attention-arrow"></i>
-    </a>
 
-    <!-- Item 2 -->
-    <a href="#" class="attention-item d-flex align-items-center justify-content-between text-decoration-none">
-      <div class="attention-left d-flex align-items-center">
-        <div class="attention-icon attention-info me-3">
-          <i class="fa-solid fa-screwdriver-wrench"></i>
-        </div>
-        <div>
-          <span class="attention-title d-block fw-bold text-dark">4 CAPAs Due This Week</span>
-          <div class="attention-text text-muted small">Effectiveness verification pending</div>
-        </div>
-      </div>
-      <i class="fa-solid fa-chevron-right attention-arrow"></i>
-    </a>
+        <!-- FUTURE REPORTS -->
+        <div class="card quality-table-card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-bug me-2"></i>
+                    Top Defect Analysis
+                </h5>
+            </div>
 
-    <!-- Item 3 -->
-    <a href="#" class="attention-item d-flex align-items-center justify-content-between text-decoration-none">
-      <div class="attention-left d-flex align-items-center">
-        <div class="attention-icon attention-danger me-3">
-          <i class="fa-solid fa-chart-line"></i>
+            <div class="card-body">
+                Future defect report goes here...
+            </div>
         </div>
-        <div>
-          <span class="attention-title d-block fw-bold text-dark">Building FTQ Below Target</span>
-          <div class="attention-text text-muted small">Current FTQ is 96.00%</div>
-        </div>
-      </div>
-      <i class="fa-solid fa-chevron-right attention-arrow"></i>
-    </a>
 
-    <!-- Item 4 -->
-    <a href="#" class="attention-item d-flex align-items-center justify-content-between text-decoration-none">
-      <div class="attention-left d-flex align-items-center">
-        <div class="attention-icon attention-warning me-3">
-          <i class="fa-solid fa-ruler-combined"></i>
-        </div>
-        <div>
-          <span class="attention-title d-block fw-bold text-dark">3 Instruments Overdue</span>
-          <div class="attention-text text-muted small">Calibration validity expired</div>
-        </div>
-      </div>
-      <i class="fa-solid fa-chevron-right attention-arrow"></i>
-    </a>
+    </div>
 
-    <!-- Item 5 -->
-    <a href="#" class="attention-item d-flex align-items-center justify-content-between text-decoration-none">
-      <div class="attention-left d-flex align-items-center">
-        <div class="attention-icon attention-info me-3">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <div>
-          <span class="attention-title d-block fw-bold text-dark">2 Complaints Under Review</span>
-          <div class="attention-text text-muted small">Root cause analysis pending</div>
-        </div>
-      </div>
-      <i class="fa-solid fa-chevron-right attention-arrow"></i>
-    </a>
-  </div>
-
-
+    <!-- RIGHT SIDE STICKY PANEL --> 
+<div class="col-xxl-3 col-xl-4"> 
+    <div class="attention-sticky"> 
+        <div class="card quality-table-card attention-card"> 
+            <div class="card-header d-flex align-items-center justify-content-between"> 
+                <h5 class="mb-0"> 
+                    <i class="fa-solid fa-bell me-2"></i> Attention Required 
+                </h5> 
+                <span class="attention-count"> 5 </span> 
+            </div> 
+            <div class="attention-list"> 
+                
+                <!-- Item 1: NCMRs -->
+                <a href="#" class="attention-item d-flex align-items-center decoration-none">
+                    <div class="attention-left d-flex align-items-center"> 
+                        <div class="attention-icon attention-warning"> 
+                            <i class="fa-solid fa-triangle-exclamation"></i> 
+                        </div> 
+                        <div> 
+                            <span class="attention-title"> 12 NCMRs Overdue </span> 
+                            <div class="attention-text"> Immediate closure action required </div> 
+                        </div> 
+                    </div> 
+                </a> 
+                
+                <!-- Item 2: CAPAs -->
+                <a href="#" class="attention-item d-flex align-items-center decoration-none">
+                    <div class="attention-left d-flex align-items-center"> 
+                        <div class="attention-icon attention-info"> 
+                            <i class="fa-solid fa-screwdriver-wrench"></i> 
+                        </div> 
+                        <div> 
+                            <span class="attention-title"> 4 CAPAs Due This Week </span> 
+                            <div class="attention-text"> Effectiveness verification pending </div> 
+                        </div> 
+                    </div> 
+                </a> 
+                
+                <!-- Item 3: FTQ -->
+                <a href="#" class="attention-item d-flex align-items-center decoration-none">
+                    <div class="attention-left d-flex align-items-center"> 
+                        <div class="attention-icon attention-danger"> 
+                            <i class="fa-solid fa-chart-line"></i> 
+                        </div> 
+                        <div> 
+                            <span class="attention-title"> Building FTQ Below Target </span> 
+                            <div class="attention-text"> Current FTQ 96.00% </div> 
+                        </div> 
+                    </div> 
+                </a> 
+                
+                <!-- Item 4: Calibration -->
+                <a href="#" class="attention-item d-flex align-items-center decoration-none">
+                    <div class="attention-left d-flex align-items-center"> 
+                        <div class="attention-icon attention-warning"> 
+                            <i class="fa-solid fa-ruler-combined"></i> 
+                        </div> 
+                        <div> 
+                            <span class="attention-title"> Calibration Overdue </span> 
+                            <div class="attention-text"> 3 instruments expired </div> 
+                        </div> 
+                    </div> 
+                </a> 
+                
+                <!-- Item 5: Customer Complaints -->
+                <a href="#" class="attention-item d-flex align-items-center decoration-none">
+                    <div class="attention-left d-flex align-items-center"> 
+                        <div class="attention-icon attention-info"> 
+                            <i class="fa-solid fa-headset"></i> 
+                        </div> 
+                        <div> 
+                            <span class="attention-title"> Customer Complaints </span> 
+                            <div class="attention-text"> 2 complaints under review </div> 
+                        </div> 
+                    </div> 
+                </a> 
+                
+            </div> 
+        </div> 
+    </div> 
 </div>
-</div>
 
-</div>
 
 </section>
 

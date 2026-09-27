@@ -1,0 +1,271 @@
+{% extends "quality/quality_base.html" %}
+
+{% block title %}QMS | JKOMS{% endblock %}
+
+{% block content %}
+
+{% include "quality/includes/quality_navbar.html" %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <!-- Header -->
+
+    <section class="page-header mb-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h2>
+                    <i class="fa-solid fa-clipboard-check me-2"></i>
+                    Quality Management System
+                </h2>
+
+                <p>
+                    Manage Internal Audits, System Audits, Management Review Meetings,
+                    Document Control, SOP Management, Risks and Continuous Improvements.
+                </p>
+
+            </div>
+
+            <i class="fa-solid fa-shield-halved header-icon"></i>
+
+        </div>
+
+    </section>
+
+   <!-- KPI CARDS --> 
+<section class="row g-4 mb-4"> 
+  <!-- Internal Audits -->
+  <div class="col-xl-2 col-md-4 col-sm-6"> 
+    <div class="quality-card"> 
+      <div class="kpi-icon icon-yellow"> 
+        <i class="fa-solid fa-list-check"></i> 
+      </div> 
+      <div class="kpi-title">INTERNAL AUDITS</div> 
+      <div class="kpi-value">12</div> 
+      <div class="kpi-description">Planned</div> 
+    </div> 
+  </div> 
+
+  <!-- System Audits -->
+  <div class="col-xl-2 col-md-4 col-sm-6"> 
+    <div class="quality-card"> 
+      <div class="kpi-icon icon-blue"> 
+        <i class="fa-solid fa-shield"></i> 
+      </div> 
+      <div class="kpi-title">SYSTEM AUDITS</div> 
+      <div class="kpi-value">4</div> 
+      <div class="kpi-description">Scheduled</div> 
+    </div> 
+  </div> 
+
+  <!-- Open MRM -->
+  <div class="col-xl-2 col-md-4 col-sm-6"> 
+    <div class="quality-card"> 
+      <div class="kpi-icon icon-red"> 
+        <i class="fa-solid fa-users"></i> 
+      </div> 
+      <div class="kpi-title">OPEN MRM</div> 
+      <div class="kpi-value">8</div> 
+      <div class="kpi-description">Actions</div> 
+    </div> 
+  </div> 
+
+  <!-- SOP Review -->
+  <div class="col-xl-2 col-md-4 col-sm-6"> 
+    <div class="quality-card"> 
+      <div class="kpi-icon icon-yellow"> 
+        <i class="fa-solid fa-book"></i> 
+      </div> 
+      <div class="kpi-title">SOP REVIEW</div> 
+      <div class="kpi-value">5</div> 
+      <div class="kpi-description">Due</div> 
+    </div> 
+  </div> 
+
+  <!-- Risks -->
+  <div class="col-xl-2 col-md-4 col-sm-6"> 
+    <div class="quality-card"> 
+      <div class="kpi-icon icon-blue"> 
+        <i class="fa-solid fa-triangle-exclamation"></i> 
+      </div> 
+      <div class="kpi-title">RISKS</div> 
+      <div class="kpi-value">14</div> 
+      <div class="kpi-description">Open</div> 
+    </div> 
+  </div> 
+
+  <!-- Compliance -->
+  <div class="col-xl-2 col-md-4 col-sm-6"> 
+    <div class="quality-card"> 
+      <div class="kpi-icon icon-green"> 
+        <i class="fa-solid fa-file-circle-check"></i> 
+      </div> 
+      <div class="kpi-title">COMPLIANCE</div> 
+      <div class="kpi-value">96%</div> 
+      <div class="kpi-description">Overall</div> 
+    </div> 
+  </div> 
+</section>
+
+
+    <!-- MODULES --> 
+<section class="row g-4 mb-4"> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-list-check"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">Internal Audit</div> 
+            <div class="qms-module-desc text-muted small"> Audit plans, schedules, findings and closure tracking. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-shield"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">System Audit</div> 
+            <div class="qms-module-desc text-muted small"> IATF, ISO, customer and certification audits. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-users"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">MRM</div> 
+            <div class="qms-module-desc text-muted small"> Management review meetings and action monitoring. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-bullseye"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">Quality Objectives</div> 
+            <div class="qms-module-desc text-muted small"> Department quality goals and performance. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-folder-open"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">Document Control</div> 
+            <div class="qms-module-desc text-muted small"> Procedures, manuals, formats and records. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-book"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">SOP Management</div> 
+            <div class="qms-module-desc text-muted small"> SOP reviews, approvals and revisions. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-triangle-exclamation"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">Risk Register</div> 
+            <div class="qms-module-desc text-muted small"> Risks, opportunities and mitigation plans. </div> 
+        </div>
+    </div> 
+    <div class="col-lg-3 col-md-6"> 
+        <div class="card qms-module-card h-100 p-3">
+            <div class="qms-module-icon mb-2"> 
+                <i class="fa-solid fa-clipboard-list"></i> 
+            </div> 
+            <div class="qms-module-title fw-bold">Action Tracker</div> 
+            <div class="qms-module-desc text-muted small"> Follow-up of audit and MRM actions. </div> 
+        </div>
+    </div> 
+</section> 
+
+<!-- ACTIVITIES + COMPLIANCE --> 
+<section class="row g-4"> 
+    <div class="col-lg-8"> 
+        <div class="card quality-table-card h-100"> 
+            <div class="card-header bg-transparent border-bottom"> 
+                <h5 class="mb-0"> <i class="fa-solid fa-clock-rotate-left me-2"></i> Recent QMS Activities </h5> 
+            </div> 
+            <div class="table-responsive"> 
+                <table class="table quality-table align-middle mb-0"> 
+                    <thead> 
+                        <tr> 
+                            <th>Date</th> 
+                            <th>Module</th> 
+                            <th>Reference</th> 
+                            <th>Description</th> 
+                            <th>Status</th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        <tr> 
+                            <td>27-Sep-2026</td> 
+                            <td>Internal Audit</td> 
+                            <td>IA-2026-015</td> 
+                            <td>Mixing Audit Completed</td> 
+                            <td> <span class="badge bg-success status-badge"> Closed </span> </td> 
+                        </tr> 
+                        <tr> 
+                            <td>26-Sep-2026</td> 
+                            <td>MRM</td> 
+                            <td>MRM-2026-03</td> 
+                            <td>Action Assigned</td> 
+                            <td> <span class="badge bg-primary status-badge"> Open </span> </td> 
+                        </tr> 
+                        <tr> 
+                            <td>25-Sep-2026</td> 
+                            <td>System Audit</td> 
+                            <td>SA-2026-007</td> <td>IATF Audit Planned</td> 
+                            <td> <span class="badge bg-warning text-dark status-badge"> Planned </span> </td> 
+                        </tr> 
+                    </tbody> 
+                </table> 
+            </div> 
+        </div> 
+    </div> 
+    <div class="col-lg-4"> 
+        <div class="card quality-table-card h-100"> 
+            <div class="card-header bg-transparent border-bottom"> 
+                <h5 class="mb-0"> <i class="fa-solid fa-chart-column me-2"></i> Compliance Status </h5> 
+            </div> 
+            <div class="card-body d-flex flex-column justify-content-between"> 
+                <div class="compliance-item mb-3"> 
+                    <strong>Internal Audit Compliance</strong> 
+                    <div class="progress mt-2" style="height: 20px;"> 
+                        <div class="progress-bar bg-success" style="width:94%">94%</div> 
+                    </div> 
+                </div> 
+                <div class="compliance-item mb-3"> 
+                    <strong>MRM Compliance</strong> 
+                    <div class="progress mt-2" style="height: 20px;"> 
+                        <div class="progress-bar bg-success" style="width:100%">100%</div> 
+                    </div> 
+                </div> 
+                <div class="compliance-item mb-3"> 
+                    <strong>Document Compliance</strong> 
+                    <div class="progress mt-2" style="height: 20px;"> 
+                        <div class="progress-bar bg-success" style="width:96%">96%</div> 
+                    </div> 
+                </div> 
+                <div class="compliance-item"> 
+                    <strong>Risk Closure</strong> 
+                    <div class="progress mt-2" style="height: 20px;"> 
+                        <div class="progress-bar bg-warning text-dark" style="width:92%">92%</div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+</section>
+
+
+</main>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 <nav class="module-navbar">
   <div class="container-fluid px-3 px-lg-4">
     <div class="module-nav-wrapper">
+      
       <!-- Module Heading -->
       <div class="module-nav-heading">
         <i class="fa-solid fa-shield-halved me-2"></i>
@@ -16,7 +17,7 @@
         </a>
 
         <!-- QMS -->
-        <a class="module-nav-link {% if active_page == 'qms' %}active{% endif %}" href="#">
+        <a class="module-nav-link {% if active_page == 'qms' %}active{% endif %}" href="{% url 'quality:qms' %}">
           <i class="fa-solid fa-clipboard-check"></i>
           <span>QMS</span>
         </a>
