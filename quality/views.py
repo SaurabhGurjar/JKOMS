@@ -8,4 +8,8 @@ def dashboard(request):
         "active_page": "dashboard",
     }
 
-    return render(request, "quality_dashboard.html", context)
+    return render(
+        request,
+        "quality/dashboard.html",
+        context,
+    )
