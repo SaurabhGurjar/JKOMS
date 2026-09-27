@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'production',
-    'usermanagement'
+    'usermanagement',
+    'quality'
 ]
 
 MIDDLEWARE = [

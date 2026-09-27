@@ -1,0 +1,878 @@
+{% extends "quality_base.html" %}
+{% block title %}
+Quality Dashboard | JKOMS
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.header-icon{
+    color: var(--accent);
+    font-size:60px;
+}
+
+.quality-card{
+    height:100%;
+    padding:22px;
+    position:relative;
+    overflow:hidden;
+    background:var(--white);
+    border:1px solid rgba(51,77,66,0.12);
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(51,77,66,0.06);
+    transition:0.3s;
+}
+
+.quality-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 25px rgba(51,77,66,0.15);
+}
+
+.kpi-title{
+    color:rgba(51,77,66,0.70);
+    font-size:.9rem;
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+.kpi-value{
+    font-size:2rem;
+    font-weight:700;
+    color:var(--secondary);
+}
+
+.kpi-description{
+    font-size:.85rem;
+    color:rgba(51,77,66,0.7);
+}
+
+.kpi-icon{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:58px;
+    height:58px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+}
+
+.icon-yellow{
+    background:rgba(255,235,0,.25);
+    color:var(--secondary);
+}
+
+.icon-green{
+    background:var(--secondary);
+    color:white;
+}
+
+.icon-red{
+    background:rgba(220,38,38,.15);
+    color:#dc2626;
+}
+
+.icon-blue{
+    background:rgba(59,130,246,.15);
+    color:#2563eb;
+}
+
+.filter-bar{
+    padding:18px;
+    background:white;
+    border-radius:18px;
+    margin-bottom:25px;
+    border:1px solid rgba(51,77,66,.12);
+    box-shadow:0 8px 25px rgba(51,77,66,.08);
+}
+
+.quality-table-card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(51,77,66,.12);
+    box-shadow:0 8px 25px rgba(51,77,66,.06);
+}
+
+.quality-table-card .card-header{
+    background:rgba(51,77,66,.04);
+    border-bottom:1px solid rgba(51,77,66,.10);
+    padding:18px 22px;
+}
+
+.quality-table{
+    margin-bottom:0;
+}
+
+.quality-table thead th{
+    background:rgba(51,77,66,.04);
+    color:rgba(51,77,66,.70);
+    font-size:.85rem;
+}
+
+.quality-table tbody tr:hover{
+    background:rgba(255,235,0,.08);
+}
+
+.status-badge{
+    padding:6px 12px;
+    border-radius:50px;
+    font-size:.8rem;
+    font-weight:600;
+}
+
+.status-open{
+    background:rgba(220,38,38,.15);
+    color:#dc2626;
+}
+
+.status-active{
+    background:rgba(255,235,0,.25);
+    color:#334d42;
+}
+
+.status-closed{
+    background:rgba(34,197,94,.15);
+    color:#16a34a;
+}
+
+.quality-module-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.quality-module-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:14px 16px;
+
+    background:#fff;
+    color:var(--secondary);
+
+    border:1px solid rgba(51,77,66,.12);
+    border-radius:14px;
+
+    text-decoration:none;
+
+    transition:all .3s ease;
+}
+
+.quality-module-item i{
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,235,0,.20);
+    color:var(--secondary);
+
+    border-radius:10px;
+
+    font-size:14px;
+}
+
+.quality-module-item span{
+    font-weight:600;
+}
+
+.quality-module-item:hover{
+    background:rgba(255,235,0,.10);
+    border-color:var(--accent);
+
+    transform:translateX(5px);
+
+    color:var(--secondary);
+
+    box-shadow:0 8px 16px rgba(51,77,66,.10);
+}
+/* =========================================
+   JKOMS COMMON MODULE NAVBAR
+   ========================================= */
+
+.module-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+
+    overflow: visible;
+
+    background: rgba(51, 77, 66, 0.97);
+
+    border-bottom: 3px solid var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 18px rgba(51, 77, 66, 0.16);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.module-nav-wrapper {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    min-height: 62px;
+
+    overflow: visible;
+}
+
+/* Module name on the left */
+
+.module-nav-heading {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    padding-right: 20px;
+
+    color: var(--white, #ffffff);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.module-nav-heading i {
+    color: var(--accent, #ffeb00);
+    font-size: 1rem;
+}
+
+/* =========================================
+   NAVIGATION LINKS
+   ========================================= */
+
+.module-nav-links {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+
+    gap: 5px;
+
+    min-width: 0;
+    padding: 7px 0;
+
+    /*
+      Do not use overflow-x: auto here.
+      It causes dropdown menus to create scrollbars.
+    */
+    overflow: visible;
+}
+
+.module-nav-link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 13px;
+
+    color: rgba(255, 255, 255, 0.8);
+    background-color: transparent;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    line-height: 1.5;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        color 0.25s ease,
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.module-nav-link:hover,
+.module-nav-link:focus {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
+
+    text-decoration: none;
+    outline: none;
+
+    transform: translateY(-1px);
+}
+
+.module-nav-link.active {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 15px rgba(255, 235, 0, 0.2);
+}
+
+.module-nav-link i {
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   DROPDOWN BUTTON
+   ========================================= */
+
+.module-nav-dropdown {
+    position: relative;
+
+    display: inline-flex;
+    flex: 0 0 auto;
+
+    overflow: visible;
+}
+
+.module-nav-dropdown > .module-nav-link {
+    margin: 0;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.module-nav-dropdown > .module-nav-link.show,
+.module-nav-dropdown > .module-nav-link[aria-expanded="true"] {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 15px rgba(255, 235, 0, 0.2);
+}
+
+.module-nav-dropdown .dropdown-toggle::after {
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* =========================================
+   DROPDOWN MENU
+   ========================================= */
+
+.module-dropdown-menu {
+    z-index: 1100;
+
+    min-width: 250px;
+    margin-top: 8px !important;
+    padding: 8px;
+
+    background-color: var(--white, #ffffff);
+
+    border: 1px solid rgba(51, 77, 66, 0.14);
+    border-radius: 14px;
+
+    box-shadow: 0 14px 35px rgba(51, 77, 66, 0.2);
+}
+
+.module-dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 11px 13px;
+
+    color: var(--secondary, #334d42);
+    background-color: transparent;
+
+    border-radius: 9px;
+
+    font-size: 0.86rem;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.module-dropdown-menu .dropdown-item i {
+    width: 22px;
+
+    color: var(--secondary, #334d42);
+
+    text-align: center;
+}
+
+.module-dropdown-menu .dropdown-item:hover,
+.module-dropdown-menu .dropdown-item:focus {
+    color: var(--secondary, #334d42);
+
+    background-color: rgba(255, 235, 0, 0.18);
+
+    outline: none;
+
+    transform: translateX(3px);
+}
+
+.module-dropdown-menu .dropdown-item.active {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+}
+
+/* Prevent Bootstrap active item text from becoming white */
+
+.module-dropdown-menu .dropdown-item.active i {
+    color: var(--secondary, #334d42);
+}
+
+/* =========================================
+   RESPONSIVE NAVBAR
+   ========================================= */
+
+@media (max-width: 1199.98px) {
+    .module-nav-wrapper {
+        align-items: flex-start;
+
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .module-nav-links {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .module-nav-wrapper {
+        display: block;
+
+        padding-top: 10px;
+        padding-bottom: 8px;
+    }
+
+    .module-nav-heading {
+        padding-right: 0;
+        padding-bottom: 8px;
+
+        border-right: 0;
+    }
+
+    .module-nav-links {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 6px;
+
+        padding-bottom: 4px;
+
+        overflow: visible;
+    }
+
+    .module-nav-link {
+        padding: 9px 12px;
+    }
+
+    .module-dropdown-menu {
+        min-width: 230px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .quality-nav-wrapper {
+        display: block;
+        padding-top: 10px;
+        padding-bottom: 8px;
+    }
+
+    .quality-nav-heading {
+        padding-right: 0;
+        padding-bottom: 8px;
+        border-right: 0;
+    }
+
+    .quality-nav-links {
+        padding-bottom: 5px;
+    }
+
+    .quality-nav-link {
+        padding: 9px 12px;
+    }
+}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+{% include "includes/quality_navbar.html" %}
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <!-- Page Header -->
+    <section class="page-header mb-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+                <h2>
+                    <i class="fas fa-check-circle me-2"></i>
+                    Quality Dashboard
+                </h2>
+
+                <p>
+                    Monitor Quality Management System, NCMR, CAPA, Audits,
+                    Deviations and Compliance Activities.
+                </p>
+            </div>
+
+            <i class="fas fa-shield-halved header-icon"></i>
+
+        </div>
+
+    </section>
+
+    <!-- Filters -->
+
+    <section class="filter-bar">
+
+        <div class="row g-3">
+
+            <div class="col-lg-3">
+                <label class="form-label">From Date</label>
+                <input type="date" class="form-control">
+            </div>
+
+            <div class="col-lg-3">
+                <label class="form-label">To Date</label>
+                <input type="date" class="form-control">
+            </div>
+
+            <div class="col-lg-3">
+                <label class="form-label">Department</label>
+                <select class="form-select">
+                    <option>All Departments</option>
+                    <option>Mixing</option>
+                    <option>Preparation</option>
+                    <option>Building</option>
+                    <option>Curing</option>
+                    <option>Inspection</option>
+                </select>
+            </div>
+
+            <div class="col-lg-3">
+                <button class="btn btn-primary w-100 mt-4">
+                    <i class="fas fa-filter me-2"></i>
+                    Apply Filter
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- KPI Cards -->
+
+    <section class="row g-4 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-yellow">
+                    <i class="fas fa-file-circle-exclamation"></i>
+                </div>
+
+                <div class="kpi-title">OPEN NCMR</div>
+                <div class="kpi-value">42</div>
+                <div class="kpi-description">
+                    Non Conforming Material Reports
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-green">
+                    <i class="fas fa-screwdriver-wrench"></i>
+                </div>
+
+                <div class="kpi-title">OPEN CAPA</div>
+                <div class="kpi-value">18</div>
+                <div class="kpi-description">
+                    Corrective Actions Pending
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-blue">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+
+                <div class="kpi-title">AUDITS DONE</div>
+                <div class="kpi-value">12</div>
+                <div class="kpi-description">
+                    Current Month
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="quality-card">
+
+                <div class="kpi-icon icon-red">
+                    <i class="fas fa-headset"></i>
+                </div>
+
+                <div class="kpi-title">CUSTOMER COMPLAINTS</div>
+                <div class="kpi-value">3</div>
+                <div class="kpi-description">
+                    Current Month
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+<!-- Tables -->
+<section class="row g-4">
+
+    <!-- Module Status -->
+    <!-- FTQ Department-Wise Status -->
+<div class="col-xl-8">
+    <div class="card quality-table-card h-100">
+
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-circle-check me-2"></i>
+                Department-Wise FTQ Status
+            </h5>
+
+            <span class="badge bg-warning text-dark">
+                Target: 98.00%
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+
+                <table class="table quality-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Inspected</th>
+                            <th>Passed First Time</th>
+                            <th>FTQ</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <i class="fa-solid fa-gears me-2"></i>
+                                Mixing
+                            </td>
+                            <td>3,200</td>
+                            <td>3,152</td>
+                            <td><strong>98.50%</strong></td>
+                            <td>98.00%</td>
+                            <td>
+                                <span class="status-badge status-closed">
+                                    On Target
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <i class="fa-solid fa-layer-group me-2"></i>
+                                Preparation
+                            </td>
+                            <td>2,850</td>
+                            <td>2,776</td>
+                            <td><strong>97.40%</strong></td>
+                            <td>98.00%</td>
+                            <td>
+                                <span class="status-badge status-active">
+                                    Attention
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <i class="fa-solid fa-circle-notch me-2"></i>
+                                Tyre Building
+                            </td>
+                            <td>3,500</td>
+                            <td>3,360</td>
+                            <td><strong>96.00%</strong></td>
+                            <td>98.00%</td>
+                            <td>
+                                <span class="status-badge status-open">
+                                    Below Target
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <i class="fa-solid fa-temperature-high me-2"></i>
+                                Curing
+                            </td>
+                            <td>3,100</td>
+                            <td>3,047</td>
+                            <td><strong>98.30%</strong></td>
+                            <td>98.00%</td>
+                            <td>
+                                <span class="status-badge status-closed">
+                                    On Target
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <i class="fa-solid fa-magnifying-glass me-2"></i>
+                                Final Inspection
+                            </td>
+                            <td>3,025</td>
+                            <td>2,964</td>
+                            <td><strong>98.00%</strong></td>
+                            <td>98.00%</td>
+                            <td>
+                                <span class="status-badge status-closed">
+                                    On Target
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Attention Required --><div class="col-xl-4"> 
+    <div class="card quality-table-card h-100"> 
+        <div class="card-header d-flex align-items-center justify-content-between"> 
+            <h5 class="mb-0"> 
+                <i class="fa-solid fa-bell me-2"></i> Attention Required 
+            </h5> 
+            <span class="attention-count badge bg-danger">6</span> 
+        </div> 
+        <div class="list-group list-group-flush card-body attention-list p-0"> 
+            
+            <!-- Item 1 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-3 py-2">
+                <div class="d-flex align-items-center">
+                    <span class="attention-icon me-3 text-warning"> 
+                        <i class="fa-solid fa-triangle-exclamation"></i> 
+                    </span> 
+                    <span class="attention-content d-flex flex-column"> 
+                        <strong>12 NCMRs overdue</strong> 
+                        <small class="text-muted">Immediate closure action required</small> 
+                    </span> 
+                </div>
+                <i class="fa-solid fa-chevron-right attention-arrow text-muted"></i> 
+            </a> 
+
+            <!-- Item 2 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-3 py-2">
+                <div class="d-flex align-items-center">
+                    <span class="attention-icon me-3 text-primary"> 
+                        <i class="fa-solid fa-screwdriver-wrench"></i> 
+                    </span> 
+                    <span class="attention-content d-flex flex-column"> 
+                        <strong>4 CAPAs due this week</strong> 
+                        <small class="text-muted">Effectiveness verification pending</small> 
+                    </span> 
+                </div>
+                <i class="fa-solid fa-chevron-right attention-arrow text-muted"></i> 
+            </a> 
+
+            <!-- Item 3 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-3 py-2">
+                <div class="d-flex align-items-center">
+                    <span class="attention-icon me-3 text-danger"> 
+                        <i class="fa-solid fa-chart-line"></i> 
+                    </span> 
+                    <span class="attention-content d-flex flex-column"> 
+                        <strong>Building FTQ below target</strong> 
+                        <small class="text-muted">Current FTQ is 96.00%</small> 
+                    </span> 
+                </div>
+                <i class="fa-solid fa-chevron-right attention-arrow text-muted"></i> 
+            </a> 
+
+            <!-- Item 4 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-3 py-2">
+                <div class="d-flex align-items-center">
+                    <span class="attention-icon me-3 text-secondary"> 
+                        <i class="fa-solid fa-ruler-combined"></i> 
+                    </span> 
+                    <span class="attention-content d-flex flex-column"> 
+                        <strong>3 instruments overdue</strong> 
+                        <small class="text-muted">Calibration validity expired</small> 
+                    </span> 
+                </div>
+                <i class="fa-solid fa-chevron-right attention-arrow text-muted"></i> 
+            </a> 
+
+            <!-- Item 5 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-3 py-2">
+                <div class="d-flex align-items-center">
+                    <span class="attention-icon me-3 text-info"> 
+                        <i class="fa-solid fa-headset"></i> 
+                    </span> 
+                    <span class="attention-content d-flex flex-column"> 
+                        <strong>2 complaints under review</strong> 
+                        <small class="text-muted">Root cause analysis pending</small> 
+                    </span> 
+                </div>
+                <i class="fa-solid fa-chevron-right attention-arrow text-muted"></i> 
+            </a> 
+
+            <!-- Item 6 -->
+            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border-0 px-3 py-2">
+                <div class="d-flex align-items-center">
+                    <span class="attention-icon me-3 text-success"> 
+                        <i class="fa-solid fa-list-check"></i> 
+                    </span> 
+                    <span class="attention-content d-flex flex-column"> 
+                        <strong>Audit scheduled tomorrow</strong> 
+                        <small class="text-muted">Curing department process audit</small> 
+                    </span> 
+                </div>
+                <i class="fa-solid fa-chevron-right attention-arrow text-muted"></i> 
+            </a> 
+
+        </div> 
+    </div> 
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+{% endblock %}

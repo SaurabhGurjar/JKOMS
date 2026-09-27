@@ -348,6 +348,177 @@
         /* border-top: 3px solid var(--accent); */
       }
 
+    
+  /* =========================================
+     JKOMS COMMON MODULE NAVBAR
+     Used by Production, Quality and all modules
+     ========================================= */
+
+  .module-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+
+    background: rgba(51, 77, 66, 0.97);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border-bottom: 3px solid var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 18px rgba(51, 77, 66, 0.16);
+  }
+
+  .module-nav-wrapper {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    min-height: 62px;
+  }
+
+  .module-nav-heading {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    padding-right: 20px;
+
+    color: var(--white, #ffffff);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+  }
+
+  .module-nav-heading i {
+    color: var(--accent, #ffeb00);
+    font-size: 1rem;
+  }
+
+  .module-nav-links {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 7px 0;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+
+  .module-nav-links::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .module-nav-links::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .module-nav-links::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+  }
+
+  .module-nav-link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 13px;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition:
+      color 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .module-nav-link:hover {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
+
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .module-nav-link.active {
+    color: var(--secondary, #334d42);
+
+    background-color: var(--accent, #ffeb00);
+    border-color: var(--accent, #ffeb00);
+
+    box-shadow: 0 5px 15px rgba(255, 235, 0, 0.2);
+  }
+
+  .module-nav-link i {
+    font-size: 0.9rem;
+  }
+
+  /* Keep the active link visible */
+  .module-nav-link.active {
+    scroll-margin-inline: 20px;
+  }
+
+  /* =========================================
+     RESPONSIVE MODULE NAVBAR
+     ========================================= */
+
+  @media (max-width: 767.98px) {
+    .module-nav-wrapper {
+      display: block;
+
+      padding-top: 10px;
+      padding-bottom: 8px;
+    }
+
+    .module-nav-heading {
+      padding-right: 0;
+      padding-bottom: 8px;
+
+      border-right: 0;
+    }
+
+    .module-nav-links {
+      padding-bottom: 4px;
+    }
+
+    .module-nav-link {
+      padding: 9px 12px;
+    }
+
+    .header-icon {
+      display: none;
+    }
+
+    .kpi-value {
+      font-size: 1.7rem;
+    }
+  }
+
       /* =========================================
        RESPONSIVE
        ========================================= */

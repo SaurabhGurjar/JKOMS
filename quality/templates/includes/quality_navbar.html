@@ -1,0 +1,162 @@
+<nav class="module-navbar">
+  <div class="container-fluid px-3 px-lg-4">
+    <div class="module-nav-wrapper">
+      <!-- Module Heading -->
+      <div class="module-nav-heading">
+        <i class="fa-solid fa-shield-halved me-2"></i>
+        <span>Quality</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="module-nav-links">
+        <!-- Dashboard -->
+        <a class="module-nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'quality:dashboard' %}">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- QMS -->
+        <a class="module-nav-link {% if active_page == 'qms' %}active{% endif %}" href="#">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>QMS</span>
+        </a>
+
+        <!-- Inspections Dropdown -->
+        <div class="dropdown module-nav-dropdown">
+          <button class="module-nav-link dropdown-toggle {% if active_page == 'incoming_quality' or active_page == 'process_quality' or active_page == 'final_inspection' %}active{% endif %}" type="button" id="inspectionDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Inspections</span>
+          </button>
+          <ul class="dropdown-menu module-dropdown-menu" aria-labelledby="inspectionDropdown">
+            <li>
+              <a class="dropdown-item {% if active_page == 'incoming_quality' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-box-open"></i>
+                <span>Incoming Quality</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'process_quality' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-gears"></i>
+                <span>Process Quality</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'final_inspection' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Final Inspection</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Non-Conformance Dropdown -->
+        <div class="dropdown module-nav-dropdown">
+          <button class="module-nav-link dropdown-toggle {% if active_page == 'ncmr' or active_page == 'capa' or active_page == 'deviation' or active_page == 'complaints' or active_page == 'quality_alerts' %}active{% endif %}" type="button" id="nonConformanceDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Non-Conformance</span>
+          </button>
+          <ul class="dropdown-menu module-dropdown-menu" aria-labelledby="nonConformanceDropdown">
+            <li>
+              <a class="dropdown-item {% if active_page == 'ncmr' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>NCMR</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'capa' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>CAPA</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'deviation' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-file-circle-exclamation"></i>
+                <span>Deviation Management</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'complaints' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-headset"></i>
+                <span>Customer Complaints</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'quality_alerts' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-bell"></i>
+                <span>Quality Alerts</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Change Management -->
+        <a class="module-nav-link {% if active_page == 'change_management' %}active{% endif %}" href="#">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Change Management</span>
+        </a>
+
+        <!-- Core Tools Dropdown -->
+        <div class="dropdown module-nav-dropdown">
+          <button class="module-nav-link dropdown-toggle {% if active_page == 'control_plan' or active_page == 'spc' or active_page == 'msa' or active_page == 'ppap' %}active{% endif %}" type="button" id="coreToolsDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+            <i class="fa-solid fa-toolbox"></i>
+            <span>Core Tools</span>
+          </button>
+          <ul class="dropdown-menu module-dropdown-menu" aria-labelledby="coreToolsDropdown">
+            <li>
+              <a class="dropdown-item {% if active_page == 'control_plan' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-list-ol"></i>
+                <span>Control Plan</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'spc' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-chart-area"></i>
+                <span>SPC</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'msa' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>MSA</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'ppap' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-folder-open"></i>
+                <span>PPAP</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Compliance Dropdown -->
+        <div class="dropdown module-nav-dropdown">
+          <button class="module-nav-link dropdown-toggle {% if active_page == 'audits' or active_page == 'calibration' %}active{% endif %}" type="button" id="complianceDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+            <i class="fa-solid fa-shield"></i>
+            <span>Compliance</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end module-dropdown-menu" aria-labelledby="complianceDropdown">
+            <li>
+              <a class="dropdown-item {% if active_page == 'audits' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Audit Management</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if active_page == 'calibration' %}active{% endif %}" href="#">
+                <i class="fa-solid fa-ruler-combined"></i>
+                <span>Calibration Management</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Reports -->
+        <a class="module-nav-link {% if active_page == 'reports' %}active{% endif %}" href="#">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Reports</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

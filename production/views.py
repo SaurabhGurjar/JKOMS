@@ -197,6 +197,7 @@ def production_dashboard(request):
     context = {
         "departments": DEPARTMENTS,
         "entry_types": ENTRY_TYPES,
+        "active_page": "dashboard",
     }
 
     return render(
