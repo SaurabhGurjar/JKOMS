@@ -1,0 +1,1041 @@
+{% extends "base.html" %}
+
+{% block title %}
+Designations | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    .designation-container {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   CARDS
+   ========================================= */
+
+.filter-card,
+.table-card {
+    background: #FFFFFF;
+
+    border: 1px solid rgba(51, 77, 66, 0.12);
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 22px rgba(51, 77, 66, 0.06);
+}
+
+.filter-card {
+    padding: 20px;
+}
+
+.table-card {
+    overflow: hidden;
+}
+
+
+/* =========================================
+   FORM CONTROLS
+   ========================================= */
+
+.form-label {
+    margin-bottom: 7px;
+
+    color: #334D42;
+
+    font-size: 0.84rem;
+    font-weight: 650;
+}
+
+.form-control,
+.form-select {
+    min-height: 44px;
+
+    color: #334D42;
+    background: #FFFFFF;
+
+    border: 1px solid rgba(51, 77, 66, 0.20);
+    border-radius: 10px;
+}
+
+.form-control::placeholder {
+    color: rgba(51, 77, 66, 0.48);
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: #334D42;
+    background: #FFFFFF;
+
+    border-color: #FFEB00;
+
+    box-shadow:
+        0 0 0 0.2rem rgba(255, 235, 0, 0.25);
+}
+
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+.btn-jkoms {
+    color: #334D42;
+
+    background: #FFEB00;
+    border-color: #FFEB00;
+
+    font-weight: 700;
+}
+
+.btn-jkoms:hover,
+.btn-jkoms:focus {
+    color: #334D42;
+
+    background: #E6D500;
+    border-color: #E6D500;
+}
+
+.btn-jkoms-dark {
+    color: #FFFFFF;
+
+    background: #334D42;
+    border-color: #334D42;
+
+    font-weight: 600;
+}
+
+.btn-jkoms-dark:hover,
+.btn-jkoms-dark:focus {
+    color: #FFFFFF;
+
+    background: #263A32;
+    border-color: #263A32;
+}
+
+
+/* =========================================
+   TABLE
+   ========================================= */
+
+.table-card .table {
+    margin-bottom: 0;
+
+    color: #334D42;
+}
+
+.table-card .table > :not(caption) > * > * {
+    padding: 14px;
+
+    vertical-align: middle;
+
+    border-color:
+        rgba(51, 77, 66, 0.09);
+}
+
+.table-card thead th {
+    color: rgba(51, 77, 66, 0.68);
+
+    background:
+        rgba(51, 77, 66, 0.04);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+
+    white-space: nowrap;
+}
+
+.table-card tbody tr {
+    transition: background 0.2s ease;
+}
+
+.table-card tbody tr:hover {
+    background:
+        rgba(255, 235, 0, 0.06);
+}
+
+
+/* =========================================
+   DESIGNATION
+   ========================================= */
+
+.designation-code {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.18);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.45);
+
+    border-radius: 8px;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.designation-name {
+    color: #334D42;
+
+    font-weight: 700;
+}
+
+.designation-meta {
+    margin-top: 3px;
+
+    color: rgba(51, 77, 66, 0.58);
+
+    font-size: 0.76rem;
+}
+
+
+/* =========================================
+   GRADE
+   ========================================= */
+
+.grade-badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    color: #334D42;
+
+    background: #F5F5F5;
+
+    border:
+        1px solid rgba(51, 77, 66, 0.12);
+
+    border-radius: 20px;
+
+    font-size: 0.75rem;
+    font-weight: 650;
+}
+
+
+/* =========================================
+   RANK
+   ========================================= */
+
+.rank-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 30px;
+
+    padding: 0 8px;
+
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.15);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.35);
+
+    border-radius: 8px;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.status-active,
+.status-inactive {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 0.74rem;
+    font-weight: 650;
+}
+
+.status-active {
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.20);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.48);
+}
+
+.status-inactive {
+    color: #DC2626;
+
+    background:
+        rgba(220, 38, 38, 0.07);
+
+    border:
+        1px solid rgba(220, 38, 38, 0.20);
+}
+
+
+/* =========================================
+   ACTIONS
+   ========================================= */
+
+.action-link,
+.action-button {
+    width: 35px;
+    height: 35px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 2px;
+
+    border-radius: 8px;
+}
+
+.action-link {
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.14);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.35);
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.action-link:hover {
+    color: #334D42;
+
+    background: #FFEB00;
+
+    transform: translateY(-1px);
+}
+
+.action-button {
+    transition: transform 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+}
+
+.action-form {
+    display: inline-block;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.empty-state {
+    padding: 55px 20px !important;
+
+    color:
+        rgba(51, 77, 66, 0.58) !important;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   INFORMATION NOTE
+   ========================================= */
+
+.architecture-note {
+    padding: 17px;
+
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.07);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.35);
+
+    border-radius: 11px;
+
+    font-size: 0.84rem;
+    line-height: 1.55;
+}
+
+.example-box {
+    margin-top: 12px;
+    padding: 12px;
+
+    background: #FFFFFF;
+
+    border:
+        1px solid rgba(51, 77, 66, 0.10);
+
+    border-radius: 9px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 767.98px) {
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions .btn {
+        width: 100%;
+    }
+}
+   
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <div class="designation-container">
+
+
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i
+                            class="fa-solid
+                                   fa-id-card
+                                   me-2"
+                        ></i>
+
+                        Designations
+
+                    </h2>
+
+
+                    <p class="mb-0">
+
+                        Manage HR titles and rank ordering independently
+                        from organizational Positions and JKOMS authority.
+
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="header-actions
+                           d-flex
+                           flex-column
+                           flex-sm-row
+                           gap-2"
+                >
+
+                    {% url 'usermanagement:organization_dashboard' %}
+                        <i class="fa-solid fa-arrow-left me-2"></i>
+
+                        Organization
+                    </a>
+
+
+                    {% url 'usermanagement:designation_create' %}
+                        <i class="fa-solid fa-plus me-2"></i>
+
+                        Add Designation
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             FILTERS
+             ========================================================= -->
+
+        <section class="filter-card mb-4">
+
+            {% url 'usermanagement:designation_list' %}
+
+                <div class="row g-3 align-items-end">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-lg-7">
+
+                        <label
+                            for="designationSearch"
+                            class="form-label"
+                        >
+                            Search
+                        </label>
+
+                        <input
+                            type="search"
+                            id="designationSearch"
+                            name="search"
+                            value="{{ search_query }}"
+                            class="form-control"
+                            placeholder="Search code, designation name or grade"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-lg-2">
+
+                        <label
+                            for="statusFilter"
+                            class="form-label"
+                        >
+                            Status
+                        </label>
+
+                        <select
+                            id="statusFilter"
+                            name="status"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All
+                            </option>
+
+
+                            <option
+                                value="active"
+                                {% if status_filter == "active" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Active
+                            </option>
+
+
+                            <option
+                                value="inactive"
+                                {% if status_filter == "inactive" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="col-lg-3">
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-jkoms flex-grow-1"
+                            >
+                                <i
+                                    class="fa-solid
+                                           fa-magnifying-glass
+                                           me-1"
+                                ></i>
+
+                                Search
+                            </button>
+
+
+                            {% url 'usermanagement:designation_list' %}
+                                <i
+                                    class="fa-solid
+                                           fa-filter-circle-xmark"
+                                ></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {% if search_query or status_filter %}
+
+                    <div class="mt-3 small text-muted">
+
+                        <i class="fa-solid fa-filter me-1"></i>
+
+                        Filters are currently applied.
+
+                        {% url 'usermanagement:designation_list' %}
+                            Clear all
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================================================
+             DESIGNATION TABLE
+             ========================================================= -->
+
+        <section class="table-card mb-4">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Code
+                            </th>
+
+                            <th>
+                                Designation
+                            </th>
+
+                            <th>
+                                Grade
+                            </th>
+
+                            <th>
+                                Rank Order
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Updated
+                            </th>
+
+                            <th class="text-end">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for designation in designations %}
+
+                            <tr>
+
+
+                                <!-- =================================
+                                     CODE
+                                     ================================= -->
+
+                                <td>
+
+                                    <span class="designation-code">
+
+                                        {{ designation.code }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     NAME
+                                     ================================= -->
+
+                                <td>
+
+                                    <div class="designation-name">
+
+                                        {{ designation.name }}
+
+                                    </div>
+
+
+                                    {% if designation.positions.exists %}
+
+                                        <div class="designation-meta">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-briefcase
+                                                       me-1"
+                                            ></i>
+
+                                            Used by Position records
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     GRADE
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if designation.grade %}
+
+                                        <span class="grade-badge">
+
+                                            {{ designation.grade }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     RANK
+                                     ================================= -->
+
+                                <td>
+
+                                    <span class="rank-value">
+
+                                        {{ designation.rank_order }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     STATUS
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if designation.is_active %}
+
+                                        <span class="status-active">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-circle-check"
+                                            ></i>
+
+                                            Active
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-inactive">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-circle-xmark"
+                                            ></i>
+
+                                            Inactive
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     UPDATED
+                                     ================================= -->
+
+                                <td>
+
+                                    <div>
+
+                                        {{ designation.updated_at|date:"d M Y" }}
+
+                                    </div>
+
+                                    <div class="small text-muted">
+
+                                        {{ designation.updated_at|date:"H:i" }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ACTIONS
+                                     ================================= -->
+
+                                <td class="text-end text-nowrap">
+
+
+                                    <!-- EDIT -->
+
+                                    {% url 'usermanagement:designation_edit' designation.id %}
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+
+                                    <!-- ACTIVATE / DEACTIVATE -->
+
+                                    {% url 'usermanagement:designation_status_toggle' designation.id %}
+
+                                        {% csrf_token %}
+
+
+                                        {% if designation.is_active %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn
+                                                       btn-outline-warning
+                                                       action-button"
+                                                title="Deactivate Designation"
+                                                aria-label="Deactivate Designation"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to deactivate {{ designation.name|escapejs }}?'
+                                                );"
+                                            >
+                                                <i
+                                                    class="fa-solid
+                                                           fa-pause"
+                                                ></i>
+                                            </button>
+
+                                        {% else %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn
+                                                       btn-outline-success
+                                                       action-button"
+                                                title="Activate Designation"
+                                                aria-label="Activate Designation"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to activate {{ designation.name|escapejs }}?'
+                                                );"
+                                            >
+                                                <i
+                                                    class="fa-solid
+                                                           fa-play"
+                                                ></i>
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <!-- =====================================
+                                 EMPTY STATE
+                                 ===================================== -->
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="empty-state"
+                                >
+
+                                    <i
+                                        class="fa-solid
+                                               fa-id-card
+                                               fa-3x
+                                               mb-3"
+                                    ></i>
+
+
+                                    <h5>
+                                        No Designations Found
+                                    </h5>
+
+
+                                    {% if search_query or status_filter %}
+
+                                        <p>
+
+                                            No Designations match
+                                            the current filters.
+
+                                        </p>
+
+
+                                        {% url 'usermanagement:designation_list' %}
+                                            <i
+                                                class="fa-solid
+                                                       fa-filter-circle-xmark
+                                                       me-2"
+                                            ></i>
+
+                                            Clear Filters
+                                        </a>
+
+
+                                    {% else %}
+
+                                        <p>
+
+                                            Create the HR Designation
+                                            Master before assigning
+                                            Designations to Positions.
+
+                                        </p>
+
+
+                                        {% url 'usermanagement:designation_create' %}
+                                            <i class="fa-solid fa-plus me-2"></i>
+
+                                            Add Designation
+                                        </a>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             ARCHITECTURE NOTE
+             ========================================================= -->
+
+        <section class="architecture-note">
+
+            <div class="fw-bold mb-2">
+
+                <i class="fa-solid fa-circle-info me-2"></i>
+
+                Designation vs Position
+
+            </div>
+
+
+            <div>
+
+                A <strong>Designation</strong> is an HR title or rank.
+
+                A <strong>Position</strong> is an organizational
+                responsibility.
+
+            </div>
+
+
+            <div class="example-box">
+
+                <div>
+
+                    <strong>Designation:</strong>
+                    Assistant Manager
+
+                </div>
+
+                <div class="mt-2">
+
+                    <strong>Position:</strong>
+                    Tube Plant Quality Section Manager
+
+                </div>
+
+                <div class="mt-2">
+
+                    <strong>Organization Unit:</strong>
+                    Tube Plant
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-3">
+
+                Rank Order is intended only for sorting and presentation.
+                It must not determine Position reporting authority,
+                workflow approval rights or JKOMS permissions.
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}

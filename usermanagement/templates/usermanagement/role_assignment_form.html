@@ -1,0 +1,1054 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ page_title }} | LTPOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>.assignment-container {
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.assignment-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(51, 77, 66, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 6px 22px rgba(51, 77, 66, 0.07);
+  overflow: hidden;
+}
+
+.assignment-header {
+  padding: 24px 26px;
+  background: linear-gradient(135deg, rgba(255, 235, 0, 0.20), rgba(255, 235, 0, 0.04));
+  border-bottom: 1px solid rgba(51, 77, 66, 0.10);
+}
+
+.assignment-header h4 {
+  margin-bottom: 5px;
+  color: #334D42;
+  font-weight: 700;
+}
+
+.assignment-header p {
+  margin-bottom: 0;
+  color: rgba(51, 77, 66, 0.68);
+}
+
+/* ========================================= SECTIONS ========================================= */
+.form-section {
+  padding: 25px;
+}
+
+.form-section + .form-section {
+  border-top: 1px solid rgba(51, 77, 66, 0.10);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #334D42;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.section-icon {
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.28);
+  border-radius: 9px;
+}
+
+/* ========================================= FORM FIELDS ========================================= */
+.form-label {
+  margin-bottom: 7px;
+  color: #334D42;
+  font-weight: 600;
+}
+
+.required-mark {
+  color: #DC2626;
+}
+
+.form-control, .form-select {
+  min-height: 46px;
+  color: #334D42;
+  background: #FFFFFF;
+  border: 1px solid rgba(51, 77, 66, 0.22);
+  border-radius: 10px;
+}
+
+.form-control:focus, .form-select:focus {
+  color: #334D42;
+  background: #FFFFFF;
+  border-color: #FFEB00;
+  box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
+}
+
+.form-check-input {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-color: rgba(51, 77, 66, 0.35);
+}
+
+.form-check-input:checked {
+  background-color: #FFEB00;
+  border-color: #334D42;
+}
+
+.form-check-label {
+  color: #334D42;
+  font-weight: 600;
+}
+
+.form-text {
+  margin-top: 6px;
+  color: rgba(51, 77, 66, 0.65) !important;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.errorlist {
+  padding-left: 0;
+  margin-top: 6px;
+  margin-bottom: 0;
+  color: #DC2626;
+  list-style: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.field-error .form-control, .field-error .form-select {
+  border-color: #DC2626;
+}
+
+.target-card {
+  height: 100%;
+  padding: 18px;
+  background: #F8F8F8;
+  border: 1px solid rgba(51, 77, 66, 0.11);
+  border-radius: 12px;
+}
+
+.target-card-title {
+  margin-bottom: 12px;
+  color: #334D42;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* ========================================= SCOPE ========================================= */
+.scope-intro {
+  padding: 15px;
+  margin-bottom: 15px;
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.08);
+  border: 1px solid rgba(255, 235, 0, 0.38);
+  border-radius: 10px;
+  font-size: 0.84rem;
+}
+
+.scope-row {
+  position: relative;
+  padding: 18px;
+  margin-bottom: 15px;
+  background: #F8F8F8;
+  border: 1px solid rgba(51, 77, 66, 0.12);
+  border-radius: 12px;
+}
+
+.scope-row:last-child {
+  margin-bottom: 0;
+}
+
+.scope-number {
+  margin-bottom: 14px;
+  color: #334D42;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.scope-delete {
+  padding-top: 31px;
+}
+
+/* ========================================= STATUS ========================================= */
+.status-card {
+  padding: 18px;
+  background: #F8F8F8;
+  border: 1px solid rgba(51, 77, 66, 0.11);
+  border-radius: 12px;
+}
+
+/* ========================================= ACTIONS ========================================= */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-primary {
+  color: #334D42;
+  background: #FFEB00;
+  border-color: #FFEB00;
+  font-weight: 700;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  color: #334D42 !important;
+  background: #E6D500 !important;
+  border-color: #E6D500 !important;
+}
+
+.btn-secondary {
+  color: #FFFFFF;
+  background: #334D42;
+  border-color: #334D42;
+  font-weight: 600;
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+  color: #FFFFFF;
+  background: #263A32;
+  border-color: #263A32;
+}
+
+/* ========================================= TARGET INFORMATION ========================================= */
+.architecture-note {
+  padding: 16px;
+  margin-top: 20px;
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.08);
+  border: 1px solid rgba(255, 235, 0, 0.38);
+  border-radius: 11px;
+  font-size: 0.84rem;
+}
+
+/* ========================================= RESPONSIVE ========================================= */
+@media (max-width: 767.98px) {
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+  .form-actions .btn {
+    width: 100%;
+  }
+  .scope-delete {
+    padding-top: 0;
+  }
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <div class="assignment-container">
+
+
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i
+                            class="fa-solid
+                                   fa-user-shield
+                                   me-2"
+                        ></i>
+
+                        {{ page_title }}
+
+                    </h2>
+
+                    <p class="mb-0">
+                        {{ page_description }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <a href="{% url 'usermanagement:role_assignment_list' %}" class="btn btn-primary">
+                        <i class="fa-solid fa-arrow-left me-2"></i>
+
+                        Back to Role Assignments
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             FORM
+             ========================================================= -->
+
+        <section class="assignment-card">
+
+            <div class="assignment-header">
+
+                <h4>
+                    {% if is_create %}
+                        New Role Assignment
+                    {% else %}
+                        Role Assignment
+                    {% endif %}
+                </h4>
+
+                <p>
+                    Assign authority to either a User or Position and
+                    define where that authority applies.
+                </p>
+
+            </div>
+
+
+            <form method="post" novalidate>
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     NON-FIELD ERRORS
+                     ================================================= -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="px-4 pt-4">
+
+                        <div class="alert alert-danger mb-0">
+
+                            <i
+                                class="fa-solid
+                                       fa-triangle-exclamation
+                                       me-2"
+                            ></i>
+
+                            {% for error in form.non_field_errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     ROLE
+                     ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-icon">
+                            <i class="fa-solid fa-shield"></i>
+                        </span>
+
+                        Role
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div
+                            class="col-lg-6
+                                   {% if form.role.errors %}
+                                       field-error
+                                   {% endif %}"
+                        >
+
+                            <label
+                                for="{{ form.role.id_for_label }}"
+                                class="form-label"
+                            >
+                                LTPOMS Role
+
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            </label>
+
+                            {{ form.role }}
+
+                            {% for error in form.role.errors %}
+
+                                <div class="errorlist">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            {% if form.role.help_text %}
+
+                                <div class="form-text">
+                                    {{ form.role.help_text }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     ASSIGNMENT TARGET
+                     ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-icon">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </span>
+
+                        Assignment Target
+
+                    </div>
+
+
+                    <div class="scope-intro">
+
+                        Select <strong>either a User or a Position</strong>,
+                        never both.
+
+                        For organizational authority such as
+                        Plant Quality Head or Sub-Plant Quality Head,
+                        assigning the Role to the
+                        <strong>Position is preferred</strong>.
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- USER -->
+
+                        <div class="col-lg-6">
+
+                            <div class="target-card">
+
+                                <div class="target-card-title">
+
+                                    <i class="fa-solid fa-user me-1"></i>
+
+                                    Direct User Assignment
+
+                                </div>
+
+
+                                <div
+                                    class="{% if form.user.errors %}
+                                               field-error
+                                           {% endif %}"
+                                >
+
+                                    <label
+                                        for="{{ form.user.id_for_label }}"
+                                        class="form-label"
+                                    >
+                                        User
+                                    </label>
+
+                                    {{ form.user }}
+
+                                    {% for error in form.user.errors %}
+
+                                        <div class="errorlist">
+                                            {{ error }}
+                                        </div>
+
+                                    {% endfor %}
+
+
+                                    {% if form.user.help_text %}
+
+                                        <div class="form-text">
+                                            {{ form.user.help_text }}
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- POSITION -->
+
+                        <div class="col-lg-6">
+
+                            <div class="target-card">
+
+                                <div class="target-card-title">
+
+                                    <i class="fa-solid fa-briefcase me-1"></i>
+
+                                    Position Assignment
+
+                                </div>
+
+
+                                <div
+                                    class="{% if form.position.errors %}
+                                               field-error
+                                           {% endif %}"
+                                >
+
+                                    <label
+                                        for="{{ form.position.id_for_label }}"
+                                        class="form-label"
+                                    >
+                                        Position
+                                    </label>
+
+                                    {{ form.position }}
+
+                                    {% for error in form.position.errors %}
+
+                                        <div class="errorlist">
+                                            {{ error }}
+                                        </div>
+
+                                    {% endfor %}
+
+
+                                    {% if form.position.help_text %}
+
+                                        <div class="form-text">
+                                            {{ form.position.help_text }}
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="architecture-note">
+
+                        <strong>
+                            Recommended LTPOMS approach:
+                        </strong>
+
+                        assign organizational authority to a Position.
+
+                        If the Employee occupying that Position changes,
+                        the Role remains attached to the Position and the
+                        new occupant inherits the authority automatically.
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     VALIDITY
+                     ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-icon">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </span>
+
+                        Validity
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- VALID FROM -->
+
+                        <div
+                            class="col-md-6
+                                   {% if form.valid_from.errors %}
+                                       field-error
+                                   {% endif %}"
+                        >
+
+                            <label
+                                for="{{ form.valid_from.id_for_label }}"
+                                class="form-label"
+                            >
+                                Valid From
+                            </label>
+
+                            {{ form.valid_from }}
+
+                            {% for error in form.valid_from.errors %}
+
+                                <div class="errorlist">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Leave blank if authority is effective
+                                immediately without a defined starting date.
+                            </div>
+
+                        </div>
+
+
+                        <!-- VALID TO -->
+
+                        <div
+                            class="col-md-6
+                                   {% if form.valid_to.errors %}
+                                       field-error
+                                   {% endif %}"
+                        >
+
+                            <label
+                                for="{{ form.valid_to.id_for_label }}"
+                                class="form-label"
+                            >
+                                Valid To
+                            </label>
+
+                            {{ form.valid_to }}
+
+                            {% for error in form.valid_to.errors %}
+
+                                <div class="errorlist">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Leave blank for an open-ended assignment.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     AUTHORIZATION SCOPE
+                     ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-icon">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </span>
+
+                        Authorization Scope
+
+                    </div>
+
+
+                    <div class="scope-intro">
+
+                        Scope controls <strong>where</strong> the Role
+                        applies.
+
+                        For example, a Quality Approver scoped to
+                        Sub-Plant 2 with descendants enabled can apply
+                        to Tube Plant and other child organization units
+                        under Sub-Plant 2.
+
+                        If no scope rows are saved, the current service
+                        logic treats the Role Assignment as unrestricted.
+
+                    </div>
+
+
+                    <!-- IMPORTANT MANAGEMENT FIELDS -->
+
+                    {{ scope_formset.management_form }}
+
+
+                    {% if scope_formset.non_form_errors %}
+
+                        <div class="alert alert-danger">
+
+                            {% for error in scope_formset.non_form_errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div id="scope-formset">
+
+                        {% for scope_form in scope_formset %}
+
+                            <div
+                                class="scope-row"
+                                data-scope-form
+                            >
+
+                                {% for hidden in scope_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+
+
+                                <div class="scope-number">
+
+                                    Scope
+                                    <span data-scope-number>
+                                        {{ forloop.counter }}
+                                    </span>
+
+                                </div>
+
+
+                                {% if scope_form.non_field_errors %}
+
+                                    <div class="alert alert-danger py-2">
+
+                                        {% for error in scope_form.non_field_errors %}
+                                            <div>
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="row g-3">
+
+
+                                    <!-- ORGANIZATION UNIT -->
+
+                                    <div class="col-lg-5">
+
+                                        <label
+                                            for="{{ scope_form.organization_unit.id_for_label }}"
+                                            class="form-label"
+                                        >
+                                            Organization Unit
+                                        </label>
+
+                                        {{ scope_form.organization_unit }}
+
+                                        {% for error in scope_form.organization_unit.errors %}
+
+                                            <div class="errorlist">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                        <div class="form-text">
+                                            Blank means no organization
+                                            restriction for this scope.
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- MODULE -->
+
+                                    <div class="col-lg-4">
+
+                                        <label
+                                            for="{{ scope_form.module.id_for_label }}"
+                                            class="form-label"
+                                        >
+                                            Module
+                                        </label>
+
+                                        {{ scope_form.module }}
+
+                                        {% for error in scope_form.module.errors %}
+
+                                            <div class="errorlist">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                        <div class="form-text">
+                                            Blank means no module
+                                            restriction for this scope.
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- DESCENDANTS -->
+
+                                    <div class="col-lg-2">
+
+                                        <label class="form-label d-block">
+                                            Inheritance
+                                        </label>
+
+                                        <div class="form-check mt-2">
+
+                                            {{ scope_form.include_descendants }}
+
+                                            <label
+                                                class="form-check-label"
+                                                for="{{ scope_form.include_descendants.id_for_label }}"
+                                            >
+                                                Descendants
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- DELETE -->
+
+                                    <div class="col-lg-1 scope-delete">
+
+                                        {% if scope_formset.can_delete %}
+
+                                            <div class="form-check">
+
+                                                {{ scope_form.DELETE }}
+
+                                                <label
+                                                    class="form-check-label small"
+                                                    for="{{ scope_form.DELETE.id_for_label }}"
+                                                >
+                                                    Delete
+                                                </label>
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     ACTIVE STATUS
+                     ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-icon">
+                            <i class="fa-solid fa-toggle-on"></i>
+                        </span>
+
+                        Assignment Status
+
+                    </div>
+
+
+                    <div class="status-card">
+
+                        <div class="form-check">
+
+                            {{ form.is_active }}
+
+                            <label
+                                class="form-check-label"
+                                for="{{ form.is_active.id_for_label }}"
+                            >
+                                Active Role Assignment
+                            </label>
+
+                        </div>
+
+
+                        {% for error in form.is_active.errors %}
+
+                            <div class="errorlist">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+
+                        <div class="form-text">
+
+                            Inactive Role Assignments do not contribute
+                            to effective LTPOMS authorization.
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     ACTIONS
+                     ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="form-actions">
+
+                        <a href="{% url 'usermanagement:role_assignment_list' %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-xmark me-2"></i>
+
+                            Cancel
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary px-4"
+                        >
+                            <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                            {{ submit_text }}
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- =============================================================
+     UX ASSISTANCE
+     ============================================================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const userSelect = document.getElementById("id_user");
+    const positionSelect = document.getElementById("id_position");
+
+    if (userSelect && positionSelect) {
+
+        function updateTargetState() {
+            const hasUser = userSelect.value !== "";
+            const hasPosition = positionSelect.value !== "";
+
+            /*
+             * Do not permanently disable values during a bound/error
+             * form state. We only visually guide normal selection.
+             */
+
+            if (hasUser && !hasPosition) {
+                positionSelect.classList.add("opacity-75");
+            } else {
+                positionSelect.classList.remove("opacity-75");
+            }
+
+            if (hasPosition && !hasUser) {
+                userSelect.classList.add("opacity-75");
+            } else {
+                userSelect.classList.remove("opacity-75");
+            }
+        }
+
+        userSelect.addEventListener(
+            "change",
+            updateTargetState
+        );
+
+        positionSelect.addEventListener(
+            "change",
+            updateTargetState
+        );
+
+        updateTargetState();
+    }
+
+
+    /*
+     * Keep visible Scope numbering aligned with rendered forms.
+     */
+
+    const scopeRows = document.querySelectorAll(
+        "[data-scope-form]"
+    );
+
+    scopeRows.forEach(function (row, index) {
+        const numberElement = row.querySelector(
+            "[data-scope-number]"
+        );
+
+        if (numberElement) {
+            numberElement.textContent = index + 1;
+        }
+    });
+});
+</script>
+
+{% endblock %}

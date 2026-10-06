@@ -41,6 +41,43 @@ from .services import (
     get_user_position_assignments,
 )
 
+# =============================================================================
+# ADD TO EXISTING IMPORTS
+# =============================================================================
+
+from django.utils import timezone
+
+from .forms import (
+    CreateUserForm,
+    EditUserForm,
+    ResetUserPasswordForm,
+    RoleAssignmentForm,
+    RoleAssignmentScopeFormSet,
+    UserFilterForm,
+
+    # Organization Management
+    OrganizationUnitTypeForm,
+    OrganizationUnitForm,
+    DesignationForm,
+    PositionForm,
+    PositionReportingForm,
+    EmployeeForm,
+    EmployeePositionAssignmentForm,
+)
+
+from .models import (
+    EmployeePositionAssignment,
+    Role,
+    RoleAssignment,
+
+    # Organization Management
+    OrganizationUnitType,
+    OrganizationUnit,
+    Designation,
+    Position,
+    PositionReporting,
+    Employee,
+)
 
 User = get_user_model()
 
@@ -53,7 +90,7 @@ User = get_user_model()
 @staff_required
 def user_list(request):
     """
-    Display JKOMS users.
+    Display LTPOMS users.
 
     Supports:
     - Search
@@ -269,7 +306,7 @@ def user_list(request):
 @staff_required
 def user_detail(request, user_id):
     """
-    Detailed JKOMS User view.
+    Detailed LTPOMS User view.
 
     Displays:
     - Account
@@ -352,7 +389,7 @@ def user_detail(request, user_id):
 @staff_required
 def user_create(request):
     """
-    Create a JKOMS User.
+    Create a LTPOMS User.
 
     Creating a User does not automatically assign Roles.
 
@@ -400,7 +437,7 @@ def user_create(request):
             "page_title": "Add User",
 
             "page_description": (
-                "Create a JKOMS user account "
+                "Create a LTPOMS user account "
                 "and link it to an employee."
             ),
 
@@ -420,7 +457,7 @@ def user_create(request):
 @can_manage_user
 def user_edit(request, user_id):
     """
-    Edit JKOMS User account information.
+    Edit LTPOMS User account information.
 
     Roles are deliberately not edited through this form.
     """
@@ -531,7 +568,7 @@ def user_password_reset(
     user_id,
 ):
     """
-    Reset another JKOMS User password.
+    Reset another LTPOMS User password.
 
     Uses Django password validation.
     """
@@ -595,7 +632,7 @@ def user_status_toggle(
     user_id,
 ):
     """
-    Activate or deactivate a JKOMS User.
+    Activate or deactivate a LTPOMS User.
 
     Security:
     - POST only
@@ -637,7 +674,7 @@ def user_status_toggle(
             request,
             (
                 "Superuser status cannot be changed "
-                "from JKOMS User Management."
+                "from LTPOMS User Management."
             ),
         )
 
@@ -688,7 +725,7 @@ def user_status_toggle(
 @staff_required
 def role_assignment_list(request):
     """
-    Display JKOMS Role Assignments.
+    Display LTPOMS Role Assignments.
 
     Supports User-based and Position-based assignments.
     """
@@ -921,7 +958,7 @@ def role_assignment_create(request):
                 "Add Role Assignment",
 
             "page_description": (
-                "Assign a JKOMS role to a User "
+                "Assign a LTPOMS role to a User "
                 "or Position and configure its scope."
             ),
 
@@ -1103,7 +1140,7 @@ def role_assignment_status_toggle(
     """
     Activate/deactivate a RoleAssignment without deleting history.
 
-    This should become the preferred method once JKOMS moves into
+    This should become the preferred method once LTPOMS moves into
     operational use.
     """
 
@@ -1139,4 +1176,2103 @@ def role_assignment_status_toggle(
     return redirect(
         "usermanagement:"
         "role_assignment_list"
+    )
+    
+# =============================================================================
+# ORGANIZATION MANAGEMENT DASHBOARD
+# =============================================================================
+
+
+@staff_required
+def organization_dashboard(request):
+    """
+    Central Organization Management dashboard.
+
+    Provides summary statistics for:
+    - Organization Units
+    - Designations
+    - Positions
+    - Employees
+    - Position Reporting
+    - Employee Position Assignments
+    """
+
+    context = {
+        "organization_units": (
+            OrganizationUnit.objects.count()
+        ),
+
+        "active_organization_units": (
+            OrganizationUnit.objects
+            .filter(is_active=True)
+            .count()
+        ),
+
+        "designations": (
+            Designation.objects.count()
+        ),
+
+        "positions": (
+            Position.objects.count()
+        ),
+
+        "active_positions": (
+            Position.objects
+            .filter(is_active=True)
+            .count()
+        ),
+
+        "employees": (
+            Employee.objects.count()
+        ),
+
+        "active_employees": (
+            Employee.objects
+            .filter(is_active=True)
+            .count()
+        ),
+
+        "reporting_relationships": (
+            PositionReporting.objects
+            .filter(is_active=True)
+            .count()
+        ),
+
+        "position_assignments": (
+            EmployeePositionAssignment.objects
+            .filter(is_active=True)
+            .count()
+        ),
+    }
+
+    return render(
+        request,
+        "usermanagement/organization_dashboard.html",
+        context,
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT TYPE LIST
+# =============================================================================
+
+
+@staff_required
+def organization_unit_type_list(request):
+    """
+    List Organization Unit Types.
+    """
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    status_filter = (
+        request.GET.get(
+            "status",
+            "",
+        ).strip()
+    )
+
+    unit_types = (
+        OrganizationUnitType.objects
+        .all()
+        .order_by("name")
+    )
+
+    if search_query:
+        unit_types = unit_types.filter(
+            Q(code__icontains=search_query)
+            | Q(name__icontains=search_query)
+            | Q(description__icontains=search_query)
+        )
+
+    if status_filter == "active":
+        unit_types = unit_types.filter(
+            is_active=True
+        )
+
+    elif status_filter == "inactive":
+        unit_types = unit_types.filter(
+            is_active=False
+        )
+
+    context = {
+        "unit_types": unit_types,
+        "search_query": search_query,
+        "status_filter": status_filter,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_unit_type_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT TYPE CREATE
+# =============================================================================
+
+
+@staff_required
+def organization_unit_type_create(request):
+
+    if request.method == "POST":
+
+        form = OrganizationUnitTypeForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            unit_type = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Organization Unit Type "
+                    f"'{unit_type.name}' was created."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "organization_unit_type_list"
+            )
+
+    else:
+
+        form = OrganizationUnitTypeForm(
+            initial={
+                "is_active": True,
+            }
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+            "page_title": (
+                "Add Organization Unit Type"
+            ),
+            "page_description": (
+                "Create a configurable type such as "
+                "Plant, Sub-Plant, Function, "
+                "Department or Section."
+            ),
+            "submit_text": "Create Type",
+            "back_url_name": (
+                "usermanagement:"
+                "organization_unit_type_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT TYPE EDIT
+# =============================================================================
+
+
+@staff_required
+def organization_unit_type_edit(
+    request,
+    type_id,
+):
+
+    unit_type = get_object_or_404(
+        OrganizationUnitType,
+        pk=type_id,
+    )
+
+    if request.method == "POST":
+
+        form = OrganizationUnitTypeForm(
+            request.POST,
+            instance=unit_type,
+        )
+
+        if form.is_valid():
+
+            unit_type = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Organization Unit Type "
+                    f"'{unit_type.name}' was updated."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "organization_unit_type_list"
+            )
+
+    else:
+
+        form = OrganizationUnitTypeForm(
+            instance=unit_type
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+            "page_title": (
+                "Edit Organization Unit Type"
+            ),
+            "page_description": (
+                "Update organization type information."
+            ),
+            "submit_text": "Save Changes",
+            "back_url_name": (
+                "usermanagement:"
+                "organization_unit_type_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT TYPE STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def organization_unit_type_status_toggle(
+    request,
+    type_id,
+):
+
+    unit_type = get_object_or_404(
+        OrganizationUnitType,
+        pk=type_id,
+    )
+
+    unit_type.is_active = (
+        not unit_type.is_active
+    )
+
+    unit_type.save(
+        update_fields=[
+            "is_active",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if unit_type.is_active
+        else "deactivated"
+    )
+
+    messages.success(
+        request,
+        (
+            f"Organization Unit Type "
+            f"'{unit_type.name}' was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "organization_unit_type_list"
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT LIST
+# =============================================================================
+
+
+@staff_required
+def organization_unit_list(request):
+    """
+    List configurable Organization Units.
+
+    Organization structure comes from:
+        OrganizationUnit.parent
+    """
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    type_filter = (
+        request.GET.get(
+            "type",
+            "",
+        ).strip()
+    )
+
+    status_filter = (
+        request.GET.get(
+            "status",
+            "",
+        ).strip()
+    )
+
+    units = (
+        OrganizationUnit.objects
+        .select_related(
+            "unit_type",
+            "parent",
+        )
+        .order_by(
+            "display_order",
+            "name",
+        )
+    )
+
+    if search_query:
+        units = units.filter(
+            Q(code__icontains=search_query)
+            | Q(name__icontains=search_query)
+            | Q(parent__name__icontains=search_query)
+        )
+
+    if type_filter:
+        units = units.filter(
+            unit_type_id=type_filter
+        )
+
+    if status_filter == "active":
+        units = units.filter(
+            is_active=True
+        )
+
+    elif status_filter == "inactive":
+        units = units.filter(
+            is_active=False
+        )
+
+    context = {
+        "units": units,
+
+        "unit_types": (
+            OrganizationUnitType.objects
+            .filter(is_active=True)
+            .order_by("name")
+        ),
+
+        "search_query": search_query,
+        "type_filter": type_filter,
+        "status_filter": status_filter,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_unit_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT CREATE
+# =============================================================================
+
+
+@staff_required
+def organization_unit_create(request):
+
+    if request.method == "POST":
+
+        form = OrganizationUnitForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            unit = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Organization Unit "
+                    f"'{unit.name}' was created."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "organization_unit_list"
+            )
+
+    else:
+
+        form = OrganizationUnitForm(
+            initial={
+                "is_active": True,
+            }
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Add Organization Unit",
+
+            "page_description": (
+                "Add a node to the configurable "
+                "LTPOMS organization hierarchy."
+            ),
+
+            "submit_text":
+                "Create Organization Unit",
+
+            "back_url_name": (
+                "usermanagement:"
+                "organization_unit_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT EDIT
+# =============================================================================
+
+
+@staff_required
+def organization_unit_edit(
+    request,
+    unit_id,
+):
+
+    unit = get_object_or_404(
+        OrganizationUnit.objects
+        .select_related(
+            "unit_type",
+            "parent",
+        ),
+        pk=unit_id,
+    )
+
+    if request.method == "POST":
+
+        form = OrganizationUnitForm(
+            request.POST,
+            instance=unit,
+        )
+
+        if form.is_valid():
+
+            unit = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Organization Unit "
+                    f"'{unit.name}' was updated."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "organization_unit_list"
+            )
+
+    else:
+
+        form = OrganizationUnitForm(
+            instance=unit
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Edit Organization Unit",
+
+            "page_description": (
+                "Update the organization node, "
+                "parent or validity."
+            ),
+
+            "submit_text":
+                "Save Changes",
+
+            "back_url_name": (
+                "usermanagement:"
+                "organization_unit_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# ORGANIZATION UNIT STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def organization_unit_status_toggle(
+    request,
+    unit_id,
+):
+
+    unit = get_object_or_404(
+        OrganizationUnit,
+        pk=unit_id,
+    )
+
+    unit.is_active = (
+        not unit.is_active
+    )
+
+    unit.save(
+        update_fields=[
+            "is_active",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if unit.is_active
+        else "deactivated"
+    )
+
+    messages.success(
+        request,
+        (
+            f"Organization Unit "
+            f"'{unit.name}' was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "organization_unit_list"
+    )
+
+
+# =============================================================================
+# DESIGNATION LIST
+# =============================================================================
+
+
+@staff_required
+def designation_list(request):
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    status_filter = (
+        request.GET.get(
+            "status",
+            "",
+        ).strip()
+    )
+
+    designations = (
+        Designation.objects
+        .all()
+        .order_by(
+            "rank_order",
+            "name",
+        )
+    )
+
+    if search_query:
+        designations = designations.filter(
+            Q(code__icontains=search_query)
+            | Q(name__icontains=search_query)
+            | Q(grade__icontains=search_query)
+        )
+
+    if status_filter == "active":
+        designations = designations.filter(
+            is_active=True
+        )
+
+    elif status_filter == "inactive":
+        designations = designations.filter(
+            is_active=False
+        )
+
+    context = {
+        "designations": designations,
+        "search_query": search_query,
+        "status_filter": status_filter,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "designation_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# DESIGNATION CREATE
+# =============================================================================
+
+
+@staff_required
+def designation_create(request):
+
+    if request.method == "POST":
+
+        form = DesignationForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            designation = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Designation "
+                    f"'{designation.name}' was created."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "designation_list"
+            )
+
+    else:
+
+        form = DesignationForm(
+            initial={
+                "is_active": True,
+            }
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Add Designation",
+
+            "page_description": (
+                "Create an HR designation. "
+                "Designation does not determine "
+                "LTPOMS authority."
+            ),
+
+            "submit_text":
+                "Create Designation",
+
+            "back_url_name":
+                "usermanagement:designation_list",
+        },
+    )
+
+
+# =============================================================================
+# DESIGNATION EDIT
+# =============================================================================
+
+
+@staff_required
+def designation_edit(
+    request,
+    designation_id,
+):
+
+    designation = get_object_or_404(
+        Designation,
+        pk=designation_id,
+    )
+
+    if request.method == "POST":
+
+        form = DesignationForm(
+            request.POST,
+            instance=designation,
+        )
+
+        if form.is_valid():
+
+            designation = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Designation "
+                    f"'{designation.name}' was updated."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "designation_list"
+            )
+
+    else:
+
+        form = DesignationForm(
+            instance=designation
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Edit Designation",
+
+            "page_description":
+                "Update HR designation information.",
+
+            "submit_text":
+                "Save Changes",
+
+            "back_url_name":
+                "usermanagement:designation_list",
+        },
+    )
+
+
+# =============================================================================
+# DESIGNATION STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def designation_status_toggle(
+    request,
+    designation_id,
+):
+
+    designation = get_object_or_404(
+        Designation,
+        pk=designation_id,
+    )
+
+    designation.is_active = (
+        not designation.is_active
+    )
+
+    designation.save(
+        update_fields=[
+            "is_active",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if designation.is_active
+        else "deactivated"
+    )
+
+    messages.success(
+        request,
+        (
+            f"Designation "
+            f"'{designation.name}' was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "designation_list"
+    )
+
+
+# =============================================================================
+# POSITION LIST
+# =============================================================================
+
+
+@staff_required
+def position_list(request):
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    organization_filter = (
+        request.GET.get(
+            "organization",
+            "",
+        ).strip()
+    )
+
+    status_filter = (
+        request.GET.get(
+            "status",
+            "",
+        ).strip()
+    )
+
+    positions = (
+        Position.objects
+        .select_related(
+            "organization_unit",
+            "organization_unit__unit_type",
+            "designation",
+        )
+        .order_by(
+            "organization_unit__name",
+            "display_order",
+            "name",
+        )
+    )
+
+    if search_query:
+        positions = positions.filter(
+            Q(code__icontains=search_query)
+            | Q(name__icontains=search_query)
+            | Q(
+                organization_unit__name__icontains=
+                search_query
+            )
+            | Q(
+                designation__name__icontains=
+                search_query
+            )
+        )
+
+    if organization_filter:
+        positions = positions.filter(
+            organization_unit_id=
+            organization_filter
+        )
+
+    if status_filter == "active":
+        positions = positions.filter(
+            is_active=True
+        )
+
+    elif status_filter == "inactive":
+        positions = positions.filter(
+            is_active=False
+        )
+
+    context = {
+        "positions": positions,
+
+        "organization_units": (
+            OrganizationUnit.objects
+            .filter(is_active=True)
+            .order_by("name")
+        ),
+
+        "search_query": search_query,
+
+        "organization_filter":
+            organization_filter,
+
+        "status_filter":
+            status_filter,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "position_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# POSITION CREATE
+# =============================================================================
+
+
+@staff_required
+def position_create(request):
+
+    if request.method == "POST":
+
+        form = PositionForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            position = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Position "
+                    f"'{position.name}' was created."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "position_list"
+            )
+
+    else:
+
+        form = PositionForm(
+            initial={
+                "is_active": True,
+                "sanctioned_strength": 1,
+            }
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Add Position",
+
+            "page_description": (
+                "Create an organizational Position "
+                "and associate it with an "
+                "Organization Unit."
+            ),
+
+            "submit_text":
+                "Create Position",
+
+            "back_url_name":
+                "usermanagement:position_list",
+        },
+    )
+
+
+# =============================================================================
+# POSITION EDIT
+# =============================================================================
+
+
+@staff_required
+def position_edit(
+    request,
+    position_id,
+):
+
+    position = get_object_or_404(
+        Position.objects
+        .select_related(
+            "organization_unit",
+            "designation",
+        ),
+        pk=position_id,
+    )
+
+    if request.method == "POST":
+
+        form = PositionForm(
+            request.POST,
+            instance=position,
+        )
+
+        if form.is_valid():
+
+            position = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Position "
+                    f"'{position.name}' was updated."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "position_list"
+            )
+
+    else:
+
+        form = PositionForm(
+            instance=position
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Edit Position",
+
+            "page_description": (
+                "Update Position classification, "
+                "designation and validity."
+            ),
+
+            "submit_text":
+                "Save Changes",
+
+            "back_url_name":
+                "usermanagement:position_list",
+        },
+    )
+
+
+# =============================================================================
+# POSITION STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def position_status_toggle(
+    request,
+    position_id,
+):
+
+    position = get_object_or_404(
+        Position,
+        pk=position_id,
+    )
+
+    position.is_active = (
+        not position.is_active
+    )
+
+    position.save(
+        update_fields=[
+            "is_active",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if position.is_active
+        else "deactivated"
+    )
+
+    messages.success(
+        request,
+        (
+            f"Position "
+            f"'{position.name}' was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "position_list"
+    )
+
+
+# =============================================================================
+# POSITION REPORTING LIST
+# =============================================================================
+
+
+@staff_required
+def position_reporting_list(request):
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    relationship_filter = (
+        request.GET.get(
+            "relationship",
+            "",
+        ).strip()
+    )
+
+    reporting = (
+        PositionReporting.objects
+        .select_related(
+            "position",
+            "position__organization_unit",
+            "reports_to_position",
+            "reports_to_position__organization_unit",
+        )
+        .order_by(
+            "position__name",
+        )
+    )
+
+    if search_query:
+        reporting = reporting.filter(
+            Q(
+                position__name__icontains=
+                search_query
+            )
+            | Q(
+                position__code__icontains=
+                search_query
+            )
+            | Q(
+                reports_to_position__name__icontains=
+                search_query
+            )
+            | Q(
+                reports_to_position__code__icontains=
+                search_query
+            )
+        )
+
+    if relationship_filter:
+        reporting = reporting.filter(
+            relationship_type=
+            relationship_filter
+        )
+
+    context = {
+        "reporting_relationships":
+            reporting,
+
+        "relationship_types":
+            PositionReporting
+            .RelationshipType
+            .choices,
+
+        "search_query":
+            search_query,
+
+        "relationship_filter":
+            relationship_filter,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "position_reporting_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# POSITION REPORTING CREATE
+# =============================================================================
+
+
+@staff_required
+def position_reporting_create(request):
+
+    if request.method == "POST":
+
+        form = PositionReportingForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            reporting = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Reporting relationship "
+                    f"'{reporting}' was created."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "position_reporting_list"
+            )
+
+    else:
+
+        form = PositionReportingForm(
+            initial={
+                "relationship_type":
+                    PositionReporting
+                    .RelationshipType
+                    .SOLID_LINE,
+
+                "is_primary": True,
+                "is_active": True,
+            }
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Add Reporting Relationship",
+
+            "page_description": (
+                "Define which Position reports "
+                "to another Position."
+            ),
+
+            "submit_text":
+                "Create Relationship",
+
+            "back_url_name": (
+                "usermanagement:"
+                "position_reporting_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# POSITION REPORTING EDIT
+# =============================================================================
+
+
+@staff_required
+def position_reporting_edit(
+    request,
+    reporting_id,
+):
+
+    reporting = get_object_or_404(
+        PositionReporting.objects
+        .select_related(
+            "position",
+            "reports_to_position",
+        ),
+        pk=reporting_id,
+    )
+
+    if request.method == "POST":
+
+        form = PositionReportingForm(
+            request.POST,
+            instance=reporting,
+        )
+
+        if form.is_valid():
+
+            reporting = form.save()
+
+            messages.success(
+                request,
+                (
+                    "Position reporting relationship "
+                    "was updated successfully."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "position_reporting_list"
+            )
+
+    else:
+
+        form = PositionReportingForm(
+            instance=reporting
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Edit Reporting Relationship",
+
+            "page_description": (
+                "Update Position reporting, "
+                "relationship type or validity."
+            ),
+
+            "submit_text":
+                "Save Changes",
+
+            "back_url_name": (
+                "usermanagement:"
+                "position_reporting_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# POSITION REPORTING STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def position_reporting_status_toggle(
+    request,
+    reporting_id,
+):
+
+    reporting = get_object_or_404(
+        PositionReporting,
+        pk=reporting_id,
+    )
+
+    reporting.is_active = (
+        not reporting.is_active
+    )
+
+    reporting.save(
+        update_fields=[
+            "is_active",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if reporting.is_active
+        else "deactivated"
+    )
+
+    messages.success(
+        request,
+        (
+            "Position reporting relationship "
+            f"was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "position_reporting_list"
+    )
+
+
+# =============================================================================
+# EMPLOYEE LIST
+# =============================================================================
+
+
+@staff_required
+def employee_list(request):
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    status_filter = (
+        request.GET.get(
+            "status",
+            "",
+        ).strip()
+    )
+
+    employees = (
+        Employee.objects
+        .all()
+        .order_by(
+            "employee_code",
+        )
+    )
+
+    if search_query:
+        employees = employees.filter(
+            Q(employee_code__icontains=search_query)
+            | Q(first_name__icontains=search_query)
+            | Q(middle_name__icontains=search_query)
+            | Q(last_name__icontains=search_query)
+            | Q(email__icontains=search_query)
+        )
+
+    if status_filter:
+        employees = employees.filter(
+            employment_status=
+            status_filter
+        )
+
+    context = {
+        "employees": employees,
+
+        "employment_statuses":
+            Employee
+            .EmploymentStatus
+            .choices,
+
+        "search_query":
+            search_query,
+
+        "status_filter":
+            status_filter,
+
+        "total_employees":
+            Employee.objects.count(),
+
+        "active_employees": (
+            Employee.objects
+            .filter(
+                employment_status=
+                Employee
+                .EmploymentStatus
+                .ACTIVE
+            )
+            .count()
+        ),
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "employee_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# EMPLOYEE CREATE
+# =============================================================================
+
+
+@staff_required
+def employee_create(request):
+
+    if request.method == "POST":
+
+        form = EmployeeForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            employee = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Employee "
+                    f"'{employee.employee_code}' "
+                    "was created."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "employee_detail",
+                employee_id=employee.pk,
+            )
+
+    else:
+
+        form = EmployeeForm(
+            initial={
+                "employment_status":
+                    Employee
+                    .EmploymentStatus
+                    .ACTIVE,
+
+                "is_active": True,
+            }
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Add Employee",
+
+            "page_description": (
+                "Create an Employee master record. "
+                "Position assignment is managed "
+                "separately."
+            ),
+
+            "submit_text":
+                "Create Employee",
+
+            "back_url_name":
+                "usermanagement:employee_list",
+        },
+    )
+
+
+# =============================================================================
+# EMPLOYEE DETAIL
+# =============================================================================
+
+
+@staff_required
+def employee_detail(
+    request,
+    employee_id,
+):
+
+    employee = get_object_or_404(
+        Employee,
+        pk=employee_id,
+    )
+
+    position_assignments = (
+        EmployeePositionAssignment.objects
+        .filter(
+            employee=employee
+        )
+        .select_related(
+            "position",
+            "position__organization_unit",
+            "position__designation",
+        )
+        .order_by(
+            "-is_active",
+            "-is_primary",
+            "-effective_from",
+        )
+    )
+
+    current_assignments = (
+        position_assignments
+        .filter(
+            is_active=True
+        )
+    )
+
+    user_account = getattr(
+        employee,
+        "user_account",
+        None,
+    )
+
+    context = {
+        "employee": employee,
+        "position_assignments":
+            position_assignments,
+        "current_assignments":
+            current_assignments,
+        "user_account":
+            user_account,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "employee_detail.html",
+        context,
+    )
+
+
+# =============================================================================
+# EMPLOYEE EDIT
+# =============================================================================
+
+
+@staff_required
+def employee_edit(
+    request,
+    employee_id,
+):
+
+    employee = get_object_or_404(
+        Employee,
+        pk=employee_id,
+    )
+
+    if request.method == "POST":
+
+        form = EmployeeForm(
+            request.POST,
+            instance=employee,
+        )
+
+        if form.is_valid():
+
+            employee = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Employee "
+                    f"'{employee.employee_code}' "
+                    "was updated."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "employee_detail",
+                employee_id=employee.pk,
+            )
+
+    else:
+
+        form = EmployeeForm(
+            instance=employee
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Edit Employee",
+
+            "page_description":
+                "Update Employee master information.",
+
+            "submit_text":
+                "Save Changes",
+
+            "back_url_name":
+                "usermanagement:employee_list",
+        },
+    )
+
+
+# =============================================================================
+# EMPLOYEE STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def employee_status_toggle(
+    request,
+    employee_id,
+):
+
+    employee = get_object_or_404(
+        Employee,
+        pk=employee_id,
+    )
+
+    employee.is_active = (
+        not employee.is_active
+    )
+
+    if employee.is_active:
+        if (
+            employee.employment_status
+            == Employee.EmploymentStatus.INACTIVE
+        ):
+            employee.employment_status = (
+                Employee.EmploymentStatus.ACTIVE
+            )
+
+    else:
+        if (
+            employee.employment_status
+            == Employee.EmploymentStatus.ACTIVE
+        ):
+            employee.employment_status = (
+                Employee.EmploymentStatus.INACTIVE
+            )
+
+    employee.save(
+        update_fields=[
+            "is_active",
+            "employment_status",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if employee.is_active
+        else "deactivated"
+    )
+
+    messages.success(
+        request,
+        (
+            f"Employee "
+            f"'{employee.employee_code}' "
+            f"was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "employee_detail",
+        employee_id=employee.pk,
+    )
+
+
+# =============================================================================
+# EMPLOYEE POSITION ASSIGNMENT LIST
+# =============================================================================
+
+
+@staff_required
+def position_assignment_list(request):
+
+    search_query = (
+        request.GET.get(
+            "search",
+            "",
+        ).strip()
+    )
+
+    assignment_type_filter = (
+        request.GET.get(
+            "assignment_type",
+            "",
+        ).strip()
+    )
+
+    status_filter = (
+        request.GET.get(
+            "status",
+            "",
+        ).strip()
+    )
+
+    assignments = (
+        EmployeePositionAssignment.objects
+        .select_related(
+            "employee",
+            "position",
+            "position__organization_unit",
+            "position__designation",
+        )
+        .order_by(
+            "-is_active",
+            "-effective_from",
+        )
+    )
+
+    if search_query:
+        assignments = assignments.filter(
+            Q(
+                employee__employee_code__icontains=
+                search_query
+            )
+            | Q(
+                employee__first_name__icontains=
+                search_query
+            )
+            | Q(
+                employee__last_name__icontains=
+                search_query
+            )
+            | Q(
+                position__name__icontains=
+                search_query
+            )
+            | Q(
+                position__code__icontains=
+                search_query
+            )
+        )
+
+    if assignment_type_filter:
+        assignments = assignments.filter(
+            assignment_type=
+            assignment_type_filter
+        )
+
+    if status_filter == "active":
+        assignments = assignments.filter(
+            is_active=True
+        )
+
+    elif status_filter == "inactive":
+        assignments = assignments.filter(
+            is_active=False
+        )
+
+    context = {
+        "assignments":
+            assignments,
+
+        "assignment_types":
+            EmployeePositionAssignment
+            .AssignmentType
+            .choices,
+
+        "search_query":
+            search_query,
+
+        "assignment_type_filter":
+            assignment_type_filter,
+
+        "status_filter":
+            status_filter,
+    }
+
+    return render(
+        request,
+        "usermanagement/"
+        "position_assignment_list.html",
+        context,
+    )
+
+
+# =============================================================================
+# EMPLOYEE POSITION ASSIGNMENT CREATE
+# =============================================================================
+
+
+@staff_required
+def position_assignment_create(
+    request,
+):
+
+    initial = {
+        "is_active": True,
+        "is_primary": True,
+        "effective_from":
+            timezone.localdate(),
+    }
+
+    # Optional convenience:
+    # /position-assignments/add/?employee=5
+    employee_id = request.GET.get(
+        "employee"
+    )
+
+    if employee_id:
+        initial["employee"] = employee_id
+
+    if request.method == "POST":
+
+        form = (
+            EmployeePositionAssignmentForm(
+                request.POST
+            )
+        )
+
+        if form.is_valid():
+
+            assignment = form.save()
+
+            messages.success(
+                request,
+                (
+                    f"Position "
+                    f"'{assignment.position.name}' "
+                    "was assigned to "
+                    f"'{assignment.employee.full_name}'."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "employee_detail",
+                employee_id=
+                    assignment.employee_id,
+            )
+
+    else:
+
+        form = (
+            EmployeePositionAssignmentForm(
+                initial=initial
+            )
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Assign Employee Position",
+
+            "page_description": (
+                "Assign an Employee to a Position "
+                "with assignment type, primary "
+                "indicator and effective dates."
+            ),
+
+            "submit_text":
+                "Create Assignment",
+
+            "back_url_name": (
+                "usermanagement:"
+                "position_assignment_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# EMPLOYEE POSITION ASSIGNMENT EDIT
+# =============================================================================
+
+
+@staff_required
+def position_assignment_edit(
+    request,
+    assignment_id,
+):
+
+    assignment = get_object_or_404(
+        EmployeePositionAssignment.objects
+        .select_related(
+            "employee",
+            "position",
+        ),
+        pk=assignment_id,
+    )
+
+    if request.method == "POST":
+
+        form = (
+            EmployeePositionAssignmentForm(
+                request.POST,
+                instance=assignment,
+            )
+        )
+
+        if form.is_valid():
+
+            assignment = form.save()
+
+            messages.success(
+                request,
+                (
+                    "Employee Position Assignment "
+                    "was updated successfully."
+                ),
+            )
+
+            return redirect(
+                "usermanagement:"
+                "employee_detail",
+                employee_id=
+                    assignment.employee_id,
+            )
+
+    else:
+
+        form = (
+            EmployeePositionAssignmentForm(
+                instance=assignment
+            )
+        )
+
+    return render(
+        request,
+        "usermanagement/"
+        "organization_master_form.html",
+        {
+            "form": form,
+
+            "page_title":
+                "Edit Position Assignment",
+
+            "page_description": (
+                "Update Employee Position, "
+                "assignment type or effective dates."
+            ),
+
+            "submit_text":
+                "Save Changes",
+
+            "back_url_name": (
+                "usermanagement:"
+                "position_assignment_list"
+            ),
+        },
+    )
+
+
+# =============================================================================
+# EMPLOYEE POSITION ASSIGNMENT STATUS
+# =============================================================================
+
+
+@staff_required
+@require_POST
+def position_assignment_status_toggle(
+    request,
+    assignment_id,
+):
+
+    assignment = get_object_or_404(
+        EmployeePositionAssignment,
+        pk=assignment_id,
+    )
+
+    assignment.is_active = (
+        not assignment.is_active
+    )
+
+    # When closing an assignment, preserve
+    # its effective history automatically.
+    if (
+        not assignment.is_active
+        and assignment.effective_to is None
+    ):
+        assignment.effective_to = (
+            timezone.localdate()
+        )
+
+    assignment.save(
+        update_fields=[
+            "is_active",
+            "effective_to",
+            "updated_at",
+        ]
+    )
+
+    status = (
+        "activated"
+        if assignment.is_active
+        else "closed"
+    )
+
+    messages.success(
+        request,
+        (
+            "Employee Position Assignment "
+            f"was {status}."
+        ),
+    )
+
+    return redirect(
+        "usermanagement:"
+        "employee_detail",
+        employee_id=
+            assignment.employee_id,
     )

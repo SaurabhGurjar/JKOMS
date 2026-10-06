@@ -187,7 +187,7 @@
 
                             {% if selected_user.id != request.user.id %}
 
-                                {% url 'usermanagement:user_status_toggle' selected_user.id %}
+                                <a href="{% url 'usermanagement:user_status_toggle' selected_user.id %}">
                                     {% csrf_token %}
 
                                     {% if selected_user.is_active %}

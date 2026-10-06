@@ -1,0 +1,933 @@
+{% extends "base.html" %}
+
+{% block title %}
+Organization Unit Types | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    .unit-type-container {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   FILTER CARD
+   ========================================= */
+
+.filter-card,
+.table-card {
+    background: #FFFFFF;
+
+    border: 1px solid rgba(51, 77, 66, 0.12);
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 22px rgba(51, 77, 66, 0.06);
+}
+
+.filter-card {
+    padding: 20px;
+}
+
+
+/* =========================================
+   FORM CONTROLS
+   ========================================= */
+
+.form-label {
+    margin-bottom: 7px;
+
+    color: #334D42;
+
+    font-size: 0.84rem;
+    font-weight: 650;
+}
+
+.form-control,
+.form-select {
+    min-height: 44px;
+
+    color: #334D42;
+    background: #FFFFFF;
+
+    border: 1px solid rgba(51, 77, 66, 0.20);
+    border-radius: 10px;
+}
+
+.form-control::placeholder {
+    color: rgba(51, 77, 66, 0.48);
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: #334D42;
+    background: #FFFFFF;
+
+    border-color: #FFEB00;
+
+    box-shadow:
+        0 0 0 0.2rem
+        rgba(255, 235, 0, 0.25);
+}
+
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+.btn-jkoms {
+    color: #334D42;
+
+    background: #FFEB00;
+    border-color: #FFEB00;
+
+    font-weight: 700;
+}
+
+.btn-jkoms:hover,
+.btn-jkoms:focus {
+    color: #334D42;
+
+    background: #E6D500;
+    border-color: #E6D500;
+}
+
+.btn-jkoms-dark {
+    color: #FFFFFF;
+
+    background: #334D42;
+    border-color: #334D42;
+
+    font-weight: 600;
+}
+
+.btn-jkoms-dark:hover,
+.btn-jkoms-dark:focus {
+    color: #FFFFFF;
+
+    background: #263A32;
+    border-color: #263A32;
+}
+
+
+/* =========================================
+   TABLE
+   ========================================= */
+
+.table-card {
+    overflow: hidden;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+
+    color: #334D42;
+}
+
+.table-card .table > :not(caption) > * > * {
+    padding: 14px;
+
+    vertical-align: middle;
+
+    border-color:
+        rgba(51, 77, 66, 0.09);
+}
+
+.table-card thead th {
+    color:
+        rgba(51, 77, 66, 0.68);
+
+    background:
+        rgba(51, 77, 66, 0.04);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.table-card tbody tr {
+    transition:
+        background 0.2s ease;
+}
+
+.table-card tbody tr:hover {
+    background:
+        rgba(255, 235, 0, 0.06);
+}
+
+
+/* =========================================
+   TYPE
+   ========================================= */
+
+.type-code {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.18);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.45);
+
+    border-radius: 8px;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.type-name {
+    color: #334D42;
+
+    font-weight: 700;
+}
+
+.type-description {
+    max-width: 500px;
+
+    color:
+        rgba(51, 77, 66, 0.64);
+
+    font-size: 0.82rem;
+
+    white-space: normal;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.status-active,
+.status-inactive {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 0.74rem;
+    font-weight: 650;
+}
+
+.status-active {
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.20);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.48);
+}
+
+.status-inactive {
+    color: #DC2626;
+
+    background:
+        rgba(220, 38, 38, 0.07);
+
+    border:
+        1px solid rgba(220, 38, 38, 0.20);
+}
+
+
+/* =========================================
+   ACTIONS
+   ========================================= */
+
+.action-link,
+.action-button {
+    width: 35px;
+    height: 35px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 2px;
+
+    border-radius: 8px;
+}
+
+.action-link {
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.14);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.35);
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.action-link:hover {
+    color: #334D42;
+
+    background: #FFEB00;
+
+    transform: translateY(-1px);
+}
+
+.action-button {
+    transition:
+        transform 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+}
+
+.action-form {
+    display: inline-block;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.empty-state {
+    padding: 55px 20px !important;
+
+    color:
+        rgba(51, 77, 66, 0.58) !important;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   INFO NOTE
+   ========================================= */
+
+.architecture-note {
+    padding: 16px;
+
+    color: #334D42;
+
+    background:
+        rgba(255, 235, 0, 0.07);
+
+    border:
+        1px solid rgba(255, 235, 0, 0.35);
+
+    border-radius: 11px;
+
+    font-size: 0.84rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 767.98px) {
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .filter-actions {
+        flex-direction: column;
+    }
+
+    .filter-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <div class="unit-type-container">
+
+
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i
+                            class="fa-solid
+                                   fa-layer-group
+                                   me-2"
+                        ></i>
+
+                        Organization Unit Types
+
+                    </h2>
+
+                    <p class="mb-0">
+
+                        Configure the classifications used by the
+                        JKOMS Organization Unit hierarchy.
+
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="header-actions
+                           d-flex
+                           flex-column
+                           flex-sm-row
+                           gap-2"
+                >
+
+                    {% url 'usermanagement:organization_dashboard' %}
+                        <i class="fa-solid fa-arrow-left me-2"></i>
+
+                        Organization
+                    </a>
+
+
+                    {% url 'usermanagement:organization_unit_type_create' %}
+                        <i class="fa-solid fa-plus me-2"></i>
+
+                        Add Unit Type
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             FILTERS
+             ========================================================= -->
+
+        <section class="filter-card mb-4">
+
+            {% url 'usermanagement:organization_unit_type_list' %}
+
+                <div class="row g-3 align-items-end">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-lg-7">
+
+                        <label
+                            for="unitTypeSearch"
+                            class="form-label"
+                        >
+                            Search
+                        </label>
+
+                        <input
+                            type="search"
+                            id="unitTypeSearch"
+                            name="search"
+                            value="{{ search_query }}"
+                            class="form-control"
+                            placeholder="Search code, name or description"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-lg-2">
+
+                        <label
+                            for="statusFilter"
+                            class="form-label"
+                        >
+                            Status
+                        </label>
+
+                        <select
+                            id="statusFilter"
+                            name="status"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All
+                            </option>
+
+                            <option
+                                value="active"
+                                {% if status_filter == "active" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Active
+                            </option>
+
+                            <option
+                                value="inactive"
+                                {% if status_filter == "inactive" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FILTER ACTIONS -->
+
+                    <div class="col-lg-3">
+
+                        <div class="d-flex gap-2 filter-actions">
+
+                            <button
+                                type="submit"
+                                class="btn btn-jkoms flex-grow-1"
+                            >
+                                <i
+                                    class="fa-solid
+                                           fa-magnifying-glass
+                                           me-1"
+                                ></i>
+
+                                Search
+                            </button>
+
+
+                            {% url 'usermanagement:organization_unit_type_list' %}
+                                <i
+                                    class="fa-solid
+                                           fa-filter-circle-xmark"
+                                ></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CURRENT FILTER INDICATOR -->
+
+                {% if search_query or status_filter %}
+
+                    <div class="mt-3 small text-muted">
+
+                        <i class="fa-solid fa-filter me-1"></i>
+
+                        Filters are currently applied.
+
+                        {% url 'usermanagement:organization_unit_type_list' %}
+                            Clear all
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================================================
+             UNIT TYPE TABLE
+             ========================================================= -->
+
+        <section class="table-card mb-4">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Code
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Last Updated
+                            </th>
+
+                            <th class="text-end">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for unit_type in unit_types %}
+
+                            <tr>
+
+
+                                <!-- =============================
+                                     CODE
+                                     ============================= -->
+
+                                <td>
+
+                                    <span class="type-code">
+
+                                        {{ unit_type.code }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =============================
+                                     NAME
+                                     ============================= -->
+
+                                <td>
+
+                                    <div class="type-name">
+
+                                        {{ unit_type.name }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =============================
+                                     DESCRIPTION
+                                     ============================= -->
+
+                                <td>
+
+                                    <div class="type-description">
+
+                                        {% if unit_type.description %}
+
+                                            {{ unit_type.description }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                No description
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =============================
+                                     STATUS
+                                     ============================= -->
+
+                                <td>
+
+                                    {% if unit_type.is_active %}
+
+                                        <span class="status-active">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-circle-check"
+                                            ></i>
+
+                                            Active
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-inactive">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-circle-xmark"
+                                            ></i>
+
+                                            Inactive
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =============================
+                                     UPDATED
+                                     ============================= -->
+
+                                <td>
+
+                                    <div>
+                                        {{ unit_type.updated_at|date:"d M Y" }}
+                                    </div>
+
+                                    <div class="small text-muted">
+                                        {{ unit_type.updated_at|date:"H:i" }}
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =============================
+                                     ACTIONS
+                                     ============================= -->
+
+                                <td class="text-end text-nowrap">
+
+
+                                    <!-- EDIT -->
+
+                                    {% url 'usermanagement:organization_unit_type_edit' unit_type.id %}
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+
+                                    <!-- ACTIVATE / DEACTIVATE -->
+
+                                    {% url 'usermanagement:organization_unit_type_status_toggle' unit_type.id %}
+
+                                        {% csrf_token %}
+
+
+                                        {% if unit_type.is_active %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn
+                                                       btn-outline-warning
+                                                       action-button"
+                                                title="Deactivate Unit Type"
+                                                aria-label="Deactivate Unit Type"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to deactivate {{ unit_type.name|escapejs }}?'
+                                                );"
+                                            >
+                                                <i
+                                                    class="fa-solid
+                                                           fa-pause"
+                                                ></i>
+                                            </button>
+
+                                        {% else %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn
+                                                       btn-outline-success
+                                                       action-button"
+                                                title="Activate Unit Type"
+                                                aria-label="Activate Unit Type"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to activate {{ unit_type.name|escapejs }}?'
+                                                );"
+                                            >
+                                                <i
+                                                    class="fa-solid
+                                                           fa-play"
+                                                ></i>
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <!-- =============================
+                                 EMPTY STATE
+                                 ============================= -->
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="empty-state"
+                                >
+
+                                    <i
+                                        class="fa-solid
+                                               fa-layer-group
+                                               fa-3x
+                                               mb-3"
+                                    ></i>
+
+                                    <h5>
+                                        No Organization Unit Types Found
+                                    </h5>
+
+                                    {% if search_query or status_filter %}
+
+                                        <p>
+                                            No Organization Unit Types
+                                            match the current search or
+                                            filter criteria.
+                                        </p>
+
+                                        {% url 'usermanagement:organization_unit_type_list' %}
+                                            <i
+                                                class="fa-solid
+                                                       fa-filter-circle-xmark
+                                                       me-2"
+                                            ></i>
+
+                                            Clear Filters
+                                        </a>
+
+                                    {% else %}
+
+                                        <p>
+                                            Create the first Unit Type
+                                            to begin configuring the
+                                            JKOMS organization hierarchy.
+                                        </p>
+
+                                        {% url 'usermanagement:organization_unit_type_create' %}
+                                            <i class="fa-solid fa-plus me-2"></i>
+
+                                            Add Unit Type
+                                        </a>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             ARCHITECTURE NOTE
+             ========================================================= -->
+
+        <section class="architecture-note">
+
+            <div class="fw-bold mb-2">
+
+                <i class="fa-solid fa-circle-info me-2"></i>
+
+                Organization Unit Types
+
+            </div>
+
+            <div>
+
+                Unit Types classify Organization Units but do not
+                determine the hierarchy.
+
+                For example, JKOMS can contain:
+
+            </div>
+
+            <div class="mt-2 fw-semibold">
+
+                Plant → Function → Sub-Plant → Section
+
+            </div>
+
+            <div class="mt-2">
+
+                or any other hierarchy required by the organization.
+                The actual hierarchy is defined by each Organization
+                Unit's Parent relationship.
+
+            </div>
+
+            <div class="mt-2">
+
+                Deactivation is preferred over deletion so historical
+                Organization Unit records can continue to reference
+                their original Unit Type.
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}

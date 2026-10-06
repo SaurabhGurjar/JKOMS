@@ -1,0 +1,1104 @@
+{% extends "usermanagement/base.html" %}
+
+{% block title %}
+Organization Management | LTPOMS
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+    /* ========================================= LTPOMS ORGANIZATION DASHBOARD ========================================= */ 
+.organization-container { 
+    max-width: 1450px; 
+    margin: 0 auto; 
+} 
+
+/* ========================================= SUMMARY CARDS ========================================= */ 
+.stat-card { 
+    height: 100%; 
+    padding: 20px; 
+    color: var(--secondary); 
+    background: var(--white); 
+    border: 1px solid rgba(51, 77, 66, 0.12); 
+    border-radius: 18px; 
+    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.06); 
+    transition: transform 0.25s ease, box-shadow 0.25s ease; 
+}
+
+.stat-card:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 12px 28px rgba(51, 77, 66, 0.12); 
+} 
+
+.stat-label { 
+    color: rgba(51, 77, 66, 0.62); 
+    font-size: 0.78rem; 
+    font-weight: 700; 
+    letter-spacing: 0.4px; 
+    text-transform: uppercase; 
+} 
+
+.stat-value { 
+    margin-top: 7px; 
+    color: var(--secondary); 
+    font-size: 1.9rem; 
+    font-weight: 750; 
+} 
+
+.stat-subtext { 
+    margin-top: 3px; 
+    color: rgba(51, 77, 66, 0.58); 
+    font-size: 0.78rem; 
+} 
+
+.stat-icon { 
+    width: 52px; 
+    height: 52px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: var(--secondary); 
+    background: rgba(255, 235, 0, 0.25); 
+    border-radius: 14px; 
+    font-size: 1.25rem; 
+} 
+
+/* ========================================= SECTION HEADER ========================================= */ 
+.dashboard-section-title { 
+    margin-bottom: 17px; 
+    color: var(--secondary); 
+} 
+
+.dashboard-section-title h5 { 
+    margin-bottom: 4px; 
+    font-weight: 700; 
+} 
+
+.dashboard-section-title p { 
+    margin-bottom: 0; 
+    color: rgba(51, 77, 66, 0.62); 
+    font-size: 0.86rem; 
+} 
+
+/* ========================================= MANAGEMENT CARDS ========================================= */ 
+.management-card { 
+    position: relative; 
+    height: 100%; 
+    min-height: 215px; 
+    padding: 22px; 
+    display: flex; 
+    flex-direction: column; 
+    color: var(--secondary); 
+    background: var(--white); 
+    border: 1px solid rgba(51, 77, 66, 0.12); 
+    border-radius: 18px; 
+    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.06); 
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; 
+} 
+
+.management-card:hover { 
+    transform: translateY(-4px); 
+    border-color: rgba(255, 235, 0, 0.75); 
+    box-shadow: 0 12px 28px rgba(51, 77, 66, 0.12); 
+} 
+
+.management-icon { 
+    width: 48px; 
+    height: 48px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 16px; 
+    color: var(--secondary); 
+    background: rgba(255, 235, 0, 0.25); 
+    border-radius: 13px; 
+    font-size: 1.15rem; 
+} 
+
+.management-title { 
+    color: var(--secondary); 
+    font-size: 1rem; 
+    font-weight: 750; 
+} 
+
+.management-description { 
+    margin-top: 7px; 
+    margin-bottom: 18px; 
+    color: rgba(51, 77, 66, 0.64); 
+    font-size: 0.84rem; 
+    line-height: 1.5; 
+} 
+
+.management-actions { 
+    margin-top: auto; 
+} 
+
+/* ========================================= BUTTONS ========================================= */ 
+.btn-LTPOMS { 
+    color: var(--secondary); 
+    background: var(--accent); 
+    border-color: var(--accent); 
+    font-weight: 700; 
+} 
+
+.btn-LTPOMS:hover, .btn-LTPOMS:focus { 
+    color: var(--secondary); 
+    background: #E6D500; 
+    border-color: #E6D500; 
+} 
+
+.btn-LTPOMS-outline { 
+    color: var(--secondary); 
+    background: transparent; 
+    border-color: rgba(51, 77, 66, 0.28); 
+    font-weight: 600; 
+} 
+
+.btn-LTPOMS-outline:hover { 
+    color: var(--secondary); 
+    background: rgba(255, 235, 0, 0.15); 
+    border-color: var(--accent); 
+} 
+
+/* ========================================= ARCHITECTURE PANEL ========================================= */ 
+.architecture-card { 
+    padding: 22px; 
+    color: var(--secondary); 
+    background: linear-gradient( 135deg, rgba(255, 235, 0, 0.10), rgba(255, 255, 255, 1) ); 
+    border: 1px solid rgba(255, 235, 0, 0.45); 
+    border-radius: 18px; 
+    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.05); 
+} 
+
+.architecture-title { 
+    margin-bottom: 15px; 
+    font-weight: 750; 
+} 
+
+.architecture-flow { 
+    display: flex; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+} 
+
+.architecture-node { 
+    padding: 8px 12px; 
+    color: var(--secondary); 
+    background: var(--white); 
+    border: 1px solid rgba(51, 77, 66, 0.14); 
+    border-radius: 20px; 
+    font-size: 0.78rem; 
+    font-weight: 650; 
+} 
+
+.architecture-arrow { 
+    color: rgba(51, 77, 66, 0.50); 
+} 
+
+/* ========================================= NOTE ========================================= */ 
+.dashboard-note { 
+    padding: 17px; 
+    color: var(--secondary); 
+    background: rgba(255, 235, 0, 0.07); 
+    border: 1px solid rgba(255, 235, 0, 0.35); 
+    border-radius: 12px; 
+    font-size: 0.84rem; 
+    line-height: 1.55; 
+} 
+
+/* ========================================= RESPONSIVE ========================================= */ 
+@media (max-width: 767.98px) { 
+    .header-actions { 
+        width: 100%; 
+    } 
+    .header-actions .btn { 
+        width: 100%; 
+    } 
+    .architecture-flow { 
+        flex-direction: column; 
+        align-items: stretch; 
+    } 
+    .architecture-node { 
+        text-align: center; 
+    } 
+    .architecture-arrow { 
+        text-align: center; 
+        transform: rotate(90deg); 
+    } 
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+    
+
+    <div class="organization-container">
+
+
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i
+                            class="fa-solid
+                                   fa-sitemap
+                                   me-2"
+                        ></i>
+
+                        Organization Management
+
+                    </h2>
+
+
+                    <p class="mb-0">
+
+                        Configure the LTPOMS organization structure,
+                        positions, reporting hierarchy, employees and
+                        position assignments.
+
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="header-actions
+                           d-flex
+                           flex-column
+                           flex-sm-row
+                           gap-2"
+                >
+
+                    <a href="{% url 'usermanagement:user_list' %}" class="btn btn-primary">
+
+                        <i
+                            class="fa-solid
+                                   fa-users
+                                   me-2"
+                        ></i>
+
+                        User Management
+
+                    </a>
+
+
+                    <a href="{% url 'usermanagement:organization_unit_create' %}" class="btn btn-primary">
+
+                        <i
+                            class="fa-solid
+                                   fa-plus
+                                   me-2"
+                        ></i>
+
+                        Add Organization Unit
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             SUMMARY STATISTICS
+             ========================================================= -->
+
+        <section class="row g-4 mb-5">
+
+
+            <!-- ORGANIZATION UNITS -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div
+                        class="d-flex
+                               justify-content-between
+                               align-items-center"
+                    >
+
+                        <div>
+
+                            <div class="stat-label">
+                                Organization Units
+                            </div>
+
+                            <div class="stat-value">
+                                {{ organization_units }}
+                            </div>
+
+                            <div class="stat-subtext">
+
+                                {{ active_organization_units }}
+                                active
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-sitemap"
+                            ></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- POSITIONS -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div
+                        class="d-flex
+                               justify-content-between
+                               align-items-center"
+                    >
+
+                        <div>
+
+                            <div class="stat-label">
+                                Positions
+                            </div>
+
+                            <div class="stat-value">
+                                {{ positions }}
+                            </div>
+
+                            <div class="stat-subtext">
+
+                                {{ active_positions }}
+                                active
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-briefcase"
+                            ></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMPLOYEES -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div
+                        class="d-flex
+                               justify-content-between
+                               align-items-center"
+                    >
+
+                        <div>
+
+                            <div class="stat-label">
+                                Employees
+                            </div>
+
+                            <div class="stat-value">
+                                {{ employees }}
+                            </div>
+
+                            <div class="stat-subtext">
+
+                                {{ active_employees }}
+                                active
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-id-badge"
+                            ></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- POSITION ASSIGNMENTS -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div
+                        class="d-flex
+                               justify-content-between
+                               align-items-center"
+                    >
+
+                        <div>
+
+                            <div class="stat-label">
+                                Position Assignments
+                            </div>
+
+                            <div class="stat-value">
+                                {{ position_assignments }}
+                            </div>
+
+                            <div class="stat-subtext">
+
+                                Current active assignments
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-user-tie"
+                            ></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             MASTER DATA
+             ========================================================= -->
+
+        <section class="mb-5">
+
+            <div class="dashboard-section-title">
+
+                <h5>
+                    Organization Masters
+                </h5>
+
+                <p>
+                    Configure the structural building blocks of LTPOMS.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- ORGANIZATION UNIT TYPES -->
+
+                <div class="col-xl-4 col-md-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-layer-group"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Organization Unit Types
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Configure reusable types such as Plant,
+                            Sub-Plant, Function, Department, Section,
+                            Line, Laboratory or Workshop.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:organization_unit_type_list' %}">
+                                Manage Types
+                                 <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORGANIZATION UNITS -->
+
+                <div class="col-xl-4 col-md-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-sitemap"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Organization Units
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Build the unlimited-depth organization tree,
+                            such as LTP → Quality → Sub-Plant 2 →
+                            Tube Plant.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:organization_unit_list' %}">
+
+                                Manage Organization
+                                <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESIGNATIONS -->
+
+                <div class="col-xl-4 col-md-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-id-card"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Designations
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Maintain HR titles such as General Manager,
+                            Manager, Assistant Manager, Engineer and
+                            Executive independently from Positions.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:designation_list' %}">
+
+                                Manage Designations
+                                <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             POSITION & REPORTING
+             ========================================================= -->
+
+        <section class="mb-5">
+
+            <div class="dashboard-section-title">
+
+                <h5>
+                    Position & Reporting Structure
+                </h5>
+
+                <p>
+                    Define organizational responsibilities independently
+                    from the Employees currently occupying them.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- POSITIONS -->
+
+                <div class="col-xl-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-briefcase"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Positions
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Configure organizational jobs such as
+                            Plant Head, Plant Quality Head,
+                            Sub-Plant Quality Head or Tube Plant
+                            Section Manager.
+
+                            Current total:
+                            <strong>{{ positions }}</strong>.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:position_list' %}">
+
+                                Manage Positions
+                                <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REPORTING -->
+
+                <div class="col-xl-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-code-branch"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Position Reporting
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Define solid-line, dotted-line, functional,
+                            administrative and technical reporting
+                            relationships independently from the
+                            Organization Unit tree.
+
+                            Active relationships:
+                            <strong>{{ reporting_relationships }}</strong>.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:position_reporting_list' %}">
+
+                                Manage Reporting
+                                <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             PEOPLE
+             ========================================================= -->
+
+        <section class="mb-5">
+
+            <div class="dashboard-section-title">
+
+                <h5>
+                    Employees & Position Assignments
+                </h5>
+
+                <p>
+                    Maintain Employee master data and assign Employees
+                    to organizational Positions using effective dates.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- EMPLOYEES -->
+
+                <div class="col-xl-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-users"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Employees
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Maintain Employee code, name, contact details,
+                            joining date and employment status.
+
+                            Organization and reporting are derived through
+                            Position Assignments.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:employee_list' %}">
+
+                                Manage Employees
+                                <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- POSITION ASSIGNMENTS -->
+
+                <div class="col-xl-6">
+
+                    <div class="management-card">
+
+                        <div class="management-icon">
+
+                            <i
+                                class="fa-solid
+                                       fa-user-check"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="management-title">
+
+                            Employee Position Assignments
+
+                        </div>
+
+
+                        <div class="management-description">
+
+                            Connect Employees to Positions using
+                            Permanent, Acting, Additional Charge or
+                            Temporary assignments while preserving
+                            effective-date history.
+
+                        </div>
+
+
+                        <div class="management-actions">
+
+                            <a href="{% url 'usermanagement:position_assignment_list' %}">
+
+                                Manage Assignments
+                                <i
+                                class="fa-solid
+                                       fa-arrow-right"
+                            ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             ARCHITECTURE
+             ========================================================= -->
+
+        <section class="architecture-card mb-4">
+
+            <div class="architecture-title">
+
+                <i class="fa-solid fa-diagram-project me-2"></i>
+
+                LTPOMS Organization Architecture
+
+            </div>
+
+
+            <div class="architecture-flow">
+
+                <span class="architecture-node">
+
+                    Organization Unit
+
+                </span>
+
+                <span class="architecture-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+                <span class="architecture-node">
+
+                    Position
+
+                </span>
+
+                <span class="architecture-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+                <span class="architecture-node">
+
+                    Employee Position Assignment
+
+                </span>
+
+                <span class="architecture-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+                <span class="architecture-node">
+
+                    Employee
+
+                </span>
+
+                <span class="architecture-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+                <span class="architecture-node">
+
+                    User
+
+                </span>
+
+                <span class="architecture-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </span>
+
+                <span class="architecture-node">
+
+                    Role + Scope
+
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             DESIGN NOTE
+             ========================================================= -->
+
+        <section class="dashboard-note">
+
+            <div class="fw-bold mb-2">
+
+                <i class="fa-solid fa-circle-info me-2"></i>
+
+                Important LTPOMS Design Principle
+
+            </div>
+
+            <div>
+
+                The Organization Unit hierarchy and Position reporting
+                hierarchy are intentionally independent.
+
+            </div>
+
+            <div class="mt-2">
+
+                For example, Tube Plant may exist organizationally under
+                Sub-Plant 2, while the Tube Plant Section Manager's
+                actual reporting authority is determined separately by
+                the Position Reporting structure.
+
+            </div>
+
+            <div class="mt-2">
+
+                This makes reorganizations, employee transfers,
+                additional charge assignments and future LTPOMS modules
+                possible without redesigning the core database.
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}

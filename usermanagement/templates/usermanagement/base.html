@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+User Management | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+
+    {{ block.super }}
+
+    <style>
+        /*
+         * User Management module-level styling can be placed here.
+         *
+         * Keep page-specific CSS inside each individual template.
+         */
+   
+        .module-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+
+            overflow: visible;
+
+            background: rgba(51, 77, 66, 0.97);
+
+            border-bottom: 3px solid var(--accent, #ffeb00);
+
+            box-shadow:
+                0 5px 18px rgba(51, 77, 66, 0.16);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .module-nav-wrapper {
+            display: flex;
+            align-items: center;
+
+            gap: 20px;
+
+            min-height: 62px;
+
+            overflow: visible;
+        }
+
+
+        /* =========================================
+           MODULE HEADING
+           ========================================= */
+
+        .module-nav-heading {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+
+            padding-right: 20px;
+
+            color: var(--white, #ffffff);
+
+            border-right:
+                1px solid rgba(255, 255, 255, 0.15);
+
+            font-size: 0.95rem;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .module-nav-heading i {
+            color: var(--accent, #ffeb00);
+
+            font-size: 1rem;
+        }
+
+
+        /* =========================================
+           NAVIGATION LINKS
+           ========================================= */
+
+        .module-nav-links {
+            display: flex;
+            flex: 1 1 auto;
+            align-items: center;
+
+            gap: 5px;
+
+            min-width: 0;
+            padding: 7px 0;
+
+            /*
+             * Do not use overflow-x: auto.
+             * Horizontal overflow can clip Bootstrap dropdowns
+             * or introduce unwanted scrollbars.
+             */
+            overflow: visible;
+        }
+
+        .module-nav-link {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 10px 13px;
+
+            color: rgba(255, 255, 255, 0.8);
+            background-color: transparent;
+
+            border: 1px solid transparent;
+            border-radius: 10px;
+
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+
+            line-height: 1.5;
+            text-decoration: none;
+            white-space: nowrap;
+
+            cursor: pointer;
+
+            transition:
+                color 0.25s ease,
+                background-color 0.25s ease,
+                border-color 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .module-nav-link:hover,
+        .module-nav-link:focus {
+            color: var(--secondary, #334d42);
+
+            background-color: var(--accent, #ffeb00);
+            border-color: var(--accent, #ffeb00);
+
+            text-decoration: none;
+            outline: none;
+
+            transform: translateY(-1px);
+        }
+
+        .module-nav-link.active {
+            color: var(--secondary, #334d42);
+
+            background-color: var(--accent, #ffeb00);
+            border-color: var(--accent, #ffeb00);
+
+            box-shadow:
+                0 5px 15px rgba(255, 235, 0, 0.2);
+        }
+
+        .module-nav-link i {
+            font-size: 0.9rem;
+        }
+
+
+        /* =========================================
+           DROPDOWN CONTAINER AND BUTTON
+           ========================================= */
+
+        .module-nav-dropdown {
+            position: relative;
+
+            display: inline-flex;
+            flex: 0 0 auto;
+
+            overflow: visible;
+        }
+
+        .module-nav-dropdown > .module-nav-link {
+            margin: 0;
+
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .module-nav-dropdown > .module-nav-link.show,
+        .module-nav-dropdown > .module-nav-link[aria-expanded="true"] {
+            color: var(--secondary, #334d42);
+
+            background-color: var(--accent, #ffeb00);
+            border-color: var(--accent, #ffeb00);
+
+            box-shadow:
+                0 5px 15px rgba(255, 235, 0, 0.2);
+        }
+
+        .module-nav-dropdown .dropdown-toggle::after {
+            margin-left: 4px;
+
+            vertical-align: middle;
+        }
+
+
+        /* =========================================
+           DROPDOWN MENU
+           ========================================= */
+
+        .module-dropdown-menu {
+            z-index: 1100;
+
+            min-width: 250px;
+
+            margin-top: 8px !important;
+            padding: 8px;
+
+            background-color: var(--white, #ffffff);
+
+            border:
+                1px solid rgba(51, 77, 66, 0.14);
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 14px 35px rgba(51, 77, 66, 0.2);
+        }
+
+        .module-dropdown-menu .dropdown-item {
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 11px 13px;
+
+            color: var(--secondary, #334d42);
+            background-color: transparent;
+
+            border-radius: 9px;
+
+            font-size: 0.86rem;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            transition:
+                color 0.2s ease,
+                background-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .module-dropdown-menu .dropdown-item i {
+            width: 22px;
+
+            color: var(--secondary, #334d42);
+
+            text-align: center;
+        }
+
+        .module-dropdown-menu .dropdown-item:hover,
+        .module-dropdown-menu .dropdown-item:focus {
+            color: var(--secondary, #334d42);
+
+            background-color: rgba(255, 235, 0, 0.18);
+
+            outline: none;
+
+            transform: translateX(3px);
+        }
+
+        .module-dropdown-menu .dropdown-item.active {
+            color: var(--secondary, #334d42);
+
+            background-color: var(--accent, #ffeb00);
+        }
+
+        /*
+         * Prevent Bootstrap from using white icons or text
+         * for active dropdown items.
+         */
+        .module-dropdown-menu .dropdown-item.active i {
+            color: var(--secondary, #334d42);
+        }
+
+
+        /* =========================================
+           DROPDOWN DIVIDER
+           ========================================= */
+
+        .module-dropdown-menu .dropdown-divider {
+            margin: 7px 4px;
+
+            border-color:
+                rgba(51, 77, 66, 0.12);
+        }
+
+
+        /* =========================================
+           RESPONSIVE NAVBAR
+           ========================================= */
+
+        @media (max-width: 1199.98px) {
+
+            .module-nav-wrapper {
+                align-items: flex-start;
+
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .module-nav-links {
+                flex-wrap: wrap;
+            }
+        }
+
+
+        @media (max-width: 767.98px) {
+
+            .module-nav-wrapper {
+                display: block;
+
+                padding-top: 10px;
+                padding-bottom: 8px;
+            }
+
+            .module-nav-heading {
+                padding-right: 0;
+                padding-bottom: 8px;
+
+                border-right: 0;
+            }
+
+            .module-nav-links {
+                display: flex;
+                flex-wrap: wrap;
+
+                gap: 6px;
+
+                padding-bottom: 4px;
+
+                overflow: visible;
+            }
+
+            .module-nav-link {
+                padding: 9px 12px;
+            }
+
+            .module-dropdown-menu {
+                min-width: 230px;
+            }
+        }
+
+
+        @media (max-width: 575.98px) {
+
+            .module-nav-link {
+                padding: 8px 10px;
+
+                font-size: 0.78rem;
+            }
+
+            .module-nav-heading {
+                font-size: 0.9rem;
+            }
+
+            .module-dropdown-menu {
+                min-width: 220px;
+            }
+        }
+   
+
+        .usermanagement-module {
+            min-height: 100%;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="usermanagement-module">
+
+        {% include "usermanagement/includes/usermanagement_nav.html" %}
+
+        {% block usermanagement_content %}
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+    {{ block.super }}
+
+    {% block usermanagement_js %}
+    {% endblock %}
+
+{% endblock %}

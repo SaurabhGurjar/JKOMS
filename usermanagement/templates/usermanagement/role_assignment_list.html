@@ -1,0 +1,1011 @@
+{% extends "base.html" %}
+
+{% block title %}
+Role Assignments | LTPOMS
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+    .assignment-container {
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+/* ========================================= CARDS ========================================= */
+.filter-card,
+.table-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(51, 77, 66, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 6px 22px rgba(51, 77, 66, 0.06);
+}
+
+.filter-card {
+  padding: 20px;
+}
+
+.table-card {
+  overflow: hidden;
+}
+
+/* ========================================= FORM CONTROLS ========================================= */
+.form-label {
+  margin-bottom: 7px;
+  color: #334D42;
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.form-control,
+.form-select {
+  min-height: 44px;
+  color: #334D42;
+  background: #FFFFFF;
+  border: 1px solid rgba(51, 77, 66, 0.20);
+  border-radius: 10px;
+}
+
+.form-control::placeholder {
+  color: rgba(51, 77, 66, 0.50);
+}
+
+.form-control:focus,
+.form-select:focus {
+  color: #334D42;
+  background: #FFFFFF;
+  border-color: #FFEB00;
+  box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.25);
+}
+
+/* ========================================= BUTTONS ========================================= */
+.btn-primary {
+  color: #334D42;
+  background: #FFEB00;
+  border-color: #FFEB00;
+  font-weight: 700;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  color: #334D42 !important;
+  background: #E6D500 !important;
+  border-color: #E6D500 !important;
+}
+
+.btn-secondary {
+  color: #FFFFFF;
+  background: #334D42;
+  border-color: #334D42;
+  font-weight: 600;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #FFFFFF;
+  background: #263A32;
+  border-color: #263A32;
+}
+
+/* ========================================= TABLE ========================================= */
+.table-card .table {
+  margin-bottom: 0;
+  color: #334D42;
+}
+
+.table-card .table > :not(caption) > * > * {
+  padding: 14px;
+  vertical-align: middle;
+  border-color: rgba(51, 77, 66, 0.09);
+}
+
+.table-card thead th {
+  color: rgba(51, 77, 66, 0.68);
+  background: rgba(51, 77, 66, 0.04);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.table-card tbody tr {
+  transition: background 0.2s ease;
+}
+
+.table-card tbody tr:hover {
+  background: rgba(255, 235, 0, 0.06);
+}
+
+/* ========================================= ROLE ========================================= */
+.role-name {
+  color: #334D42;
+  font-weight: 700;
+}
+
+.role-code {
+  margin-top: 2px;
+  color: rgba(51, 77, 66, 0.58);
+  font-size: 0.74rem;
+}
+
+/* ========================================= TARGET ========================================= */
+.target-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 20px;
+  font-size: 0.70rem;
+  font-weight: 700;
+}
+
+.target-user {
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.20);
+  border: 1px solid rgba(255, 235, 0, 0.48);
+}
+
+.target-position {
+  color: #FFFFFF;
+  background: #334D42;
+  border: 1px solid #334D42;
+}
+
+.target-name {
+  color: #334D42;
+  font-weight: 650;
+}
+
+.target-meta {
+  margin-top: 2px;
+  color: rgba(51, 77, 66, 0.58);
+  font-size: 0.75rem;
+}
+
+/* ========================================= SCOPES ========================================= */
+.scope-item {
+  padding: 7px 9px;
+  margin-bottom: 6px;
+  background: #F8F8F8;
+  border: 1px solid rgba(51, 77, 66, 0.09);
+  border-radius: 8px;
+  font-size: 0.75rem;
+}
+
+.scope-item:last-child {
+  margin-bottom: 0;
+}
+
+.scope-org {
+  color: #334D42;
+  font-weight: 650;
+}
+
+.scope-meta {
+  margin-top: 2px;
+  color: rgba(51, 77, 66, 0.58);
+}
+
+.unrestricted-scope {
+  display: inline-block;
+  padding: 5px 9px;
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.18);
+  border-radius: 8px;
+  font-size: 0.73rem;
+  font-weight: 650;
+}
+
+/* ========================================= STATUS ========================================= */
+.status-active,
+.status-inactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 650;
+}
+
+.status-active {
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.20);
+  border: 1px solid rgba(255, 235, 0, 0.48);
+}
+
+.status-inactive {
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.07);
+  border: 1px solid rgba(220, 38, 38, 0.20);
+}
+
+/* ========================================= ACTIONS ========================================= */
+.action-link,
+.action-button {
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 2px;
+  border-radius: 8px;
+}
+
+.action-link {
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.15);
+  border: 1px solid rgba(255, 235, 0, 0.35);
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.action-link:hover {
+  color: #334D42;
+  background: #FFEB00;
+  transform: translateY(-1px);
+}
+
+.action-button {
+  transition: transform 0.2s ease;
+}
+
+.action-button:hover {
+  transform: translateY(-1px);
+}
+
+.action-form {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================= EMPTY STATE ========================================= */
+.empty-state {
+  padding: 55px 20px !important;
+  color: rgba(51, 77, 66, 0.58) !important;
+  text-align: center;
+}
+
+/* ========================================= INFO ========================================= */
+.architecture-note {
+  padding: 16px;
+  color: #334D42;
+  background: rgba(255, 235, 0, 0.07);
+  border: 1px solid rgba(255, 235, 0, 0.35);
+  border-radius: 11px;
+  font-size: 0.84rem;
+}
+
+/* ========================================= RESPONSIVE ========================================= */
+@media (max-width: 991.98px) {
+  .table-card .table {
+    min-width: 1250px;
+  }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <div class="assignment-container">
+
+
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i
+                            class="fa-solid
+                                   fa-user-shield
+                                   me-2"
+                        ></i>
+
+                        Role Assignments
+
+                    </h2>
+
+                    <p class="mb-0">
+
+                        Manage User and Position-based LTPOMS
+                        authorization assignments and scopes.
+
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="d-flex
+                           flex-column
+                           flex-sm-row
+                           gap-2"
+                >
+
+                <a href="{% url 'usermanagement:user_list' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-users me-2"></i> Users
+                </a>
+
+                <a href="{% url 'usermanagement:role_assignment_create' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-2"></i> Add Assignment
+                </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             SEARCH AND FILTERS
+             ========================================================= -->
+
+        <section class="filter-card mb-4">
+
+           <form action="{% url 'usermanagement:role_assignment_list' %}" method="get">
+  <div class="row g-3 align-items-end">
+    <!-- SEARCH -->
+    <div class="col-lg-4">
+      <label for="assignmentSearch" class="form-label">Search</label>
+      <input type="search" id="assignmentSearch" name="search" value="{{ search_query }}" class="form-control" placeholder="Role, user, employee or position">
+    </div>
+
+    <!-- ROLE FILTER -->
+    <div class="col-lg-3">
+      <label for="roleFilter" class="form-label">Role</label>
+      <select id="roleFilter" name="role" class="form-select">
+        <option value="">All Roles</option>
+        {% for role in roles %}
+          <option value="{{ role.id }}" {% if role_filter == role.id|stringformat:"s" %}selected{% endif %}>
+            {{ role.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- ASSIGNMENT TYPE -->
+    <div class="col-lg-2">
+      <label for="typeFilter" class="form-label">Assigned To</label>
+      <select id="typeFilter" name="type" class="form-select">
+        <option value="">All Types</option>
+        <option value="user" {% if assignment_type == "user" %}selected{% endif %}>User</option>
+        <option value="position" {% if assignment_type == "position" %}selected{% endif %}>Position</option>
+      </select>
+    </div>
+
+    <!-- ACTION -->
+    <div class="col-lg-3">
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary flex-grow-1">
+          <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+        </button>
+        <a href="{% url 'usermanagement:role_assignment_list' %}" class="btn btn-secondary">
+          <i class="fa-solid fa-filter-circle-xmark"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+        </section>
+
+
+        <!-- =========================================================
+             ROLE ASSIGNMENT TABLE
+             ========================================================= -->
+
+        <section class="table-card mb-4">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Assigned To
+                            </th>
+
+                            <th>
+                                Scope
+                            </th>
+
+                            <th>
+                                Validity
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Assigned By
+                            </th>
+
+                            <th class="text-end">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for assignment in assignments %}
+
+                                                            <!-- =================================
+                                     ROLE
+                                     ================================= -->
+
+                                <td>
+
+                                    <div class="role-name">
+                                        {{ assignment.role.name }}
+                                    </div>
+
+                                    <div class="role-code">
+                                        {{ assignment.role.code }}
+                                    </div>
+
+                                    {% if assignment.role.role_type %}
+
+                                        <div class="role-code">
+                                            Type:
+                                            {{ assignment.role.role_type.name }}
+                                        </div>
+
+                                    {% endif %}
+
+                                    {% if assignment.role.module %}
+
+                                        <div class="role-code">
+                                            Module:
+                                            {{ assignment.role.module.name }}
+                                        </div>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ASSIGNED TO
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if assignment.user %}
+
+                                        <div>
+
+                                            <span
+                                                class="target-badge target-user"
+                                            >
+                                                <i class="fa-solid fa-user"></i>
+                                                USER
+                                            </span>
+
+                                        </div>
+
+                                        <div class="target-name">
+                                            {{ assignment.user.username }}
+                                        </div>
+
+                                        {% if assignment.user.employee %}
+
+                                            <div class="target-meta">
+                                                {{ assignment.user.employee.employee_code }}
+                                            </div>
+
+                                            <div class="target-meta">
+                                                {{ assignment.user.employee.full_name }}
+                                            </div>
+
+                                        {% endif %}
+
+                                        <div class="mt-2">
+
+                                            {% url 'usermanagement:user_detail' assignment.user.id %}
+                                                <i class="fa-solid fa-eye me-1"></i>
+                                                View User
+                                            </a>
+
+                                        </div>
+
+
+                                    {% elif assignment.position %}
+
+                                        <div>
+
+                                            <span
+                                                class="target-badge target-position"
+                                            >
+                                                <i class="fa-solid fa-briefcase"></i>
+                                                POSITION
+                                            </span>
+
+                                        </div>
+
+                                        <div class="target-name">
+                                            {{ assignment.position.name }}
+                                        </div>
+
+                                        {% if assignment.position.code %}
+
+                                            <div class="target-meta">
+                                                {{ assignment.position.code }}
+                                            </div>
+
+                                        {% endif %}
+
+                                        {% if assignment.position.organization_unit %}
+
+                                            <div class="target-meta">
+
+                                                <i class="fa-solid fa-building me-1"></i>
+
+                                                {{ assignment.position.organization_unit.name }}
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                    {% else %}
+
+                                        <span class="text-danger">
+
+                                            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+
+                                            Invalid assignment target
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     SCOPE
+                                     ================================= -->
+
+                                <td>
+
+                                    {% for scope in assignment.scopes.all %}
+
+                                        <div class="scope-item">
+
+
+                                            <!-- ORGANIZATION UNIT -->
+
+                                            <div class="scope-org">
+
+                                                {% if scope.organization_unit %}
+
+                                                    <i class="fa-solid fa-sitemap me-1"></i>
+
+                                                    {{ scope.organization_unit.name }}
+
+                                                {% else %}
+
+                                                    <i class="fa-solid fa-globe me-1"></i>
+
+                                                    All Organization Units
+
+                                                {% endif %}
+
+                                            </div>
+
+
+                                            <!-- MODULE -->
+
+                                            <div class="scope-meta">
+
+                                                {% if scope.module %}
+
+                                                    Module:
+                                                    {{ scope.module.name }}
+
+                                                {% else %}
+
+                                                    Module:
+                                                    All Modules
+
+                                                {% endif %}
+
+                                            </div>
+
+
+                                            <!-- DESCENDANTS -->
+
+                                            {% if scope.organization_unit %}
+
+                                                <div class="scope-meta">
+
+                                                    Include descendants:
+
+                                                    {% if scope.include_descendants %}
+
+                                                        Yes
+
+                                                    {% else %}
+
+                                                        No
+
+                                                    {% endif %}
+
+                                                </div>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                    {% empty %}
+
+                                        <span class="unrestricted-scope">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-triangle-exclamation
+                                                       me-1"
+                                            ></i>
+
+                                            Unrestricted
+
+                                        </span>
+
+                                    {% endfor %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     VALIDITY
+                                     ================================= -->
+
+                                <td>
+
+                                    <div>
+
+                                        {% if assignment.valid_from %}
+
+                                            {{ assignment.valid_from|date:"d M Y" }}
+
+                                        {% else %}
+
+                                            Open
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <div class="small text-muted my-1">
+                                        to
+                                    </div>
+
+
+                                    <div>
+
+                                        {% if assignment.valid_to %}
+
+                                            {{ assignment.valid_to|date:"d M Y" }}
+
+                                        {% else %}
+
+                                            Open
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     STATUS
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if assignment.is_active %}
+
+                                        <span class="status-active">
+
+                                            <i class="fa-solid fa-circle-check"></i>
+
+                                            Active
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-inactive">
+
+                                            <i class="fa-solid fa-circle-xmark"></i>
+
+                                            Inactive
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ASSIGNED BY
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if assignment.assigned_by %}
+
+                                        <div class="fw-semibold">
+                                            {{ assignment.assigned_by.username }}
+                                        </div>
+
+                                        {% if assignment.assigned_at %}
+
+                                            <div class="small text-muted">
+                                                {{ assignment.assigned_at|date:"d M Y H:i" }}
+                                            </div>
+
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            System / Unknown
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ACTIONS
+                                     ================================= -->
+
+                                <td class="text-end text-nowrap">
+
+
+                                    <!-- EDIT -->
+
+                                    <a href="{% url 'usermanagement:role_assignment_edit' assignment.id %}">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+
+                                    <!-- =================================
+                                         ACTIVATE / DEACTIVATE
+                                         POST ONLY
+                                         ================================= -->
+
+                                    <form action="{% url 'usermanagement:role_assignment_status_toggle' assignment.id %}" method="post">
+
+                                        {% csrf_token %}
+
+
+                                        {% if assignment.is_active %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-outline-warning action-button"
+                                                title="Deactivate Assignment"
+                                                aria-label="Deactivate Role Assignment"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to deactivate this Role Assignment?'
+                                                );"
+                                            >
+                                                <i class="fa-solid fa-pause"></i>
+                                            </button>
+
+                                        {% else %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-outline-success action-button"
+                                                title="Activate Assignment"
+                                                aria-label="Activate Role Assignment"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to activate this Role Assignment?'
+                                                );"
+                                            >
+                                                <i class="fa-solid fa-play"></i>
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+
+                                    <!-- =================================
+                                         DELETE
+                                         POST ONLY
+                                         ================================= -->
+
+                                    <form action="{% url 'usermanagement:role_assignment_delete' assignment.id %}" method="post">
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-outline-danger action-button"
+                                            title="Delete Assignment"
+                                            aria-label="Delete Role Assignment"
+                                            onclick="return confirm(
+                                                'Are you sure you want to permanently delete this Role Assignment and its Scope records?'
+                                            );"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <!-- =====================================
+                                 EMPTY STATE
+                                 ===================================== -->
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="empty-state"
+                                >
+
+                                    <i
+                                        class="fa-solid
+                                               fa-user-shield
+                                               fa-3x
+                                               mb-3"
+                                    ></i>
+
+                                    <h5>
+                                        No Role Assignments Found
+                                    </h5>
+
+                                    <p class="mb-3">
+
+                                        No Role Assignments match the
+                                        current search or filter criteria.
+
+                                    </p>
+
+                                    <a href="{% url 'usermanagement:role_assignment_create' %}" class="btn btn-outline-secondary">
+                                        <i class="fa-solid fa-plus me-1"></i>
+
+                                        Add Role Assignment
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             LTPOMS AUTHORIZATION NOTE
+             ========================================================= -->
+
+        <section class="architecture-note">
+
+            <div class="fw-bold mb-2">
+
+                <i class="fa-solid fa-circle-info me-2"></i>
+
+                LTPOMS Role Assignment Model
+
+            </div>
+
+            <div>
+
+                Organizational authority should normally be assigned
+                to a <strong>Position</strong> rather than directly
+                to a User.
+
+            </div>
+
+            <div class="mt-2">
+
+                A direct User assignment should be used when the
+                authority genuinely belongs to that specific account,
+                such as controlled administrative or special-purpose
+                access.
+
+            </div>
+
+            <div class="mt-2">
+
+                <strong>Position Assignment:</strong>
+
+                authority follows the Position and is inherited by the
+                Employee currently occupying that Position.
+
+            </div>
+
+            <div class="mt-2">
+
+                <strong>Scope:</strong>
+
+                Organization Unit, Module, and descendant settings
+                determine where an assignment applies.
+
+            </div>
+
+            <div class="mt-2 text-danger">
+
+                <i class="fa-solid fa-triangle-exclamation me-1"></i>
+
+                <strong>Important:</strong>
+
+                a Role Assignment without Scope records is currently
+                treated as unrestricted by the LTPOMS authorization
+                service.
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+

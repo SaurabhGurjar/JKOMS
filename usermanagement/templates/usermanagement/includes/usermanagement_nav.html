@@ -1,0 +1,299 @@
+<nav class="module-navbar">
+
+    <div class="container-fluid px-3 px-lg-4">
+
+        <div class="module-nav-wrapper">
+
+            <!-- MODULE HEADING -->
+
+            <div class="module-nav-heading">
+                <i class="fa-solid fa-users-gear me-2"></i>
+                <span>User Management</span>
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <div class="module-nav-links">
+
+
+                <!-- USERS -->
+
+                <div class="dropdown module-nav-dropdown">
+
+                    <button
+                        class="module-nav-link dropdown-toggle{% if active_page == 'users' or active_page == 'user_detail' or active_page == 'user_create' or active_page == 'user_edit' or active_page == 'password_reset' %} active{% endif %}"
+                        type="button"
+                        id="usersDropdown"
+                        data-bs-toggle="dropdown"
+                        data-bs-boundary="viewport"
+                        aria-expanded="false"
+                    >
+                        <i class="fa-solid fa-users"></i>
+                        <span>Users</span>
+                    </button>
+
+                    <ul
+                        class="dropdown-menu module-dropdown-menu"
+                        aria-labelledby="usersDropdown"
+                    >
+                        <li>
+                            <a class="dropdown-item" href="{% url 'usermanagement:user_list' %}">
+                                <i class="fa-solid fa-list"></i>
+                                <span>User List</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{% url 'usermanagement:user_create' %}">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Add User</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+
+                <!-- ACCESS CONTROL -->
+
+                <div class="dropdown module-nav-dropdown">
+
+                    <button
+                        class="module-nav-link dropdown-toggle{% if active_page == 'role_assignments' or active_page == 'role_assignment_form' %} active{% endif %}"
+                        type="button"
+                        id="accessDropdown"
+                        data-bs-toggle="dropdown"
+                        data-bs-boundary="viewport"
+                        aria-expanded="false"
+                    >
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Access Control</span>
+                    </button>
+
+                    <ul
+                        class="dropdown-menu module-dropdown-menu"
+                        aria-labelledby="accessDropdown"
+                    >
+                        <li>
+                            <a class="dropdown-item" href="{% url 'usermanagement:role_assignment_list' %}">
+                                <i class="fa-solid fa-user-shield"></i>
+                                <span>Role Assignments</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{% url 'usermanagement:role_assignment_create' %}">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Assign Role</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+
+                <!-- ORGANIZATION -->
+<div class="dropdown module-nav-dropdown">
+
+    <button
+        class="module-nav-link dropdown-toggle{% if active_page == 'organization' or active_page == 'unit_types' or active_page == 'organization_units' %} active{% endif %}"
+        type="button"
+        id="organizationDropdown"
+        data-bs-toggle="dropdown"
+        data-bs-boundary="viewport"
+        aria-expanded="false"
+    >
+        <i class="fa-solid fa-sitemap"></i>
+        <span>Organization</span>
+    </button>
+
+    <ul
+        class="dropdown-menu module-dropdown-menu"
+        aria-labelledby="organizationDropdown"
+    >
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:organization_dashboard' %}">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Overview</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:organization_unit_type_list' %}">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Unit Types</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:organization_unit_list' %}">
+                <i class="fa-solid fa-sitemap"></i>
+                <span>Organization Units</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+
+
+                <!-- POSITIONS -->
+
+                <div class="dropdown module-nav-dropdown">
+
+    <button
+        class="module-nav-link dropdown-toggle{% if active_page == 'designations' or active_page == 'positions' or active_page == 'position_reporting' %} active{% endif %}"
+        type="button"
+        id="positionsDropdown"
+        data-bs-toggle="dropdown"
+        data-bs-boundary="viewport"
+        aria-expanded="false"
+    >
+        <i class="fa-solid fa-briefcase"></i>
+        <span>Positions</span>
+    </button>
+
+    <ul
+        class="dropdown-menu module-dropdown-menu"
+        aria-labelledby="positionsDropdown"
+    >
+        <li>
+            <!-- Added missing <a> opening tag below -->
+            <a class="dropdown-item" href="{% url 'usermanagement:designation_list' %}">
+                <i class="fa-solid fa-id-card"></i>
+                <span>Designations</span>
+            </a>
+        </li>
+
+        <li>
+            <!-- Added missing <a> opening tag below -->
+            <a class="dropdown-item" href="{% url 'usermanagement:position_list' %}">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>Positions</span>
+            </a>
+        </li>
+
+        <li>
+            <!-- Added missing <a> opening tag below -->
+            <a class="dropdown-item" href="{% url 'usermanagement:position_reporting_list' %}">
+                <i class="fa-solid fa-code-branch"></i>
+                <span>Reporting Structure</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+
+
+                <!-- EMPLOYEES -->
+
+               <div class="dropdown module-nav-dropdown">
+
+    <button
+        class="module-nav-link dropdown-toggle{% if active_page == 'employees' or active_page == 'employee_detail' or active_page == 'position_assignments' %} active{% endif %}"
+        type="button"
+        id="employeesDropdown"
+        data-bs-toggle="dropdown"
+        data-bs-boundary="viewport"
+        aria-expanded="false"
+    >
+        <i class="fa-solid fa-id-badge"></i>
+        <span>Employees</span>
+    </button>
+
+    <ul
+        class="dropdown-menu module-dropdown-menu"
+        aria-labelledby="employeesDropdown"
+    >
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:employee_list' %}">
+                <i class="fa-solid fa-users"></i>
+                <span>Employee Master</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:employee_create' %}">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Add Employee</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:position_assignment_list' %}">
+                <i class="fa-solid fa-user-check"></i>
+                <span>Position Assignments</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+
+
+                <!-- QUICK ADD -->
+
+               <div class="dropdown module-nav-dropdown">
+
+    <button
+        class="module-nav-link dropdown-toggle"
+        type="button"
+        id="quickAddDropdown"
+        data-bs-toggle="dropdown"
+        data-bs-boundary="viewport"
+        aria-expanded="false"
+    >
+        <i class="fa-solid fa-circle-plus"></i>
+        <span>Quick Add</span>
+    </button>
+
+    <ul
+        class="dropdown-menu dropdown-menu-end module-dropdown-menu"
+        aria-labelledby="quickAddDropdown"
+    >
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:organization_unit_type_create' %}">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Unit Type</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:organization_unit_create' %}">
+                <i class="fa-solid fa-sitemap"></i>
+                <span>Organization Unit</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:designation_create' %}">
+                <i class="fa-solid fa-id-card"></i>
+                <span>Designation</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:position_create' %}">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>Position</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'usermanagement:position_reporting_create' %}">
+                 <!-- Remember to complete this item if needed -->
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

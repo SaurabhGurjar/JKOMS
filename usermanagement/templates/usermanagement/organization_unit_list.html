@@ -1,0 +1,1263 @@
+{% extends "usermanagement/base.html" %}
+
+{% block title %}
+Organization Units | LTPOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    .organization-container {
+        max-width: 1450px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================
+       CARDS
+       ========================================= */
+
+    .filter-card,
+    .table-card {
+        background: #FFFFFF;
+
+        border: 1px solid rgba(51, 77, 66, 0.12);
+        border-radius: 16px;
+
+        box-shadow:
+            0 6px 22px rgba(51, 77, 66, 0.06);
+    }
+
+    .filter-card {
+        padding: 20px;
+    }
+
+    .table-card {
+        overflow: hidden;
+    }
+
+
+    /* =========================================
+       FORM CONTROLS
+       ========================================= */
+
+    .form-label {
+        margin-bottom: 7px;
+
+        color: #334D42;
+
+        font-size: 0.*4rem;
+        font-weight: 650;
+   }
+
+    .form-control,
+    .form-select {
+        min-height: 44px;
+
+       color: #334D42;
+        background: #FFFFFF;
+
+        border: 2px solid rgba(51, 77, 66, 0.20);
+       border-radius: 10px;
+    }
+
+   .form-control::placeholder {
+        color: rgba(51, 77, 66, 0.48);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        color: #334D42;
+        background: #FFFFFF;
+
+        border-color: #FFEB00;
+
+        box-shadow:
+            0 0 0 0.2rem rgba(255, 235, 0, 0.25);
+    }
+
+
+    /* =========================================
+       BUTTONS
+       ========================================= */
+
+    .btn-LTPOMS {
+        color: #334D42;
+
+        background: #FFEB00;
+        border-color: #FFEB00;
+
+        font-weight: 700;
+    }
+
+    .btn-LTPOMS:hover,
+    .btn-LTPOMS:focus {
+        color: #334D42;
+
+        background: #E6D500;
+        border-color: #E6D500;
+    }
+
+    .btn-LTPOMS-dark {
+        color: #FFFFFF;
+
+        background: #334D42;
+        border-color: #334D42;
+
+        font-weight: 600;
+    }
+
+    .btn-LTPOMS-dark:hover,
+    .btn-LTPOMS-dark:focus {
+        color: #FFFFFF;
+
+        background: #263A32;
+        border-color: #263A32;
+    }
+
+
+    /* =========================================
+       TABLE
+       ========================================= */
+
+    .table-card .table {
+        margin-bottom: 0;
+
+        color: #334D42;
+    }
+
+    .table-card .table > :not(caption) > * > * {
+        padding: 14px;
+
+        vertical-align: middle;
+
+        border-color:
+            rgba(51, 77, 66, 0.09);
+    }
+
+    .table-card thead th {
+        color: rgba(51, 77, 66, 0.68);
+
+        background:
+            rgba(51, 77, 66, 0.04);
+
+        font-size: 0.75rem;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+
+        white-space: nowrap;
+    }
+
+    .table-card tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .table-card tbody tr:hover {
+        background:
+            rgba(255, 235, 0, 0.06);
+    }
+
+
+    /* =========================================
+       UNIT
+       ========================================= */
+
+    .unit-code {
+        display: inline-block;
+
+        padding: 5px 9px;
+
+        color: #334D42;
+
+        background:
+            rgba(255, 235, 0, 0.18);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.45);
+
+        border-radius: 8px;
+
+        font-size: 0.76rem;
+        font-weight: 700;
+    }
+
+    .unit-name {
+        color: #334D42;
+
+        font-weight: 700;
+    }
+
+    .unit-meta {
+        margin-top: 3px;
+
+        color: rgba(51, 77, 66, 0.60);
+
+        font-size: 0.76rem;
+    }
+
+
+    /* =========================================
+       TYPE BADGE
+       ========================================= */
+
+    .unit-type-badge {
+        display: inline-flex;
+        align-items: center;
+
+        gap: 5px;
+
+        padding: 5px 9px;
+
+        color: #334D42;
+
+        background: #F5F5F5;
+
+        border:
+            1px solid rgba(51, 77, 66, 0.12);
+
+        border-radius: 20px;
+
+        font-size: 0.74rem;
+        font-weight: 650;
+    }
+
+
+    /* =========================================
+       PARENT / HIERARCHY
+       ========================================= */
+
+    .parent-box {
+        padding: 8px 10px;
+
+        background: #F8F8F8;
+
+        border:
+            1px solid rgba(51, 77, 66, 0.09);
+
+        border-radius: 9px;
+    }
+
+    .parent-name {
+        color: #334D42;
+
+        font-size: 0.82rem;
+        font-weight: 650;
+    }
+
+    .parent-code {
+        margin-top: 2px;
+
+        color: rgba(51, 77, 66, 0.58);
+
+        font-size: 0.70rem;
+    }
+
+    .root-badge {
+        display: inline-flex;
+        align-items: center;
+
+        gap: 5px;
+
+        padding: 5px 9px;
+
+        color: #FFFFFF;
+        background: #334D42;
+
+        border-radius: 20px;
+
+        font-size: 0.72rem;
+        font-weight: 650;
+    }
+
+
+    /* =========================================
+       VALIDITY
+       ========================================= */
+
+    .validity-text {
+        color: #334D42;
+
+        font-size: 0.79rem;
+    }
+
+    .validity-subtext {
+        margin-top: 2px;
+
+        color: rgba(51, 77, 66, 0.56);
+
+        font-size: 0.72rem;
+    }
+
+
+    /* =========================================
+       STATUS
+       ========================================= */
+
+    .status-active,
+    .status-inactive {
+        display: inline-flex;
+        align-items: center;
+
+        gap: 5px;
+
+        padding: 5px 9px;
+
+        border-radius: 20px;
+
+        font-size: 0.74rem;
+        font-weight: 650;
+    }
+
+    .status-active {
+        color: #334D42;
+
+        background:
+            rgba(255, 235, 0, 0.20);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.48);
+    }
+
+    .status-inactive {
+        color: #DC2626;
+
+        background:
+            rgba(220, 38, 38, 0.07);
+
+        border:
+            1px solid rgba(220, 38, 38, 0.20);
+    }
+
+
+    /* =========================================
+       ACTIONS
+       ========================================= */
+
+    .action-link,
+    .action-button {
+        width: 35px;
+        height: 35px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        margin: 2px;
+
+        border-radius: 8px;
+    }
+
+    .action-link {
+        color: #334D42;
+
+        background:
+            rgba(255, 235, 0, 0.14);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.35);
+
+        text-decoration: none;
+
+        transition:
+            background 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .action-link:hover {
+        color: #334D42;
+
+        background: #FFEB00;
+
+        transform: translateY(-1px);
+    }
+
+    .action-button {
+        transition:
+            transform 0.2s ease;
+    }
+
+    .action-button:hover {
+        transform: translateY(-1px);
+    }
+
+    .action-form {
+        display: inline-block;
+
+        margin: 0;
+        padding: 0;
+    }
+
+
+    /* =========================================
+       EMPTY STATE
+       ========================================= */
+
+    .empty-state {
+        padding: 55px 20px !important;
+
+        color:
+            rgba(51, 77, 66, 0.58) !important;
+
+        text-align: center;
+    }
+
+
+    /* =========================================
+       ARCHITECTURE NOTE
+       ========================================= */
+
+    .architecture-note {
+        padding: 17px;
+
+        color: #334D42;
+
+        background:
+            rgba(255, 235, 0, 0.07);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.35);
+
+        border-radius: 11px;
+
+        font-size: 0.84rem;
+        line-height: 1.55;
+    }
+
+    .example-flow {
+        margin-top: 12px;
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        gap: 7px;
+    }
+
+    .flow-node {
+        padding: 6px 10px;
+
+        background: #FFFFFF;
+
+        border:
+            1px solid rgba(51, 77, 66, 0.14);
+
+        border-radius: 18px;
+
+        font-size: 0.76rem;
+        font-weight: 650;
+    }
+
+    .flow-arrow {
+        color: rgba(51, 77, 66, 0.45);
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @media (max-width: 1100px) {
+        .table-card .table {
+            min-width: 1100px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .header-actions {
+            width: 100%;
+        }
+
+        .header-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <div class="organization-container">
+
+
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i class="fa-solid fa-sitemap me-2"></i>
+
+                        Organization Units
+
+                    </h2>
+
+
+                    <p class="mb-0">
+
+                        Build and maintain the configurable LTPOMS
+                        organization hierarchy.
+
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="header-actions
+                           d-flex
+                           flex-column
+                           flex-sm-row
+                           gap-2"
+                >
+
+                    <a href="{% url 'usermanagement:organization_dashboard' %}" class="btn btn-primary">
+
+                        <i class="fa-solid fa-arrow-left me-2"></i>
+
+                        Organization
+
+                    </a>
+
+
+                    <a href="{% url 'usermanagement:organization_unit_create' %}" class="btn btn-primary">
+
+                        <i class="fa-solid fa-plus me-2"></i>
+
+                        Add Organization Unit
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             SEARCH / FILTERS
+             ========================================================= -->
+
+        <section class="filter-card mb-4">
+
+            <form action="{% url 'usermanagement:organization_unit_list' %}" method="get">
+
+                <div class="row g-3 align-items-end">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-lg-5">
+
+                        <label
+                            for="organizationSearch"
+                            class="form-label"
+                        >
+                            Search
+                        </label>
+
+                        <input
+                            type="search"
+                            id="organizationSearch"
+                            name="search"
+                            value="{{ search_query }}"
+                            class="form-control"
+                            placeholder="Code, name or parent organization"
+                        >
+
+                    </div>
+
+
+                    <!-- TYPE -->
+
+                    <div class="col-lg-3">
+
+                        <label
+                            for="typeFilter"
+                            class="form-label"
+                        >
+                            Unit Type
+                        </label>
+
+                        <select
+                            id="typeFilter"
+                            name="type"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All Unit Types
+                            </option>
+
+
+                            {% for unit_type in unit_types %}
+
+                                <option
+                                    value="{{ unit_type.id }}"
+                                    {% if type_filter == unit_type.id|stringformat:"s" %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ unit_type.name }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-lg-2">
+
+                        <label
+                            for="statusFilter"
+                            class="form-label"
+                        >
+                            Status
+                        </label>
+
+                        <select
+                            id="statusFilter"
+                            name="status"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All
+                            </option>
+
+
+                            <option
+                                value="active"
+                                {% if status_filter == "active" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Active
+                            </option>
+
+
+                            <option
+                                value="inactive"
+                                {% if status_filter == "inactive" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="col-lg-2">
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-LTPOMS flex-grow-1"
+                                title="Apply Filters"
+                            >
+
+                                <i
+                                    class="fa-solid
+                                           fa-magnifying-glass"
+                                ></i>
+
+                            </button>
+
+
+                            <a href="{% url 'usermanagement:organization_unit_list' %}" class="btn btn-secondary">
+
+                                <i
+                                    class="fa-solid
+                                           fa-filter-circle-xmark"
+                                ></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {% if search_query or type_filter or status_filter %}
+
+                    <div class="mt-3 small text-muted">
+
+                        <i class="fa-solid fa-filter me-1"></i>
+
+                        Filters are currently applied.
+
+                        <a href="{% url 'usermanagement:organization_unit_list' %}" class="btn btn-outline-secondary">
+
+                            Clear all
+
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================================================
+             ORGANIZATION UNIT TABLE
+             ========================================================= -->
+
+        <section class="table-card mb-4">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Organization Unit
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Parent
+                            </th>
+
+                            <th>
+                                Display Order
+                            </th>
+
+                            <th>
+                                Validity
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Updated
+                            </th>
+
+                            <th class="text-end">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for unit in units %}
+
+                            <tr>
+
+
+                                <!-- =================================
+                                     ORGANIZATION UNIT
+                                     ================================= -->
+
+                                <td>
+
+                                    <div class="unit-name">
+                                        {{ unit.name }}
+                                    </div>
+
+
+                                    <div class="mt-1">
+
+                                        <span class="unit-code">
+
+                                            {{ unit.code }}
+
+                                        </span>
+
+                                    </div>
+
+
+                                    {% if unit.children.exists %}
+
+                                        <div class="unit-meta">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-diagram-project
+                                                       me-1"
+                                            ></i>
+
+                                            Has child units
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     TYPE
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if unit.unit_type %}
+
+                                        <span class="unit-type-badge">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-layer-group"
+                                            ></i>
+
+                                            {{ unit.unit_type.name }}
+
+                                        </span>
+
+
+                                        <div class="unit-meta">
+
+                                            {{ unit.unit_type.code }}
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     PARENT
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if unit.parent %}
+
+                                        <div class="parent-box">
+
+                                            <div class="parent-name">
+
+                                                {{ unit.parent.name }}
+
+                                            </div>
+
+
+                                            <div class="parent-code">
+
+                                                {{ unit.parent.code }}
+
+                                            </div>
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="root-badge">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-tree"
+                                            ></i>
+
+                                            ROOT
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     DISPLAY ORDER
+                                     ================================= -->
+
+                                <td>
+
+                                    {{ unit.display_order }}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     VALIDITY
+                                     ================================= -->
+
+                                <td>
+
+                                    <div class="validity-text">
+
+                                        {% if unit.valid_from %}
+
+                                            {{ unit.valid_from|date:"d M Y" }}
+
+                                        {% else %}
+
+                                            Open
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <div class="validity-subtext">
+                                        to
+                                    </div>
+
+
+                                    <div class="validity-text">
+
+                                        {% if unit.valid_to %}
+
+                                            {{ unit.valid_to|date:"d M Y" }}
+
+                                        {% else %}
+
+                                            Open
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     STATUS
+                                     ================================= -->
+
+                                <td>
+
+                                    {% if unit.is_active %}
+
+                                        <span class="status-active">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-circle-check"
+                                            ></i>
+
+                                            Active
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-inactive">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-circle-xmark"
+                                            ></i>
+
+                                            Inactive
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     UPDATED
+                                     ================================= -->
+
+                                <td>
+
+                                    <div>
+
+                                        {{ unit.updated_at|date:"d M Y" }}
+
+                                    </div>
+
+
+                                    <div class="small text-muted">
+
+                                        {{ unit.updated_at|date:"H:i" }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ACTIONS
+                                     ================================= -->
+
+                                <td class="text-end text-nowrap">
+
+
+                                    <!-- EDIT -->
+
+                                    <a href="{% url 'usermanagement:organization_unit_edit' unit.id %}">
+
+                                        <i class="fa-solid fa-pen"></i>
+
+                                    </a>
+
+
+                                    <!-- ACTIVATE / DEACTIVATE -->
+
+                                    <form action="{% url 'usermanagement:organization_unit_status_toggle' unit.id %}" method="post">
+
+                                        {% csrf_token %}
+
+
+                                        {% if unit.is_active %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn
+                                                       btn-outline-warning
+                                                       action-button"
+                                                title="Deactivate Organization Unit"
+                                                aria-label="Deactivate Organization Unit"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to deactivate {{ unit.name|escapejs }}?'
+                                                );"
+                                            >
+
+                                                <i
+                                                    class="fa-solid
+                                                           fa-pause"
+                                                ></i>
+
+                                            </button>
+
+                                        {% else %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn
+                                                       btn-outline-success
+                                                       action-button"
+                                                title="Activate Organization Unit"
+                                                aria-label="Activate Organization Unit"
+                                                onclick="return confirm(
+                                                    'Are you sure you want to activate {{ unit.name|escapejs }}?'
+                                                );"
+                                            >
+
+                                                <i
+                                                    class="fa-solid
+                                                           fa-play"
+                                                ></i>
+
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <!-- =====================================
+                                 EMPTY STATE
+                                 ===================================== -->
+
+                            <tr>
+
+                                <td
+                                    colspan="8"
+                                    class="empty-state"
+                                >
+
+                                    <i
+                                        class="fa-solid
+                                               fa-sitemap
+                                               fa-3x
+                                               mb-3"
+                                    ></i>
+
+
+                                    <h5>
+
+                                        No Organization Units Found
+
+                                    </h5>
+
+
+                                    {% if search_query or type_filter or status_filter %}
+
+                                        <p>
+
+                                            No Organization Units match
+                                            the current filters.
+
+                                        </p>
+
+
+                                        <a href="{% url 'usermanagement:organization_unit_list' %}">
+
+                                            <i
+                                                class="fa-solid
+                                                       fa-filter-circle-xmark
+                                                       me-2"
+                                            ></i>
+
+                                            Clear Filters
+
+                                        </a>
+
+
+                                    {% else %}
+
+                                        <p>
+
+                                            Create the root organization
+                                            unit to begin building the
+                                            LTPOMS hierarchy.
+
+                                        </p>
+
+
+                                        <a href="{% url 'usermanagement:organization_unit_create' %}" class="btn btn-outline-secondary">
+
+                                            <i class="fa-solid fa-plus me-2"></i>
+
+                                            Add Organization Unit
+
+                                        </a>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             ARCHITECTURE NOTE
+             ========================================================= -->
+
+        <section class="architecture-note">
+
+            <div class="fw-bold mb-2">
+
+                <i class="fa-solid fa-circle-info me-2"></i>
+
+                LTPOMS Organization Hierarchy
+
+            </div>
+
+
+            <div>
+
+                Every Organization Unit can optionally have another
+                Organization Unit as its Parent. This allows unlimited
+                hierarchy depth without hard-coding Plant, Sub-Plant,
+                Department or Section relationships.
+
+            </div>
+
+
+            <div class="example-flow">
+
+                <span class="flow-node">
+                    LTP
+                </span>
+
+                <span class="flow-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+                <span class="flow-node">
+                    Quality
+                </span>
+
+                <span class="flow-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+                <span class="flow-node">
+                    Sub-Plant 2
+                </span>
+
+                <span class="flow-arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
+                <span class="flow-node">
+                    Tube Plant
+                </span>
+
+            </div>
+
+
+            <div class="mt-3">
+
+                <strong>Important:</strong>
+
+                this hierarchy describes where a Position belongs.
+                Position-to-Position reporting is configured separately
+                through Position Reporting.
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
