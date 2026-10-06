@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ page_title }} | JKOMS
+    {{ page_title }} | LTPOMS
 {% endblock %}
 
 
 {% block extra_css %}
+
 <style>
     .user-form-container {
         max-width: 1050px;
@@ -29,8 +30,8 @@
         font-weight: 650;
     }
 
-    .form-section-title .text-primary {
-        color: #334D42 !important;
+    .form-section-title i {
+        color: #334D42;
     }
 
     .form-label {
@@ -57,7 +58,9 @@
         color: #334D42;
         background: #FFFFFF;
         border-color: #FFEB00;
-        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
+
+        box-shadow:
+            0 0 0 0.2rem rgba(255, 235, 0, 0.28);
     }
 
     .form-control::placeholder {
@@ -69,26 +72,12 @@
         background: #FFFFFF;
     }
 
-    select[multiple].form-select {
-        min-height: 150px;
-        padding: 10px;
-    }
-
-    select[multiple].form-select option {
-        padding: 7px 10px;
-        border-radius: 5px;
-    }
-
-    select[multiple].form-select option:checked {
-        color: #334D42;
-        background: #FFEB00;
-    }
-
     .form-check-container {
-        height: 100%;
-        min-height: 110px;
+        min-height: 105px;
         padding: 18px;
-        background: #EDEDED;
+
+        background: #F4F4F4;
+
         border: 1px solid rgba(51, 77, 66, 0.14);
         border-radius: 12px;
     }
@@ -97,8 +86,11 @@
         width: 1.15rem;
         height: 1.15rem;
         margin-top: 0.15rem;
+
         background-color: #FFFFFF;
-        border-color: rgba(51, 77, 66, 0.35);
+
+        border-color:
+            rgba(51, 77, 66, 0.35);
     }
 
     .form-check-input:checked {
@@ -108,7 +100,9 @@
 
     .form-check-input:focus {
         border-color: #FFEB00;
-        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
+
+        box-shadow:
+            0 0 0 0.2rem rgba(255, 235, 0, 0.28);
     }
 
     .form-check-label {
@@ -119,7 +113,10 @@
     .form-text,
     .helptext {
         margin-top: 7px;
-        color: rgba(51, 77, 66, 0.72) !important;
+
+        color:
+            rgba(51, 77, 66, 0.72) !important;
+
         font-size: 0.82rem;
     }
 
@@ -134,8 +131,11 @@
         padding-left: 0;
         margin-top: 7px;
         margin-bottom: 0;
+
         color: #DC2626;
+
         list-style: none;
+
         font-size: 0.86rem;
     }
 
@@ -144,12 +144,22 @@
         border-color: #DC2626;
     }
 
+
+    /* =========================================
+       SELECTED USER
+       ========================================= */
+
     .selected-user-card {
         padding: 15px 18px;
         margin-bottom: 24px;
+
         color: #334D42;
-        background: rgba(255, 235, 0, 0.16);
-        border: 1px solid rgba(255, 235, 0, 0.65);
+        background:
+            rgba(255, 235, 0, 0.16);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.65);
+
         border-radius: 12px;
     }
 
@@ -157,23 +167,140 @@
         width: 44px;
         height: 44px;
         flex: 0 0 44px;
+
         display: inline-flex;
         align-items: center;
         justify-content: center;
+
         color: #334D42;
         background: #FFEB00;
-        border: 1px solid rgba(51, 77, 66, 0.15);
+
+        border:
+            1px solid rgba(51, 77, 66, 0.15);
+
         border-radius: 50%;
+
         font-weight: 700;
     }
 
-    .selected-user-card .fw-semibold {
-        color: #334D42 !important;
+    .selected-user-card small {
+        color:
+            rgba(51, 77, 66, 0.70);
     }
 
-    .selected-user-card small {
-        color: rgba(51, 77, 66, 0.70);
+
+    /* =========================================
+       INFORMATION PANEL
+       ========================================= */
+
+    .information-card {
+        padding: 18px;
+        margin-top: 24px;
+
+        color: #334D42;
+
+        background:
+            rgba(255, 235, 0, 0.08);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.45);
+
+        border-radius: 12px;
     }
+
+    .information-card-title {
+        margin-bottom: 7px;
+        font-weight: 700;
+    }
+
+    .information-card p {
+        margin-bottom: 0;
+
+        color:
+            rgba(51, 77, 66, 0.72);
+
+        font-size: 0.86rem;
+        line-height: 1.55;
+    }
+
+
+    /* =========================================
+       CURRENT AUTHORIZATION INFORMATION
+       ========================================= */
+
+    .authorization-card {
+        margin-top: 24px;
+        padding: 18px;
+
+        background: #F8F8F8;
+
+        border:
+            1px solid rgba(51, 77, 66, 0.12);
+
+        border-radius: 12px;
+    }
+
+    .authorization-title {
+        color: #334D42;
+        font-weight: 700;
+
+        margin-bottom: 14px;
+    }
+
+    .authorization-item {
+        padding: 10px 0;
+
+        border-bottom:
+            1px solid rgba(51, 77, 66, 0.08);
+    }
+
+    .authorization-item:last-child {
+        border-bottom: 0;
+    }
+
+    .authorization-label {
+        color:
+            rgba(51, 77, 66, 0.6);
+
+        font-size: 0.75rem;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .authorization-value {
+        margin-top: 3px;
+
+        color: #334D42;
+
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .role-badge {
+        display: inline-block;
+
+        padding: 5px 9px;
+        margin: 3px 3px 3px 0;
+
+        color: #334D42;
+
+        background:
+            rgba(255, 235, 0, 0.18);
+
+        border:
+            1px solid rgba(255, 235, 0, 0.55);
+
+        border-radius: 20px;
+
+        font-size: 0.75rem;
+    }
+
+
+    /* =========================================
+       BUTTONS
+       ========================================= */
 
     .form-actions {
         display: flex;
@@ -185,18 +312,21 @@
         color: #334D42;
         background: #FFEB00;
         border-color: #FFEB00;
+
         font-weight: 700;
     }
 
     .form-actions .btn-primary:hover,
     .form-actions .btn-primary:focus {
         color: #334D42;
+
         background: #e6d300;
         border-color: #e6d300;
     }
 
     .form-actions .btn-secondary {
         color: #FFFFFF;
+
         background: #334D42;
         border-color: #334D42;
     }
@@ -204,23 +334,49 @@
     .form-actions .btn-secondary:hover,
     .form-actions .btn-secondary:focus {
         color: #FFFFFF;
+
         background: #263a32;
         border-color: #263a32;
     }
 
+    .form-actions .btn-outline-secondary {
+        color: #334D42;
+
+        border-color:
+            rgba(51, 77, 66, 0.35);
+    }
+
+
+    /* =========================================
+       ALERT
+       ========================================= */
+
     .alert-danger {
         color: #DC2626;
-        background: rgba(220, 38, 38, 0.08);
-        border: 1px solid rgba(220, 38, 38, 0.25);
+
+        background:
+            rgba(220, 38, 38, 0.08);
+
+        border:
+            1px solid rgba(220, 38, 38, 0.25);
+
         border-radius: 10px;
     }
 
     hr.border-secondary {
-        border-color: rgba(51, 77, 66, 0.15) !important;
+        border-color:
+            rgba(51, 77, 66, 0.15) !important;
+
         opacity: 1;
     }
 
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
     @media (max-width: 575.98px) {
+
         .user-form-card {
             padding: 22px;
         }
@@ -234,161 +390,713 @@
         }
     }
 </style>
+
 {% endblock %}
 
 
 {% block content %}
+
 <main class="container-fluid px-3 px-lg-4 py-4">
 
     <div class="user-form-container">
 
-        <section class="glass-card user-form-card">
 
-            <!-- Selected User Information -->
+        <!-- =========================================================
+             PAGE HEADER
+             ========================================================= -->
+
+        <section class="page-header mb-4">
+
+            <div
+                class="d-flex flex-column
+                       flex-md-row
+                       align-items-md-center
+                       justify-content-between
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 class="mb-1">
+
+                        <i class="fa-solid fa-user-gear me-2"></i>
+
+                        {{ page_title }}
+
+                    </h2>
+
+                    <p class="mb-0">
+                        {{ page_description }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    {% if selected_user %}
+
+                        <a href="{% url 'usermanagement:user_detail' selected_user.id %}">
+                            <i class="fa-solid fa-arrow-left me-2"></i>
+
+                            Back to User
+                        </a>
+
+                    {% else %}
+
+                        <a href="{% url 'usermanagement:user_list' %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left me-2"></i>
+
+                            Back to Users
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================================
+             FORM CARD
+             ========================================================= -->
+
+        <section class="user-form-card">
+
+
+            <!-- =====================================================
+                 EDIT MODE USER INFORMATION
+                 ===================================================== -->
 
             {% if selected_user %}
+
                 <div class="selected-user-card">
-                    <div class="d-flex align-items-center gap-3">
+
+                    <div
+                        class="d-flex
+                               align-items-center
+                               gap-3"
+                    >
 
                         <div class="selected-user-icon">
                             {{ selected_user.username|first|upper }}
                         </div>
 
+
                         <div>
+
                             <div class="fw-semibold">
+
                                 {% if selected_user.get_full_name %}
+
                                     {{ selected_user.get_full_name }}
+
                                 {% else %}
+
                                     {{ selected_user.username }}
+
                                 {% endif %}
+
                             </div>
 
+
                             <small>
-                                Editing user: {{ selected_user.username }}
+
+                                Editing user:
+                                {{ selected_user.username }}
+
+                                {% if selected_user.employee %}
+
+                                    |
+                                    Employee:
+                                    {{ selected_user.employee.employee_code }}
+
+                                {% endif %}
+
                             </small>
+
                         </div>
 
                     </div>
+
                 </div>
+
             {% endif %}
 
-            <!-- User Form -->
+
+            <!-- =====================================================
+                 USER FORM
+                 ===================================================== -->
 
             <form method="post" novalidate>
+
                 {% csrf_token %}
 
+
+                <!-- =================================================
+                     NON FIELD ERRORS
+                     ================================================= -->
+
                 {% if form.non_field_errors %}
+
                     <div
                         class="alert alert-danger"
                         role="alert"
                     >
+
+                        <i
+                            class="fa-solid
+                                   fa-triangle-exclamation
+                                   me-2"
+                        ></i>
+
                         {{ form.non_field_errors }}
+
                     </div>
+
                 {% endif %}
 
+
+                <!-- =================================================
+                     USER ACCOUNT
+                     ================================================= -->
+
                 <div class="form-section-title">
-                    <i class="fa-solid fa-address-card me-2 text-primary"></i>
-                    User Details
+
+                    <i
+                        class="fa-solid
+                               fa-address-card
+                               me-2"
+                    ></i>
+
+                    Account Information
+
                 </div>
+
 
                 <div class="row g-4">
 
-                    {% for field in form %}
 
-                        {% if field.field.widget.input_type == "checkbox" %}
+                    <!-- USERNAME -->
 
-                            <!-- Checkbox Fields -->
+                    <div
+                        class="col-md-6
+                               {% if form.username.errors %}
+                                   field-error
+                               {% endif %}"
+                    >
 
-                            <div class="col-md-6">
-                                <div class="form-check-container">
+                        <label
+                            class="form-label"
+                            for="{{ form.username.id_for_label }}"
+                        >
+                            {{ form.username.label }}
 
-                                    <div class="form-check">
-                                        {{ field }}
+                            {% if form.username.field.required %}
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            {% endif %}
+                        </label>
 
-                                        <label
-                                            class="form-check-label"
-                                            for="{{ field.id_for_label }}"
-                                        >
-                                            {{ field.label }}
-                                        </label>
-                                    </div>
+                        {{ form.username }}
 
-                                    {% if field.errors %}
-                                        {{ field.errors }}
-                                    {% endif %}
+                        {% if form.username.errors %}
+                            {{ form.username.errors }}
+                        {% endif %}
 
-                                    {% if field.help_text %}
-                                        <div class="form-text">
-                                            {{ field.help_text|safe }}
-                                        </div>
-                                    {% endif %}
+                        {% if form.username.help_text %}
 
-                                </div>
-                            </div>
-
-                        {% else %}
-
-                            <!-- Standard Input and Select Fields -->
-
-                            <div
-                                class="
-                                    {% if field.name == 'groups' %}
-                                        col-12
-                                    {% else %}
-                                        col-md-6
-                                    {% endif %}
-
-                                    {% if field.errors %}
-                                        field-error
-                                    {% endif %}
-                                "
-                            >
-                                <label
-                                    class="form-label"
-                                    for="{{ field.id_for_label }}"
-                                >
-                                    {{ field.label }}
-
-                                    {% if field.field.required %}
-                                        <span class="required-mark">*</span>
-                                    {% endif %}
-                                </label>
-
-                                {{ field }}
-
-                                {% if field.errors %}
-                                    {{ field.errors }}
-                                {% endif %}
-
-                                {% if field.help_text %}
-                                    <div class="form-text">
-                                        {{ field.help_text|safe }}
-                                    </div>
-                                {% endif %}
+                            <div class="form-text">
+                                {{ form.username.help_text|safe }}
                             </div>
 
                         {% endif %}
 
-                    {% endfor %}
+                    </div>
+
+
+                    <!-- EMPLOYEE -->
+
+                    <div
+                        class="col-md-6
+                               {% if form.employee.errors %}
+                                   field-error
+                               {% endif %}"
+                    >
+
+                        <label
+                            class="form-label"
+                            for="{{ form.employee.id_for_label }}"
+                        >
+                            {{ form.employee.label }}
+
+                            {% if form.employee.field.required %}
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            {% endif %}
+                        </label>
+
+                        {{ form.employee }}
+
+                        {% if form.employee.errors %}
+                            {{ form.employee.errors }}
+                        {% endif %}
+
+                        {% if form.employee.help_text %}
+
+                            <div class="form-text">
+                                {{ form.employee.help_text|safe }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- FIRST NAME -->
+
+                    <div
+                        class="col-md-6
+                               {% if form.first_name.errors %}
+                                   field-error
+                               {% endif %}"
+                    >
+
+                        <label
+                            class="form-label"
+                            for="{{ form.first_name.id_for_label }}"
+                        >
+                            {{ form.first_name.label }}
+                        </label>
+
+                        {{ form.first_name }}
+
+                        {% if form.first_name.errors %}
+                            {{ form.first_name.errors }}
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- LAST NAME -->
+
+                    <div
+                        class="col-md-6
+                               {% if form.last_name.errors %}
+                                   field-error
+                               {% endif %}"
+                    >
+
+                        <label
+                            class="form-label"
+                            for="{{ form.last_name.id_for_label }}"
+                        >
+                            {{ form.last_name.label }}
+                        </label>
+
+                        {{ form.last_name }}
+
+                        {% if form.last_name.errors %}
+                            {{ form.last_name.errors }}
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div
+                        class="col-md-6
+                               {% if form.email.errors %}
+                                   field-error
+                               {% endif %}"
+                    >
+
+                        <label
+                            class="form-label"
+                            for="{{ form.email.id_for_label }}"
+                        >
+                            {{ form.email.label }}
+                        </label>
+
+                        {{ form.email }}
+
+                        {% if form.email.errors %}
+                            {{ form.email.errors }}
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ACTIVE -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-check-container">
+
+                            <div class="form-check">
+
+                                {{ form.is_active }}
+
+                                <label
+                                    class="form-check-label"
+                                    for="{{ form.is_active.id_for_label }}"
+                                >
+                                    Active User
+                                </label>
+
+                            </div>
+
+
+                            {% if form.is_active.errors %}
+                                {{ form.is_active.errors }}
+                            {% endif %}
+
+
+                            {% if form.is_active.help_text %}
+
+                                <div class="form-text">
+                                    {{ form.is_active.help_text|safe }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
 
                 </div>
 
+
+                <!-- =================================================
+                     PASSWORD - CREATE ONLY
+                     ================================================= -->
+
+                {% if is_create %}
+
+                    <hr class="border-secondary my-4">
+
+
+                    <div class="form-section-title">
+
+                        <i class="fa-solid fa-key me-2"></i>
+
+                        Initial Password
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- PASSWORD 1 -->
+
+                        <div
+                            class="col-md-6
+                                   {% if form.password1.errors %}
+                                       field-error
+                                   {% endif %}"
+                        >
+
+                            <label
+                                class="form-label"
+                                for="{{ form.password1.id_for_label }}"
+                            >
+                                {{ form.password1.label }}
+
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            </label>
+
+                            {{ form.password1 }}
+
+                            {% if form.password1.errors %}
+                                {{ form.password1.errors }}
+                            {% endif %}
+
+                            {% if form.password1.help_text %}
+
+                                <div class="form-text">
+                                    {{ form.password1.help_text|safe }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- PASSWORD 2 -->
+
+                        <div
+                            class="col-md-6
+                                   {% if form.password2.errors %}
+                                       field-error
+                                   {% endif %}"
+                        >
+
+                            <label
+                                class="form-label"
+                                for="{{ form.password2.id_for_label }}"
+                            >
+                                Confirm Password
+
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            </label>
+
+                            {{ form.password2 }}
+
+                            {% if form.password2.errors %}
+                                {{ form.password2.errors }}
+                            {% endif %}
+
+                            {% if form.password2.help_text %}
+
+                                <div class="form-text">
+                                    {{ form.password2.help_text|safe }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     LTPOMS AUTHORIZATION INFORMATION
+                     ================================================= -->
+
+                <div class="information-card">
+
+                    <div class="information-card-title">
+
+                        <i class="fa-solid fa-shield-halved me-2"></i>
+
+                        LTPOMS Authorization
+
+                    </div>
+
+                    <p>
+                        Roles are not assigned from this account form.
+                        Organizational authority is managed separately
+                        using Role Assignments, Position assignments,
+                        Permissions and Scopes.
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     EDIT MODE: CURRENT POSITION AND ROLES
+                     ================================================= -->
+
+                {% if not is_create %}
+
+                    <!-- CURRENT POSITIONS -->
+
+                    <div class="authorization-card">
+
+                        <div class="authorization-title">
+
+                            <i class="fa-solid fa-sitemap me-2"></i>
+
+                            Current Position Assignments
+
+                        </div>
+
+
+                        {% for assignment in position_assignments %}
+
+                            <div class="authorization-item">
+
+                                <div class="authorization-value">
+                                    {{ assignment.position.name }}
+                                </div>
+
+                                <div class="small text-muted mt-1">
+
+                                    {{ assignment.position.organization_unit.name }}
+
+                                    |
+
+                                    {{ assignment.get_assignment_type_display }}
+
+                                    {% if assignment.is_primary %}
+                                        |
+                                        Primary
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        {% empty %}
+
+                            <div class="text-muted">
+                                No active Position assignment.
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- ROLES -->
+
+                    <div class="authorization-card">
+
+                        <div class="authorization-title">
+
+                            <i class="fa-solid fa-user-shield me-2"></i>
+
+                            Current LTPOMS Roles
+
+                        </div>
+
+
+                        <div class="authorization-label">
+                            Direct User Roles
+                        </div>
+
+
+                        <div class="mt-2 mb-3">
+
+                            {% for assignment in direct_role_assignments %}
+
+                                <span class="role-badge">
+
+                                    {{ assignment.role.name }}
+
+                                    {% if assignment.role.module %}
+                                        |
+                                        {{ assignment.role.module.name }}
+                                    {% endif %}
+
+                                </span>
+
+                            {% empty %}
+
+                                <span class="text-muted small">
+                                    No roles assigned directly to this user.
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="authorization-label">
+                            Position-Inherited Roles
+                        </div>
+
+
+                        <div class="mt-2">
+
+                            {% for assignment in position_role_assignments %}
+
+                                <span
+                                    class="role-badge"
+                                    title="Inherited through {{ assignment.position.name }}"
+                                >
+
+                                    {{ assignment.role.name }}
+
+                                    {% if assignment.position %}
+                                        |
+                                        {{ assignment.position.name }}
+                                    {% endif %}
+
+                                </span>
+
+                            {% empty %}
+
+                                <span class="text-muted small">
+                                    No roles inherited through current Positions.
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="mt-3">
+
+                            <a href="{% url 'usermanagement:role_assignment_list' %}" class="btn btn-primary">
+                                <i
+                                    class="fa-solid
+                                           fa-user-shield
+                                           me-1"
+                                ></i>
+
+                                Manage Role Assignments
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
                 <hr class="border-secondary my-4">
 
-                <!-- Form Actions -->
+
+                <!-- =================================================
+                     FORM ACTIONS
+                     ================================================= -->
 
                 <div class="form-actions">
 
-                    <a href="{% url 'usermanagement:user_list' %}" class="btn btn-secondary">
-                        <i class="fa-solid fa-xmark me-2"></i>
-                        Cancel
-                    </a>
+
+                    {% if selected_user %}
+
+                        <a href="{% url 'usermanagement:user_detail' selected_user.id %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-xmark me-2"></i>
+
+                            Cancel
+                        </a>
+
+                    {% else %}
+
+                        <a href="{% url 'usermanagement:user_list' %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-xmark me-2"></i>
+
+                            Cancel
+                        </a>
+
+                    {% endif %}
+
+
+                    {% if selected_user %}
+
+                        <a href="{% url 'usermanagement:user_password_reset' selected_user.id %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-key me-2"></i>
+
+                            Reset Password
+                        </a>
+
+                    {% endif %}
+
 
                     <button
                         type="submit"
                         class="btn btn-primary px-4"
                     >
-                        <i class="fa-solid fa-floppy-disk me-2"></i>
+                        <i
+                            class="fa-solid
+                                   fa-floppy-disk
+                                   me-2"
+                        ></i>
+
                         {{ submit_text }}
                     </button>
 
@@ -401,5 +1109,5 @@
     </div>
 
 </main>
-{% endblock %}
 
+{% endblock %}

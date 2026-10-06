@@ -38,6 +38,12 @@ urlpatterns = [
 
     path('', include('dashboard.urls')),
     path('production/', include('production.urls')),
-    path('usermanagement/', include('usermanagement.urls')),
+    path(
+        "usermanagement/",
+        include(
+            "usermanagement.urls",
+            namespace="usermanagement",
+            ),
+    ),
     path("quality/", include("quality.urls"))
 ]

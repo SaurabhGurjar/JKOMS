@@ -42,7 +42,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = os.environ.get(
         "DJANGO_ALLOWED_HOSTS",
-        "127.0.0*1,localhost"
+        "127.0.0.1,localhost"
     ).split(",")
 
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
@@ -101,13 +101,23 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'ENGINE': os.getenv('DB_ENGINE'),
+    'NAME': os.getenv('DB_NAME'),
+    'USER': os.getenv('DB_USER'),
+    'PASSWORD': os.getenv('DB_PASSWORD'),
+    'HOST': os.getenv('DB_HOST'),
+    'PORT': os.getenv('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
@@ -147,6 +157,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "config" / "static",]
 STATIC_ROOT = BASE_DIR / "config" / "staticfiles"
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "config" / "media"
 
 
 # Email
@@ -200,6 +213,8 @@ if not DEBUG:
     # TLS and forwards requests to Django over plain HTTP.
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+
+AUTH_USER_MODEL = "usermanagement.User"
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"

@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ page_title }} | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    .user-form-container {
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+    .user-form-card {
+        padding: 28px;
+        background: #FFFFFF;
+        border: 1px solid rgba(51, 77, 66, 0.12);
+        border-radius: 14px;
+        box-shadow: 0 4px 18px rgba(51, 77, 66, 0.08);
+    }
+
+    .form-section-title {
+        margin-bottom: 22px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(51, 77, 66, 0.15);
+        color: #334D42;
+        font-size: 1.05rem;
+        font-weight: 650;
+    }
+
+    .form-section-title .text-primary {
+        color: #334D42 !important;
+    }
+
+    .form-label {
+        margin-bottom: 8px;
+        color: #334D42;
+        font-weight: 600;
+    }
+
+    .required-mark {
+        color: #DC2626;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 46px;
+        color: #334D42;
+        background: #FFFFFF;
+        border: 1px solid rgba(51, 77, 66, 0.22);
+        border-radius: 10px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        color: #334D42;
+        background: #FFFFFF;
+        border-color: #FFEB00;
+        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
+    }
+
+    .form-control::placeholder {
+        color: rgba(51, 77, 66, 0.55);
+    }
+
+    .form-select option {
+        color: #334D42;
+        background: #FFFFFF;
+    }
+
+    select[multiple].form-select {
+        min-height: 150px;
+        padding: 10px;
+    }
+
+    select[multiple].form-select option {
+        padding: 7px 10px;
+        border-radius: 5px;
+    }
+
+    select[multiple].form-select option:checked {
+        color: #334D42;
+        background: #FFEB00;
+    }
+
+    .form-check-container {
+        height: 100%;
+        min-height: 110px;
+        padding: 18px;
+        background: #EDEDED;
+        border: 1px solid rgba(51, 77, 66, 0.14);
+        border-radius: 12px;
+    }
+
+    .form-check-input {
+        width: 1.15rem;
+        height: 1.15rem;
+        margin-top: 0.15rem;
+        background-color: #FFFFFF;
+        border-color: rgba(51, 77, 66, 0.35);
+    }
+
+    .form-check-input:checked {
+        background-color: #FFEB00;
+        border-color: #334D42;
+    }
+
+    .form-check-input:focus {
+        border-color: #FFEB00;
+        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.28);
+    }
+
+    .form-check-label {
+        color: #334D42;
+        font-weight: 600;
+    }
+
+    .form-text,
+    .helptext {
+        margin-top: 7px;
+        color: rgba(51, 77, 66, 0.72) !important;
+        font-size: 0.82rem;
+    }
+
+    .form-text ul,
+    .helptext ul {
+        padding-left: 20px;
+        margin-top: 7px;
+        margin-bottom: 0;
+    }
+
+    .errorlist {
+        padding-left: 0;
+        margin-top: 7px;
+        margin-bottom: 0;
+        color: #DC2626;
+        list-style: none;
+        font-size: 0.86rem;
+    }
+
+    .field-error .form-control,
+    .field-error .form-select {
+        border-color: #DC2626;
+    }
+
+    .selected-user-card {
+        padding: 15px 18px;
+        margin-bottom: 24px;
+        color: #334D42;
+        background: rgba(255, 235, 0, 0.16);
+        border: 1px solid rgba(255, 235, 0, 0.65);
+        border-radius: 12px;
+    }
+
+    .selected-user-icon {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #334D42;
+        background: #FFEB00;
+        border: 1px solid rgba(51, 77, 66, 0.15);
+        border-radius: 50%;
+        font-weight: 700;
+    }
+
+    .selected-user-card .fw-semibold {
+        color: #334D42 !important;
+    }
+
+    .selected-user-card small {
+        color: rgba(51, 77, 66, 0.70);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .form-actions .btn-primary {
+        color: #334D42;
+        background: #FFEB00;
+        border-color: #FFEB00;
+        font-weight: 700;
+    }
+
+    .form-actions .btn-primary:hover,
+    .form-actions .btn-primary:focus {
+        color: #334D42;
+        background: #e6d300;
+        border-color: #e6d300;
+    }
+
+    .form-actions .btn-secondary {
+        color: #FFFFFF;
+        background: #334D42;
+        border-color: #334D42;
+    }
+
+    .form-actions .btn-secondary:hover,
+    .form-actions .btn-secondary:focus {
+        color: #FFFFFF;
+        background: #263a32;
+        border-color: #263a32;
+    }
+
+    .alert-danger {
+        color: #DC2626;
+        background: rgba(220, 38, 38, 0.08);
+        border: 1px solid rgba(220, 38, 38, 0.25);
+        border-radius: 10px;
+    }
+
+    hr.border-secondary {
+        border-color: rgba(51, 77, 66, 0.15) !important;
+        opacity: 1;
+    }
+
+    @media (max-width: 575.98px) {
+        .user-form-card {
+            padding: 22px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<main class="container-fluid px-3 px-lg-4 py-4">
+
+    <div class="user-form-container">
+
+        <section class="glass-card user-form-card">
+
+            <!-- Selected User Information -->
+
+            {% if selected_user %}
+                <div class="selected-user-card">
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="selected-user-icon">
+                            {{ selected_user.username|first|upper }}
+                        </div>
+
+                        <div>
+                            <div class="fw-semibold">
+                                {% if selected_user.get_full_name %}
+                                    {{ selected_user.get_full_name }}
+                                {% else %}
+                                    {{ selected_user.username }}
+                                {% endif %}
+                            </div>
+
+                            <small>
+                                Editing user: {{ selected_user.username }}
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- User Form -->
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                    >
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-section-title">
+                    <i class="fa-solid fa-address-card me-2 text-primary"></i>
+                    User Details
+                </div>
+
+                <div class="row g-4">
+
+                    {% for field in form %}
+
+                        {% if field.field.widget.input_type == "checkbox" %}
+
+                            <!-- Checkbox Fields -->
+
+                            <div class="col-md-6">
+                                <div class="form-check-container">
+
+                                    <div class="form-check">
+                                        {{ field }}
+
+                                        <label
+                                            class="form-check-label"
+                                            for="{{ field.id_for_label }}"
+                                        >
+                                            {{ field.label }}
+                                        </label>
+                                    </div>
+
+                                    {% if field.errors %}
+                                        {{ field.errors }}
+                                    {% endif %}
+
+                                    {% if field.help_text %}
+                                        <div class="form-text">
+                                            {{ field.help_text|safe }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                        {% else %}
+
+                            <!-- Standard Input and Select Fields -->
+
+                            <div
+                                class="
+                                    {% if field.name == 'groups' %}
+                                        col-12
+                                    {% else %}
+                                        col-md-6
+                                    {% endif %}
+
+                                    {% if field.errors %}
+                                        field-error
+                                    {% endif %}
+                                "
+                            >
+                                <label
+                                    class="form-label"
+                                    for="{{ field.id_for_label }}"
+                                >
+                                    {{ field.label }}
+
+                                    {% if field.field.required %}
+                                        <span class="required-mark">*</span>
+                                    {% endif %}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.errors %}
+                                    {{ field.errors }}
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <div class="form-text">
+                                        {{ field.help_text|safe }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+                <hr class="border-secondary my-4">
+
+                <!-- Form Actions -->
+
+                <div class="form-actions">
+
+                    <a href="{% url 'usermanagement:user_list' %}" class="btn btn-secondary">
+                        <i class="fa-solid fa-xmark me-2"></i>
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-4"
+                    >
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+                        {{ submit_text }}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</main>
+{% endblock %}
+

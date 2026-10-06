@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-User Management | JKOMS
+User Management | LTPOMS
 {% endblock %}
 
 {% block extra_css %}
 
 <style>
     /* =========================================
-       JKOMS USER MANAGEMENT THEME
+       LTPOMS USER MANAGEMENT THEME
        ========================================= */
-
-    /* Statistics */
 
     .stat-card {
         height: 100%;
@@ -79,6 +77,7 @@ User Management | JKOMS
         background: rgba(220, 38, 38, 0.1) !important;
     }
 
+
     /* =========================================
        FILTER SECTION
        ========================================= */
@@ -117,13 +116,15 @@ User Management | JKOMS
 
         border-color: var(--accent);
 
-        box-shadow: 0 0 0 0.2rem rgba(255, 235, 0, 0.25);
+        box-shadow:
+            0 0 0 0.2rem rgba(255, 235, 0, 0.25);
     }
 
     .form-select option {
         color: var(--secondary);
         background: var(--white);
     }
+
 
     /* =========================================
        BUTTONS
@@ -136,7 +137,8 @@ User Management | JKOMS
 
         font-weight: 700;
 
-        box-shadow: 0 5px 14px rgba(255, 235, 0, 0.16);
+        box-shadow:
+            0 5px 14px rgba(255, 235, 0, 0.16);
 
         transition:
             background 0.2s ease,
@@ -154,7 +156,8 @@ User Management | JKOMS
 
         transform: translateY(-1px);
 
-        box-shadow: 0 7px 18px rgba(255, 235, 0, 0.25);
+        box-shadow:
+            0 7px 18px rgba(255, 235, 0, 0.25);
     }
 
     .btn-secondary {
@@ -188,6 +191,7 @@ User Management | JKOMS
         border-color: #e6d500 !important;
     }
 
+
     /* =========================================
        USER TABLE
        ========================================= */
@@ -200,12 +204,8 @@ User Management | JKOMS
         border: 1px solid rgba(51, 77, 66, 0.12);
         border-radius: 18px;
 
-        box-shadow: 0 8px 25px rgba(51, 77, 66, 0.06);
-    }
-
-    .user-table {
-        margin-bottom: 0;
-        color: var(--secondary);
+        box-shadow:
+            0 8px 25px rgba(51, 77, 66, 0.06);
     }
 
     .table-card .table {
@@ -238,7 +238,8 @@ User Management | JKOMS
     }
 
     .table-card .table tbody tr {
-        transition: background 0.2s ease;
+        transition:
+            background 0.2s ease;
     }
 
     .table-card .table tbody tr:hover {
@@ -249,8 +250,9 @@ User Management | JKOMS
         color: rgba(51, 77, 66, 0.58);
     }
 
+
     /* =========================================
-       AVATAR
+       USER AVATAR
        ========================================= */
 
     .user-avatar {
@@ -271,31 +273,20 @@ User Management | JKOMS
         font-weight: 700;
     }
 
-    .user-secondary-text {
+
+    /* =========================================
+       EMPLOYEE
+       ========================================= */
+
+    .employee-code {
+        font-weight: 650;
+    }
+
+    .employee-name {
         color: rgba(51, 77, 66, 0.6);
         font-size: 0.82rem;
     }
 
-    /* =========================================
-       ROLE BADGE
-       ========================================= */
-
-    .role-badge {
-        display: inline-block;
-
-        padding: 5px 9px;
-        margin: 2px;
-
-        color: var(--secondary);
-        background: rgba(255, 235, 0, 0.2);
-
-        border: 1px solid rgba(255, 235, 0, 0.45);
-        border-radius: 20px;
-
-        font-size: 0.75rem;
-
-        white-space: nowrap;
-    }
 
     /* =========================================
        STATUS
@@ -322,74 +313,44 @@ User Management | JKOMS
         color: var(--secondary);
         background: rgba(255, 235, 0, 0.22);
 
-        border: 1px solid rgba(255, 235, 0, 0.45);
+        border:
+            1px solid rgba(255, 235, 0, 0.45);
     }
 
     .status-inactive {
         color: var(--error);
         background: rgba(220, 38, 38, 0.1);
 
-        border: 1px solid rgba(220, 38, 38, 0.28);
+        border:
+            1px solid rgba(220, 38, 38, 0.28);
     }
+
 
     /* =========================================
-       STAFF BADGES
+       ACCOUNT TYPE BADGES
        ========================================= */
 
-    .table-card .badge.bg-warning {
-        color: var(--secondary) !important;
-        background: var(--accent) !important;
+    .badge-superuser {
+        color: #ffffff;
+        background: #dc2626;
     }
 
-    .table-card .badge.bg-secondary {
-        color: var(--white) !important;
-        background: var(--secondary) !important;
+    .badge-staff {
+        color: var(--secondary);
+        background: var(--accent);
     }
+
+    .badge-standard {
+        color: var(--white);
+        background: var(--secondary);
+    }
+
 
     /* =========================================
        ACTION BUTTONS
        ========================================= */
 
-    .action-button {
-        width: 36px;
-        height: 36px;
-
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        margin: 2px;
-        padding: 0;
-
-        border-radius: 9px;
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-    }
-
-    .action-button:hover {
-        transform: translateY(-1px);
-    }
-
-    .action-button.btn-danger {
-        color: var(--white);
-        background: var(--error);
-        border-color: var(--error);
-    }
-
-    .action-button.btn-success {
-        color: var(--secondary);
-        background: var(--accent);
-        border-color: var(--accent);
-    }
-
-    .action-form {
-        display: inline-block;
-        margin: 0;
-    }
-
-    .table-card td > a {
+    .action-link {
         width: 36px;
         height: 36px;
 
@@ -402,7 +363,8 @@ User Management | JKOMS
         color: var(--secondary);
         background: rgba(255, 235, 0, 0.16);
 
-        border: 1px solid rgba(255, 235, 0, 0.3);
+        border:
+            1px solid rgba(255, 235, 0, 0.3);
         border-radius: 9px;
 
         text-decoration: none;
@@ -413,29 +375,31 @@ User Management | JKOMS
             transform 0.2s ease;
     }
 
-    .table-card td > a:hover {
+    .action-link:hover {
         color: var(--secondary);
         background: var(--accent);
 
         transform: translateY(-1px);
     }
 
-    /* =========================================
-       EMPTY STATE
-       ========================================= */
+    .action-button {
+        min-width: 36px;
+        min-height: 36px;
 
-    .empty-state {
-        padding: 55px 20px;
-        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 2px;
+
+        border-radius: 9px;
     }
 
-    .table-card .text-secondary {
-        color: rgba(51, 77, 66, 0.6) !important;
+    .action-form {
+        display: inline-block;
+        margin: 0;
     }
 
-    .table-card .text-light-emphasis {
-        color: rgba(51, 77, 66, 0.58) !important;
-    }
 
     /* =========================================
        RESPONSIVE
@@ -452,484 +416,762 @@ User Management | JKOMS
         }
 
         .table-card .table {
-            min-width: 1050px;
+            min-width: 1150px;
         }
     }
 </style>
 
 {% endblock %}
 
+
 {% block content %}
 
 <main class="container-fluid px-3 px-lg-4 py-4">
 
 
-<!-- Page Header -->
+    <!-- =============================================================
+         PAGE HEADER
+         ============================================================= -->
 
-<section class="page-header mb-4">
+    <section class="page-header mb-4">
 
-    <div
-        class="d-flex flex-column flex-md-row
-               align-items-md-center justify-content-between gap-3"
-    >
-        <div>
-            <h2>
-                <i class="fa-solid fa-users-gear me-2"></i>
-                User Management
-            </h2>
+        <div
+            class="d-flex flex-column flex-md-row
+                   align-items-md-center
+                   justify-content-between
+                   gap-3"
+        >
 
-            <p>
-                Create users, assign roles, manage passwords,
-                and control system access.
-            </p>
-        </div>
+            <div>
 
-        <div class="page-header-actions">
-            <a
-                href="{% url 'usermanagement:user_create' %}"
-                class="btn btn-light bg-white border"
+                <h2>
+                    <i class="fa-solid fa-users-gear me-2"></i>
+                    User Management
+                </h2>
+
+                <p>
+                    Manage LTPOMS user accounts, employee links
+                    and system access.
+                </p>
+
+            </div>
+
+
+            <div
+                class="page-header-actions
+                       d-flex flex-column
+                       flex-md-row gap-2"
             >
-                <i class="fa-solid fa-user-plus me-2"></i>
-                Add User
-            </a>
-        </div>
-    </div>
 
-</section>
+                <a href="{% url 'usermanagement:role_assignment_list' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-user-shield me-2"></i>
 
-<!-- Statistics -->
+                    Role Assignments
+                </a>
 
-<section class="row g-4 mb-4">
 
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card">
+                <a href="{% url 'usermanagement:user_create' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-user-plus me-2"></i>
 
-            <div class="d-flex align-items-center justify-content-between">
-
-                <div>
-                    <div class="stat-title">
-                        TOTAL USERS
-                    </div>
-
-                    <h2 class="mt-2 mb-0">
-                        {{ total_users }}
-                    </h2>
-                </div>
-
-                <div class="stat-icon text-primary">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card">
-
-            <div class="d-flex align-items-center justify-content-between">
-
-                <div>
-                    <div class="stat-title">
-                        ACTIVE USERS
-                    </div>
-
-                    <h2 class="mt-2 mb-0">
-                        {{ active_users }}
-                    </h2>
-                </div>
-
-                <div class="stat-icon text-success">
-                    <i class="fa-solid fa-user-check"></i>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card">
-
-            <div class="d-flex align-items-center justify-content-between">
-
-                <div>
-                    <div class="stat-title">
-                        INACTIVE USERS
-                    </div>
-
-                    <h2 class="mt-2 mb-0">
-                        {{ inactive_users }}
-                    </h2>
-                </div>
-
-                <div class="stat-icon text-danger">
-                    <i class="fa-solid fa-user-slash"></i>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card">
-
-            <div class="d-flex align-items-center justify-content-between">
-
-                <div>
-                    <div class="stat-title">
-                        STAFF USERS
-                    </div>
-
-                    <h2 class="mt-2 mb-0">
-                        {{ staff_users }}
-                    </h2>
-                </div>
-
-                <div class="stat-icon text-warning">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-</section>
-
-<!-- Search and Filters -->
-
-<section class="filter-card mb-4">
-
-    <form method="get" action="{% url 'usermanagement:user_list' %}">
-
-        <div class="row g-3">
-
-            <div class="col-lg-5">
-
-                <label
-                    for="userSearch"
-                    class="visually-hidden"
-                >
-                    Search Users
-                </label>
-
-                <input
-                    type="search"
-                    id="userSearch"
-                    name="search"
-                    value="{{ search_query }}"
-                    class="form-control"
-                    placeholder="Search name, username, or email"
-                >
-
-            </div>
-
-            <div class="col-lg-2">
-
-                <label
-                    for="statusFilter"
-                    class="visually-hidden"
-                >
-                    User Status
-                </label>
-
-                <select
-                    id="statusFilter"
-                    name="status"
-                    class="form-select"
-                >
-                    <option value="">
-                        All Status
-                    </option>
-
-                    <option
-                        value="active"
-                        {% if status_filter == "active" %}
-                            selected
-                        {% endif %}
-                    >
-                        Active
-                    </option>
-
-                    <option
-                        value="inactive"
-                        {% if status_filter == "inactive" %}
-                            selected
-                        {% endif %}
-                    >
-                        Inactive
-                    </option>
-                </select>
-
-            </div>
-
-            <div class="col-lg-3">
-
-                <label
-                    for="roleFilter"
-                    class="visually-hidden"
-                >
-                    User Role
-                </label>
-
-                <select
-                    id="roleFilter"
-                    name="role"
-                    class="form-select"
-                >
-                    <option value="">
-                        All Roles
-                    </option>
-
-                    {% for group in groups %}
-
-                        <option
-                            value="{{ group.id }}"
-                            {% if role_filter == group.id|stringformat:"s" %}
-                                selected
-                            {% endif %}
-                        >
-                            {{ group.name }}
-                        </option>
-
-                    {% endfor %}
-                </select>
-
-            </div>
-
-            <div class="col-lg-2">
-
-                <div class="d-grid gap-2">
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                    >
-                        <i class="fa-solid fa-magnifying-glass me-1"></i>
-                        Search
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {% if search_query or status_filter or role_filter %}
-
-            <div class="mt-3">
-
-                <a
-                    href="{% url 'usermanagement:user_list' %}"
-                    class="btn btn-secondary"
-                >
-                    <i class="fa-solid fa-filter-circle-xmark me-1"></i>
-                    Clear Filters
+                    Add User
                 </a>
 
             </div>
 
-        {% endif %}
+        </div>
 
-    </form>
+    </section>
 
-</section>
 
-<!-- User Table -->
+    <!-- =============================================================
+         STATISTICS
+         ============================================================= -->
 
-<section class="table-card">
+    <section class="row g-4 mb-4">
 
-    <div class="table-responsive">
+        <div class="col-xl-3 col-md-6">
 
-        <table class="table align-middle">
+            <div class="stat-card">
 
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Staff</th>
-                    <th>Date Joined</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+                <div
+                    class="d-flex
+                           align-items-center
+                           justify-content-between"
+                >
 
-            <tbody>
+                    <div>
 
-                {% for user_item in users %}
+                        <div class="stat-title">
+                            TOTAL USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ total_users }}
+                        </h2>
+
+                    </div>
+
+                    <div
+                        class="stat-icon
+                               text-primary
+                               bg-primary"
+                    >
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div
+                    class="d-flex
+                           align-items-center
+                           justify-content-between"
+                >
+
+                    <div>
+
+                        <div class="stat-title">
+                            ACTIVE USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ active_users }}
+                        </h2>
+
+                    </div>
+
+                    <div
+                        class="stat-icon
+                               text-success
+                               bg-success"
+                    >
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div
+                    class="d-flex
+                           align-items-center
+                           justify-content-between"
+                >
+
+                    <div>
+
+                        <div class="stat-title">
+                            INACTIVE USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ inactive_users }}
+                        </h2>
+
+                    </div>
+
+                    <div
+                        class="stat-icon
+                               text-danger
+                               bg-danger"
+                    >
+                        <i class="fa-solid fa-user-slash"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div
+                    class="d-flex
+                           align-items-center
+                           justify-content-between"
+                >
+
+                    <div>
+
+                        <div class="stat-title">
+                            STAFF USERS
+                        </div>
+
+                        <h2 class="mt-2 mb-0">
+                            {{ staff_users }}
+                        </h2>
+
+                    </div>
+
+                    <div
+                        class="stat-icon
+                               text-warning
+                               bg-warning"
+                    >
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =============================================================
+         SEARCH AND FILTERS
+         ============================================================= -->
+
+    <section class="filter-card mb-4">
+
+        <form action="{% url 'usermanagement:user_list' %}">
+
+            <div class="row g-3 align-items-end">
+
+
+                <!-- SEARCH -->
+
+                <div class="col-lg-5">
+
+                    <label
+                        for="userSearch"
+                        class="form-label"
+                    >
+                        Search
+                    </label>
+
+                    <input
+                        type="search"
+                        id="userSearch"
+                        name="search"
+                        value="{{ search_query }}"
+                        class="form-control"
+                        placeholder="Username, employee code, name or email"
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-lg-2">
+
+                    <label
+                        for="statusFilter"
+                        class="form-label"
+                    >
+                        Status
+                    </label>
+
+                    <select
+                        id="statusFilter"
+                        name="status"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option
+                            value="active"
+                            {% if status_filter == "active" %}
+                                selected
+                            {% endif %}
+                        >
+                            Active
+                        </option>
+
+                        <option
+                            value="inactive"
+                            {% if status_filter == "inactive" %}
+                                selected
+                            {% endif %}
+                        >
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- LTPOMS ROLE -->
+
+                <div class="col-lg-3">
+
+                    <label
+                        for="roleFilter"
+                        class="form-label"
+                    >
+                        LTPOMS Role
+                    </label>
+
+                    <select
+                        id="roleFilter"
+                        name="role"
+                        class="form-select"
+                    >
+
+                        <option value="">
+                            All Roles
+                        </option>
+
+                        {% for role in roles %}
+
+                            <option
+                                value="{{ role.id }}"
+                                {% if role_filter == role.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ role.name }}
+
+                                {% if role.module %}
+                                    - {{ role.module.name }}
+                                {% endif %}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <div class="col-lg-2">
+
+                    <div class="d-grid">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            <i
+                                class="fa-solid
+                                       fa-magnifying-glass
+                                       me-1"
+                            ></i>
+
+                            Search
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {% if search_query or status_filter or role_filter %}
+
+                <div class="mt-3">
+
+                    <a href="{% url 'usermanagement:user_list' %}">
+                        <i
+                            class="fa-solid
+                                   fa-filter-circle-xmark
+                                   me-1"
+                        ></i>
+
+                        Clear Filters
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </form>
+
+    </section>
+
+
+    <!-- =============================================================
+         USER TABLE
+         ============================================================= -->
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
 
                     <tr>
-                        <td>
+                        <th>User</th>
+                        <th>Employee</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Account Type</th>
+                        <th>Last Login</th>
+                        <th>Date Joined</th>
+                        <th>Actions</th>
+                    </tr>
 
-                            <div class="d-flex align-items-center gap-3">
+                </thead>
 
-                                <span class="user-avatar">
-                                    {{ user_item.username|first|upper }}
-                                </span>
 
-                                <div>
+                <tbody>
 
-                                    <div class="fw-semibold">
-                                        {% if user_item.get_full_name %}
-                                            {{ user_item.get_full_name }}
-                                        {% else %}
-                                            {{ user_item.username }}
-                                        {% endif %}
+                    {% for user_item in users %}
+
+                        <tr>
+
+
+                            <!-- USER -->
+
+                            <td>
+
+                                <div
+                                    class="d-flex
+                                           align-items-center
+                                           gap-3"
+                                >
+
+                                    <span class="user-avatar">
+                                        {{ user_item.username|first|upper }}
+                                    </span>
+
+
+                                    <div>
+
+                                       <a href="{% url 'usermanagement:user_detail' user_item.id %}">
+                                        
+
+                                            {% if user_item.get_full_name %}
+
+                                                {{ user_item.get_full_name }}
+
+                                            {% else %}
+
+                                                {{ user_item.username }}
+
+                                            {% endif %}
+
+                                        </a>
+
+
+                                        <div>
+                                            <small>
+                                                @{{ user_item.username }}
+                                            </small>
+                                        </div>
+
                                     </div>
-
-                                    <small>
-                                        @{{ user_item.username }}
-                                    </small>
 
                                 </div>
 
-                            </div>
+                            </td>
 
-                        </td>
 
-                        <td>
-                            {{ user_item.email|default:"Not provided" }}
-                        </td>
+                            <!-- EMPLOYEE -->
 
-                        <td>
+                            <td>
 
-                            {% for group in user_item.groups.all %}
+                                {% if user_item.employee %}
 
-                                <span class="role-badge">
-                                    {{ group.name }}
-                                </span>
+                                    <div class="employee-code">
+                                        {{ user_item.employee.employee_code }}
+                                    </div>
 
-                            {% empty %}
+                                    <div class="employee-name">
+                                        {{ user_item.employee.full_name }}
+                                    </div>
 
-                                <span>
-                                    No role
-                                </span>
+                                {% else %}
 
-                            {% endfor %}
+                                    <span class="text-muted">
+                                        Not linked
+                                    </span>
 
-                        </td>
+                                {% endif %}
 
-                        <td>
+                            </td>
 
-                            {% if user_item.is_active %}
 
-                                <span class="status-active">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                    Active
-                                </span>
+                            <!-- EMAIL -->
 
-                            {% else %}
+                            <td>
 
-                                <span class="status-inactive">
-                                    <i class="fa-solid fa-circle-xmark"></i>
-                                    Inactive
-                                </span>
+                                {% if user_item.email %}
 
-                            {% endif %}
+                                    {{ user_item.email }}
 
-                        </td>
+                                {% else %}
 
-                        <td>
+                                    <span class="text-muted">
+                                        Not provided
+                                    </span>
 
-                            {% if user_item.is_staff %}
+                                {% endif %}
 
-                                <span class="badge bg-warning text-dark">
-                                    Yes
-                                </span>
+                            </td>
 
-                            {% else %}
 
-                                <span class="badge bg-secondary">
-                                    No
-                                </span>
+                            <!-- STATUS -->
 
-                            {% endif %}
+                            <td>
 
-                        </td>
+                                {% if user_item.is_active %}
 
-                        <td>
-                            {{ user_item.date_joined|date:"d M Y" }}
-                        </td>
+                                    <span class="status-active">
 
-                        <td class="text-nowrap">
+                                        <i
+                                            class="fa-solid
+                                                   fa-circle-check"
+                                        ></i>
 
-                            <a
-                                href={% url 'usermanagement:user_edit' user_item.id %}
-                            >
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
+                                        Active
 
-                            <a
-                                href={% url 'usermanagement:user_password_reset' user_item.id %}
-                            >
-                                <i class="fa-solid fa-key"></i>
-                            </a>
+                                    </span>
 
-                            
-                            <form
-                                method="post"
-                                action="{% url 'usermanagement:user_status_toggle' user_item.id %}"
-                                class="d-inline"
-                            >
-                                {% csrf_token %}
+                                {% else %}
 
-                                <button
-                                    type="submit"
-                                    class="btn btn-sm {% if user_item.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}"
-                                    {% if user_item == request.user %}disabled{% endif %}
-                                    title="{% if user_item.is_active %}Deactivate{% else %}Activate{% endif %} user"
-                                >
-                                    {% if user_item.is_active %}
-                                        <i class="fa-solid fa-user-slash me-1"></i>
-                                        Deactivate
-                                    {% else %}
-                                        <i class="fa-solid fa-user-check me-1"></i>
-                                        Activate
+                                    <span class="status-inactive">
+
+                                        <i
+                                            class="fa-solid
+                                                   fa-circle-xmark"
+                                        ></i>
+
+                                        Inactive
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ACCOUNT TYPE -->
+
+                            <td>
+
+                                {% if user_item.is_superuser %}
+
+                                    <span class="badge badge-superuser">
+                                        Superuser
+                                    </span>
+
+                                {% elif user_item.is_staff %}
+
+                                    <span class="badge badge-staff">
+                                        Staff
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge badge-standard">
+                                        Standard
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- LAST LOGIN -->
+
+                            <td>
+
+                                {% if user_item.last_login %}
+
+                                    <div>
+                                        {{ user_item.last_login|date:"d M Y" }}
+                                    </div>
+
+                                    <small>
+                                        {{ user_item.last_login|date:"H:i" }}
+                                    </small>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        Never
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- DATE JOINED -->
+
+                            <td>
+
+                                {{ user_item.date_joined|date:"d M Y" }}
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td class="text-nowrap">
+
+
+                                <!-- DETAIL -->
+
+                                <a href="{% url 'usermanagement:user_detail' user_item.id %}">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+
+
+                                <!-- EDIT -->
+
+                                <a href="{% url 'usermanagement:user_edit' user_item.id %}">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+
+
+                                <!-- PASSWORD RESET -->
+
+                                <a href="{% url 'usermanagement:user_password_reset' user_item.id %}">
+                                    <i class="fa-solid fa-key"></i>
+                                </a>
+
+
+                               <!-- ============================================================= ACTIVATE / DEACTIVATE USER ============================================================= --> 
+                                    {% if not user_item.is_superuser %} 
+                                        {% if user_item.id != request.user.id %} 
+                                            <!-- Fixed: Added opening form tag with POST method -->
+                                            <form action="{% url 'usermanagement:user_status_toggle' user_item.id %}" method="POST" style="display:inline;">
+                                                {% csrf_token %} 
+                                                {% if user_item.is_active %} 
+                                                    <button type="submit" class="btn btn-outline-danger action-button" title="Deactivate User" aria-label="Deactivate {{ user_item.username }}" onclick="return confirm('Are you sure you want to deactivate {{ user_item.username|escapejs }}?');"> 
+                                                        <i class="fa-solid fa-user-slash"></i> 
+                                                    </button> 
+                                                {% else %} 
+                                                    <button type="submit" class="btn btn-success action-button" title="Activate User" aria-label="Activate {{ user_item.username }}" onclick="return confirm('Are you sure you want to activate {{ user_item.username|escapejs }}?');"> 
+                                                        <i class="fa-solid fa-user-check"></i> 
+                                                    </button> 
+                                                {% endif %} 
+                                            </form> 
+                                        {% else %} 
+                                            <button type="button" class="btn btn-outline-secondary action-button" title="You cannot change your own account status" disabled> 
+                                                <i class="fa-solid fa-user-lock"></i> 
+                                            </button> 
+                                        {% endif %} 
+                                    {% else %} 
+                                        <button type="button" class="btn btn-outline-secondary action-button" title="Superuser status cannot be changed here" disabled> 
+                                            <i class="fa-solid fa-shield-halved"></i> 
+                                        </button> 
                                     {% endif %}
-                                </button>
-                            </form>
-                        </td>
 
-                    </tr>
+                            </td>
 
-                {% empty %}
+                        </tr>
 
-                    <tr>
 
-                        <td colspan="7" class="text-center py-5">
+                    {% empty %}
 
-                            <i
-                                class="fa-solid fa-users-slash
-                                       fa-3x text-secondary mb-3"
-                            ></i>
+                        <tr>
 
-                            <h5>
-                                No users found
-                            </h5>
+                            <td
+                                colspan="8"
+                                class="text-center py-5"
+                            >
 
-                            <p class="text-light-emphasis mb-0">
-                                Add a user or change the search filter.
-                            </p>
+                                <i
+                                    class="fa-solid
+                                           fa-users-slash
+                                           fa-3x
+                                           text-secondary
+                                           mb-3"
+                                ></i>
 
-                        </td>
+                                <h5>
+                                    No users found
+                                </h5>
 
-                    </tr>
+                                <p class="text-light-emphasis mb-3">
+                                    Add a user or change the search filters.
+                                </p>
 
-                {% endfor %}
+                                {% url 'usermanagement:user_create' %}
+                                    <i class="fa-solid fa-user-plus me-1"></i>
 
-            </tbody>
+                                    Add User
+                                </a>
 
-        </table>
+                            </td>
 
-    </div>
+                        </tr>
 
-</section>
+                    {% endfor %}
 
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =============================================================
+         LTPOMS AUTHORIZATION NOTE
+         ============================================================= -->
+
+    <section class="filter-card mt-4">
+
+        <div class="d-flex gap-3">
+
+            <div>
+                <i
+                    class="fa-solid
+                           fa-circle-info
+                           fa-lg"
+                    style="color: var(--secondary);"
+                ></i>
+            </div>
+
+            <div>
+
+                <div class="fw-semibold">
+                    LTPOMS Authorization Model
+                </div>
+
+                <div
+                    class="small mt-1"
+                    style="color: rgba(51, 77, 66, 0.65);"
+                >
+                    User accounts are separate from organizational
+                    authority. Roles can be assigned directly to a
+                    user or inherited through the employee's active
+                    position. Organization and module scopes determine
+                    where that authority applies.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </main>
-{% endblock %}
 
+{% endblock %}
