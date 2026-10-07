@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+User Management | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+
+    {{ block.super }}
+
+    <!-- {% static 'css/module_nav.css' %} -->
+
+    {% block usermanagement_extra_css %}
+    {% endblock %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="usermanagement-module">
+
+        {% include "usermanagement/includes/usermanagement_nav.html" %}
+
+        {% block usermanagement_content %}
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+    {{ block.super }}
+
+    {% block usermanagement_extra_js %}
+    {% endblock %}
+
+{% endblock %}

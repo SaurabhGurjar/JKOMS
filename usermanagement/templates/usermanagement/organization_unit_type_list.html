@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "usermanagement/usermanagement_base.html" %}
 
 {% block title %}
 Organization Unit Types | JKOMS
@@ -371,7 +371,7 @@ Organization Unit Types | JKOMS
 {% endblock %}
 
 
-{% block content %}
+{% block usermanagement_content %}
 
 <main class="container-fluid px-3 px-lg-4 py-4">
 
@@ -424,14 +424,14 @@ Organization Unit Types | JKOMS
                            gap-2"
                 >
 
-                    {% url 'usermanagement:organization_dashboard' %}
+                    <a href="{% url 'usermanagement:organization_dashboard' %}" class="btn btn-primary">
                         <i class="fa-solid fa-arrow-left me-2"></i>
 
                         Organization
                     </a>
 
 
-                    {% url 'usermanagement:organization_unit_type_create' %}
+                    <a href="{% url 'usermanagement:organization_unit_type_create' %}" class="btn btn-primary">
                         <i class="fa-solid fa-plus me-2"></i>
 
                         Add Unit Type
@@ -450,7 +450,7 @@ Organization Unit Types | JKOMS
 
         <section class="filter-card mb-4">
 
-            {% url 'usermanagement:organization_unit_type_list' %}
+            <form action="{% url 'usermanagement:organization_unit_type_list' %}" method="get">
 
                 <div class="row g-3 align-items-end">
 
@@ -542,7 +542,7 @@ Organization Unit Types | JKOMS
                             </button>
 
 
-                            {% url 'usermanagement:organization_unit_type_list' %}
+                            <a href="{% url 'usermanagement:organization_unit_type_list' %}" class="btn btn-secondary">
                                 <i
                                     class="fa-solid
                                            fa-filter-circle-xmark"
@@ -566,7 +566,7 @@ Organization Unit Types | JKOMS
 
                         Filters are currently applied.
 
-                        {% url 'usermanagement:organization_unit_type_list' %}
+                        <a href="{% url 'usermanagement:organization_unit_type_list' %}">
                             Clear all
                         </a>
 
@@ -747,14 +747,14 @@ Organization Unit Types | JKOMS
 
                                     <!-- EDIT -->
 
-                                    {% url 'usermanagement:organization_unit_type_edit' unit_type.id %}
+                                    <a href="{% url 'usermanagement:organization_unit_type_edit' unit_type.id %}">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
 
 
                                     <!-- ACTIVATE / DEACTIVATE -->
 
-                                    {% url 'usermanagement:organization_unit_type_status_toggle' unit_type.id %}
+                                    <form action="{% url 'usermanagement:organization_unit_type_status_toggle' unit_type.id %}" method="post">
 
                                         {% csrf_token %}
 

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "usermanagement/usermanagement_base.html" %}
 
 {% block title %}
 Designations | JKOMS
@@ -416,7 +416,7 @@ Designations | JKOMS
 {% endblock %}
 
 
-{% block content %}
+{% block usermanagement_content %}
 
 <main class="container-fluid px-3 px-lg-4 py-4">
 
@@ -470,14 +470,14 @@ Designations | JKOMS
                            gap-2"
                 >
 
-                    {% url 'usermanagement:organization_dashboard' %}
+                    <a href="{% url 'usermanagement:organization_dashboard' %}" class="btn btn-primary">
                         <i class="fa-solid fa-arrow-left me-2"></i>
 
                         Organization
                     </a>
 
 
-                    {% url 'usermanagement:designation_create' %}
+                    <a href="{% url 'usermanagement:designation_create' %}" class="btn btn-primary">
                         <i class="fa-solid fa-plus me-2"></i>
 
                         Add Designation
@@ -496,7 +496,7 @@ Designations | JKOMS
 
         <section class="filter-card mb-4">
 
-            {% url 'usermanagement:designation_list' %}
+           <form action="{% url 'usermanagement:designation_list' %}" method="get">
 
                 <div class="row g-3 align-items-end">
 
@@ -590,7 +590,7 @@ Designations | JKOMS
                             </button>
 
 
-                            {% url 'usermanagement:designation_list' %}
+                            <a href="{% url 'usermanagement:designation_list' %}" class="btn btn-secondary">
                                 <i
                                     class="fa-solid
                                            fa-filter-circle-xmark"
@@ -612,7 +612,7 @@ Designations | JKOMS
 
                         Filters are currently applied.
 
-                        {% url 'usermanagement:designation_list' %}
+                        <a href="{% url 'usermanagement:designation_list' %}">
                             Clear all
                         </a>
 
@@ -833,14 +833,14 @@ Designations | JKOMS
 
                                     <!-- EDIT -->
 
-                                    {% url 'usermanagement:designation_edit' designation.id %}
+                                    <a href="{% url 'usermanagement:designation_edit' designation.id %}">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
 
 
                                     <!-- ACTIVATE / DEACTIVATE -->
 
-                                    {% url 'usermanagement:designation_status_toggle' designation.id %}
+                                    <form action="{% url 'usermanagement:designation_status_toggle' designation.id %}" method="post">
 
                                         {% csrf_token %}
 
@@ -928,7 +928,7 @@ Designations | JKOMS
                                         </p>
 
 
-                                        {% url 'usermanagement:designation_list' %}
+                                        <a href="{% url 'usermanagement:designation_list' %}">
                                             <i
                                                 class="fa-solid
                                                        fa-filter-circle-xmark
@@ -950,7 +950,7 @@ Designations | JKOMS
                                         </p>
 
 
-                                        {% url 'usermanagement:designation_create' %}
+                                        <a href="{% url 'usermanagement:designation_create' %}">
                                             <i class="fa-solid fa-plus me-2"></i>
 
                                             Add Designation
