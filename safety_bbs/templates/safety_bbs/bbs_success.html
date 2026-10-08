@@ -1,0 +1,235 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block title %} BBS Observation Submitted | JKOMS {% endblock %} 
+
+{% block content %} 
+<style> 
+    .bbs-success-container { 
+        max-width: 720px; 
+        margin: 40px auto; 
+        padding: 20px; 
+        font-family: Arial, sans-serif; 
+    } 
+    .bbs-success-card { 
+        background: #ffffff; 
+        border-radius: 10px; 
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .15); 
+        overflow: hidden; 
+    } 
+    /* ============================================================== HEADER ============================================================== */ 
+    .bbs-success-header { 
+        background: #f3dd59; 
+        padding: 20px 25px; 
+    } 
+    .bbs-success-header h1 { 
+        margin: 0; 
+        color: #555555; 
+        font-size: 26px; 
+        font-weight: bold; 
+    } 
+    .bbs-success-header small { 
+        display: block; 
+        color: #7a5d00; 
+        margin-top: 4px; 
+    } 
+    /* ============================================================== BODY ============================================================== */ 
+    .bbs-success-body { 
+        padding: 35px 30px; 
+        text-align: center; 
+    } 
+    .bbs-success-icon { 
+        width: 68px; 
+        height: 68px; 
+        margin: 0 auto 18px; 
+        border-radius: 50%; 
+        background: #d8f5e9; 
+        color: #067647; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 36px; 
+        font-weight: bold; 
+    } 
+    .bbs-success-title { 
+        color: #17365d; 
+        font-size: 25px; 
+        margin-bottom: 8px; 
+    } 
+    .bbs-success-message { 
+        color: #667085; 
+        font-size: 15px; 
+        margin-bottom: 25px; 
+    } 
+    /* ============================================================== SUBMISSION SUMMARY ============================================================== */ 
+    .bbs-submission-summary { 
+        max-width: 470px; 
+        margin: 0 auto 28px; 
+        border: 1px solid #d9d9d9; 
+        border-radius: 8px; 
+        text-align: left; 
+        overflow: hidden; 
+    } 
+    .bbs-summary-title { 
+        padding: 11px 15px; 
+        background: #f5f5f5; 
+        color: #555; 
+        font-weight: bold; 
+        border-bottom: 1px solid #d9d9d9; 
+    } 
+    .bbs-summary-row { 
+        display: flex; 
+        padding: 10px 15px; 
+        border-bottom: 1px solid #eeeeee; 
+    } 
+    .bbs-summary-row:last-child { 
+        border-bottom: none; 
+    } 
+    .bbs-summary-label { 
+        width: 42%; 
+        color: #667085; 
+        font-weight: 600; 
+    } 
+    .bbs-summary-value { 
+        width: 58%; 
+        color: #333333; 
+        font-weight: 600; 
+        word-break: break-word; 
+    } 
+    /* ============================================================== BUTTONS ============================================================== */ 
+    .bbs-success-actions { 
+        display: flex; 
+        justify-content: center; 
+        gap: 12px; 
+        flex-wrap: wrap; 
+    } 
+    .bbs-action-button { 
+        display: inline-block; 
+        padding: 11px 22px; 
+        border-radius: 5px; 
+        text-decoration: none; 
+        background: #f3dd59; 
+        color: #333333; 
+        font-weight: bold; 
+        border: none; 
+        cursor: pointer; 
+    } 
+    .bbs-action-button:hover { 
+        background: #e4ca3f; 
+        color: #333333; 
+        text-decoration: none; 
+    } 
+    /* ============================================================== FOOTNOTE ============================================================== */ 
+    .bbs-success-note { 
+        margin-top: 25px; 
+        color: #777777; 
+        font-size: 13px; 
+    } 
+    /* ============================================================== MOBILE ============================================================== */ 
+    @media (max-width: 600px) { 
+        .bbs-success-container { 
+            margin: 15px auto; 
+            padding: 10px; 
+        } 
+        .bbs-success-header { 
+            padding: 18px; 
+        } 
+        .bbs-success-header h1 { 
+            font-size: 22px; 
+        } 
+        .bbs-success-body { 
+            padding: 28px 18px; 
+        } 
+        .bbs-summary-row { 
+            display: block; 
+        } 
+        .bbs-summary-label, 
+        .bbs-summary-value { 
+            width: 100%; 
+        } 
+        .bbs-summary-value { 
+            margin-top: 3px; 
+        } 
+        .bbs-action-button { 
+            width: 100%; 
+            text-align: center; 
+        } 
+    } 
+</style> 
+
+<div class="bbs-success-container"> 
+    <div class="bbs-success-card"> 
+        <!-- ============================================================ BBS HEADER ============================================================ --> 
+        <div class="bbs-success-header"> 
+            <h1>BBS OBSERVATION CARD</h1> 
+            <small>JK Tyre &amp; Industries Ltd | Behaviour Based Safety Programme</small> 
+        </div> 
+        
+        <!-- ============================================================ SUCCESS BODY ============================================================ --> 
+        <div class="bbs-success-body"> 
+            <div class="bbs-success-icon">✓</div> 
+            <h2 class="bbs-success-title">Response Submitted</h2> 
+            <p class="bbs-success-message">Thank you. Your BBS observation has been recorded successfully in JKOMS Safety.</p> 
+            
+            <!-- ======================================================== SUBMISSION SUMMARY ======================================================== --> 
+            <div class="bbs-submission-summary"> 
+                <div class="bbs-summary-title">Submission Details</div> 
+                
+                {% if submission.employee_name %} 
+                <div class="bbs-summary-row"> 
+                    <div class="bbs-summary-label">Employee Name</div> 
+                    <div class="bbs-summary-value">{{ submission.employee_name }}</div> 
+                </div> 
+                {% endif %} 
+                
+                {% if submission.card_no %} 
+                <div class="bbs-summary-row"> 
+                    <div class="bbs-summary-label">Card No.</div> 
+                    <div class="bbs-summary-value">{{ submission.card_no }}</div> 
+                </div> 
+                {% endif %} 
+                
+                {% if submission.observation_date %} 
+                <div class="bbs-summary-row"> 
+                    <div class="bbs-summary-label">Date</div> 
+                    <div class="bbs-summary-value">{{ submission.observation_date }}</div> 
+                </div> 
+                {% endif %} 
+                
+                {% if submission.observation_time %} 
+                <div class="bbs-summary-row"> 
+                    <div class="bbs-summary-label">Time</div> 
+                    <div class="bbs-summary-value">{{ submission.observation_time }}</div> 
+                </div> 
+                {% endif %} 
+                
+                {% if submission.shift %} 
+                <div class="bbs-summary-row"> 
+                    <div class="bbs-summary-label">Shift</div> 
+                    <div class="bbs-summary-value">{{ submission.shift }}</div> 
+                </div> 
+                {% endif %} 
+                
+                {% if submission.area %} 
+                <div class="bbs-summary-row"> 
+                    <div class="bbs-summary-label">Area</div> 
+                    <div class="bbs-summary-value">{{ submission.area }}</div> 
+                </div> 
+                {% endif %} 
+            </div> 
+            
+            <!-- ======================================================== ACTION ======================================================== --> 
+            <div class="bbs-success-actions"> 
+                <a href="{% url 'safety_bbs:bbs_create' %}" class="bbs-action-button">
+                    Submit Another Observation
+                </a> 
+            </div> 
+            
+            <div class="bbs-success-note"> 
+                This acknowledgement confirms that the BBS response has been recorded. <br> 
+                The observed employee does not need to be identified in the BBS observation. 
+            </div> 
+        </div> 
+    </div> 
+</div> 
+{% endblock %}

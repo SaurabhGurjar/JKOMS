@@ -45,5 +45,9 @@ urlpatterns = [
             namespace="usermanagement",
             ),
     ),
-    path("quality/", include("quality.urls"))
+    path("quality/", include("quality.urls")),
+    path(
+        "safety/bbs/",
+        include("safety_bbs.urls"),
+    ),
 ]

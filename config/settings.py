@@ -64,7 +64,8 @@ INSTALLED_APPS = [
     'dashboard',
     'production',
     'usermanagement',
-    'quality'
+    'quality',
+    'safety_bbs'
 ]
 
 MIDDLEWARE = [

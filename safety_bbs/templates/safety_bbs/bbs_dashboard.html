@@ -1,0 +1,1334 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+BBS Compliance Dashboard | JKOMS
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ==================================================
+   BBS COMPLIANCE DASHBOARD
+   JKOMS / LTPOMS THEME
+================================================== */
+
+.bbs-dashboard {
+    padding: 20px 0;
+}
+
+
+/* ==================================================
+   DASHBOARD BANNER
+================================================== */
+
+.bbs-dashboard-header {
+    background: linear-gradient(
+        135deg,
+        #334d42 0%,
+        #446055 100%
+    );
+
+    border-radius: 20px;
+    padding: 30px 35px;
+    margin-bottom: 24px;
+
+    color: #fff;
+
+    box-shadow:
+        0 12px 25px rgba(51,77,66,.15);
+}
+
+.bbs-dashboard-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.bbs-dashboard-title h2 {
+    margin: 0;
+
+    color: #ffeb00;
+
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.bbs-dashboard-title p {
+    margin: 7px 0 0;
+
+    color: rgba(255,255,255,.75);
+
+    font-size: .92rem;
+}
+
+.bbs-dashboard-icon {
+    color: #ffeb00;
+    font-size: 54px;
+}
+
+
+/* ==================================================
+   KPI CARDS
+================================================== */
+
+.bbs-kpis {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(160px,1fr)
+        );
+
+    gap: 18px;
+
+    margin-bottom: 24px;
+}
+
+.bbs-kpi {
+    position: relative;
+
+    background: #fff;
+
+    border:
+        1px solid rgba(51,77,66,.12);
+
+    border-radius: 20px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 8px 25px rgba(51,77,66,.06);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.bbs-kpi:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 12px 28px rgba(51,77,66,.12);
+}
+
+.bbs-kpi-label {
+    margin-bottom: 7px;
+
+    color: rgba(51,77,66,.65);
+
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.bbs-kpi-value {
+    color: #334d42;
+
+    font-size: 2rem;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+.bbs-kpi-description {
+    margin-top: 6px;
+
+    color: rgba(51,77,66,.55);
+
+    font-size: .78rem;
+}
+
+.bbs-kpi-icon {
+    position: absolute;
+
+    top: 20px;
+    right: 20px;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    font-size: 20px;
+}
+
+.bbs-icon-yellow {
+    background: rgba(255,235,0,.25);
+    color: #334d42;
+}
+
+.bbs-icon-green {
+    background: rgba(25,135,84,.13);
+    color: #198754;
+}
+
+.bbs-icon-orange {
+    background: rgba(217,119,6,.13);
+    color: #d97706;
+}
+
+.bbs-icon-blue {
+    background: rgba(59,130,246,.13);
+    color: #2563eb;
+}
+
+
+/* ==================================================
+   FILTER CARD
+================================================== */
+
+.bbs-filter-card {
+    background: #fff;
+
+    border:
+        1px solid rgba(51,77,66,.12);
+
+    border-radius: 20px;
+
+    padding: 18px 22px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 8px 25px rgba(51,77,66,.06);
+}
+
+.bbs-filter-form {
+    display: flex;
+
+    align-items: end;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.bbs-filter-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: rgba(51,77,66,.70);
+
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.bbs-filter-field select {
+    min-width: 160px;
+    height: 40px;
+
+    padding: 0 12px;
+
+    color: #334d42;
+    background: #fff;
+
+    border:
+        1px solid rgba(51,77,66,.20);
+
+    border-radius: 10px;
+
+    outline: none;
+}
+
+.bbs-filter-field select:focus {
+    border-color: #334d42;
+
+    box-shadow:
+        0 0 0 3px rgba(51,77,66,.08);
+}
+
+
+/* ==================================================
+   FILTER BUTTON
+================================================== */
+
+.bbs-filter-button {
+    height: 40px;
+
+    padding: 0 20px;
+
+    color: #fff;
+    background: #334d42;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: .85rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.bbs-filter-button:hover {
+    background: #446055;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   EXCEL BUTTON
+================================================== */
+
+.bbs-export-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    height: 40px;
+
+    padding: 0 20px;
+
+    margin-left: auto;
+
+    color: #334d42;
+    background: #ffeb00;
+
+    border-radius: 10px;
+
+    font-size: .85rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.bbs-export-button:hover {
+    color: #334d42;
+    background: #f1dd00;
+
+    text-decoration: none;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   TABLE CARD
+================================================== */
+
+.bbs-table-card {
+    background: #fff;
+
+    border:
+        1px solid rgba(51,77,66,.12);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 25px rgba(51,77,66,.06);
+}
+
+.bbs-table-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 18px 22px;
+
+    color: #334d42;
+    background: rgba(51,77,66,.04);
+
+    border-bottom:
+        1px solid rgba(51,77,66,.10);
+
+    font-weight: 650;
+}
+
+.bbs-table-title i {
+    color: #334d42;
+}
+
+
+/* ==================================================
+   HORIZONTAL TABLE WRAPPER
+================================================== */
+
+.bbs-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(51,77,66,.35)
+        #f5f5f5;
+}
+
+.bbs-table-wrapper::-webkit-scrollbar {
+    height: 9px;
+}
+
+.bbs-table-wrapper::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+.bbs-table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(51,77,66,.35);
+
+    border-radius: 10px;
+}
+
+
+/* ==================================================
+   COMPLIANCE TABLE
+================================================== */
+
+.bbs-compliance-table {
+    width: 100%;
+
+    min-width: 1500px;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    font-size: .8rem;
+}
+
+.bbs-compliance-table th,
+.bbs-compliance-table td {
+    padding: 9px 6px;
+
+    border-right:
+        1px solid rgba(51,77,66,.08);
+
+    border-bottom:
+        1px solid rgba(51,77,66,.08);
+
+    text-align: center;
+    vertical-align: middle;
+
+    white-space: nowrap;
+}
+
+.bbs-compliance-table thead th {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 2;
+
+    color: #334d42;
+    background: #f8f9fa;
+
+    font-weight: 650;
+}
+
+
+/* ==================================================
+   STICKY EMPLOYEE NAME
+================================================== */
+
+.employee-name-column {
+    position: sticky;
+
+    left: 0;
+
+    min-width: 190px;
+    width: 190px;
+    max-width: 190px;
+
+    color: #334d42;
+    background: #fff;
+
+    text-align: left !important;
+
+    z-index: 3;
+}
+
+
+/* ==================================================
+   STICKY CARD NO
+================================================== */
+
+.card-column {
+    position: sticky;
+
+    left: 190px;
+
+    min-width: 95px;
+    width: 95px;
+    max-width: 95px;
+
+    color: #334d42;
+    background: #fff;
+
+    z-index: 3;
+}
+
+th.employee-name-column,
+th.card-column {
+    background: #f8f9fa;
+
+    z-index: 5;
+}
+
+
+/* ==================================================
+   DAYS
+================================================== */
+
+.day-column {
+    min-width: 37px;
+    width: 37px;
+}
+
+
+/* ==================================================
+   TABLE HOVER
+================================================== */
+
+.bbs-compliance-table tbody tr:hover td {
+    background-color: #fbfcfb;
+}
+
+.bbs-compliance-table tbody tr:hover
+.employee-name-column,
+.bbs-compliance-table tbody tr:hover
+.card-column {
+    background-color: #fbfcfb;
+}
+
+
+/* ==================================================
+   DAILY STATUS
+================================================== */
+
+.status-submitted {
+    color: #198754;
+    background: rgba(25,135,84,.10);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.status-missing {
+    color: #dc2626;
+    background: rgba(220,38,38,.08);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.status-future {
+    color: #adb5bd;
+    background: #f8f9fa;
+}
+
+
+/* Preserve status backgrounds on row hover */
+
+.bbs-compliance-table tbody tr:hover
+.status-submitted {
+    background: rgba(25,135,84,.10);
+}
+
+.bbs-compliance-table tbody tr:hover
+.status-missing {
+    background: rgba(220,38,38,.08);
+}
+
+.bbs-compliance-table tbody tr:hover
+.status-future {
+    background: #f8f9fa;
+}
+
+
+/* ==================================================
+   COMPLIANCE PERCENTAGE
+================================================== */
+
+.compliance-good {
+    color: #198754;
+
+    font-weight: 700;
+}
+
+.compliance-medium {
+    color: #d97706;
+
+    font-weight: 700;
+}
+
+.compliance-low {
+    color: #dc2626;
+
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   LEGEND
+================================================== */
+
+.bbs-legend {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+
+    padding: 14px 22px;
+
+    color: rgba(51,77,66,.70);
+
+    border-top:
+        1px solid rgba(51,77,66,.08);
+
+    font-size: .8rem;
+}
+
+.legend-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+.legend-box {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 5px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.legend-submitted {
+    color: #198754;
+    background: rgba(25,135,84,.10);
+}
+
+.legend-missing {
+    color: #dc2626;
+    background: rgba(220,38,38,.08);
+}
+
+.legend-future {
+    color: #adb5bd;
+    background: #f8f9fa;
+}
+
+
+/* ==================================================
+   EMPTY STATE
+================================================== */
+
+.bbs-empty {
+    padding: 60px 20px;
+
+    color: rgba(51,77,66,.65);
+
+    text-align: center;
+}
+
+.bbs-empty i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: rgba(51,77,66,.30);
+
+    font-size: 36px;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 991.98px) {
+
+    .bbs-kpis {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(140px,1fr)
+            );
+    }
+
+    .bbs-dashboard {
+        padding: 10px 0;
+    }
+
+    .bbs-export-button {
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width: 575.98px) {
+
+    .bbs-dashboard-header {
+        padding: 22px;
+    }
+
+    .bbs-dashboard-header-content {
+        display: block;
+
+        text-align: center;
+    }
+
+    .bbs-dashboard-icon {
+        margin-top: 15px;
+
+        font-size: 38px;
+    }
+
+    .bbs-kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .bbs-filter-form {
+        display: block;
+    }
+
+    .bbs-filter-field {
+        margin-bottom: 12px;
+    }
+
+    .bbs-filter-field select,
+    .bbs-filter-button,
+    .bbs-export-button {
+        width: 100%;
+    }
+
+    .bbs-filter-button,
+    .bbs-export-button {
+        margin-bottom: 8px;
+    }
+}
+
+</style>
+
+
+<div class="bbs-dashboard px-3 py-4">
+
+
+    <!-- ================================================================
+         DASHBOARD HEADER
+         ================================================================ -->
+
+    <div class="bbs-dashboard-header">
+
+        <div class="bbs-dashboard-header-content">
+
+            <div class="bbs-dashboard-title">
+
+                <h2>
+                    <i class="fas fa-shield-alt me-2"></i>
+                    BBS Daily Compliance
+                </h2>
+
+                <p>
+                    Behaviour Based Safety Programme
+                    |
+                    {{ month_name }} {{ selected_year }}
+                </p>
+
+            </div>
+
+
+            <div class="bbs-dashboard-icon">
+
+                <i class="fas fa-clipboard-check"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================================
+         KPI CARDS
+         ================================================================ -->
+
+    <div class="bbs-kpis">
+
+
+        <!-- EMPLOYEES -->
+
+        <div class="bbs-kpi">
+
+            <div class="bbs-kpi-label">
+                Employees
+            </div>
+
+            <div class="bbs-kpi-value">
+                {{ total_employees }}
+            </div>
+
+            <div class="bbs-kpi-description">
+                Employees in selected period
+            </div>
+
+            <div class="
+                bbs-kpi-icon
+                bbs-icon-yellow
+            ">
+
+                <i class="fas fa-users"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBMITTED TODAY -->
+
+        <div class="bbs-kpi">
+
+            <div class="bbs-kpi-label">
+                Submitted Today
+            </div>
+
+            <div class="bbs-kpi-value">
+                {{ submitted_today }}
+            </div>
+
+            <div class="bbs-kpi-description">
+                BBS forms completed today
+            </div>
+
+            <div class="
+                bbs-kpi-icon
+                bbs-icon-green
+            ">
+
+                <i class="fas fa-check"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING TODAY -->
+
+        <div class="bbs-kpi">
+
+            <div class="bbs-kpi-label">
+                Pending Today
+            </div>
+
+            <div class="bbs-kpi-value">
+                {{ pending_today }}
+            </div>
+
+            <div class="bbs-kpi-description">
+                BBS forms not yet submitted
+            </div>
+
+            <div class="
+                bbs-kpi-icon
+                bbs-icon-orange
+            ">
+
+                <i class="fas fa-clock"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- MONTHLY COMPLIANCE -->
+
+        <div class="bbs-kpi">
+
+            <div class="bbs-kpi-label">
+                Monthly Compliance
+            </div>
+
+            <div class="bbs-kpi-value">
+                {{ overall_compliance }}%
+            </div>
+
+            <div class="bbs-kpi-description">
+                Compliance for applicable days
+            </div>
+
+            <div class="
+                bbs-kpi-icon
+                bbs-icon-blue
+            ">
+
+                <i class="fas fa-chart-line"></i>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================================================================
+         FILTERS
+         ================================================================ -->
+
+    <div class="bbs-filter-card">
+
+        <form
+            method="get"
+            class="bbs-filter-form"
+        >
+
+
+            <!-- MONTH -->
+
+            <div class="bbs-filter-field">
+
+                <label for="bbs-month">
+
+                    <i class="far fa-calendar me-1"></i>
+
+                    Month
+
+                </label>
+
+                <select
+                    id="bbs-month"
+                    name="month"
+                >
+
+                    {% for month in months %}
+
+                        <option
+                            value="{{ month.number }}"
+                            {% if month.number == selected_month %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ month.name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- YEAR -->
+
+            <div class="bbs-filter-field">
+
+                <label for="bbs-year">
+
+                    <i class="far fa-calendar-alt me-1"></i>
+
+                    Year
+
+                </label>
+
+                <select
+                    id="bbs-year"
+                    name="year"
+                >
+
+                    {% for year in years %}
+
+                        <option
+                            value="{{ year }}"
+                            {% if year == selected_year %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ year }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- APPLY -->
+
+            <button
+                type="submit"
+                class="bbs-filter-button"
+            >
+
+                <i class="fas fa-filter me-1"></i>
+
+                Apply
+
+            </button>
+
+
+            <!-- ========================================================
+                 EXCEL
+
+                 Replace href="#" once bbs_monthly_export
+                 has been implemented.
+                 ======================================================== -->
+
+            <a href="{% url 'safety_bbs:bbs_monthly_export' %}?month={{ selected_month }}&year={{ selected_year }}" class="btn btn-primary">
+                <i class="fas fa-file-excel"></i>
+
+                Download Excel
+            </a>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- ================================================================
+         DAILY COMPLIANCE TABLE
+         ================================================================ -->
+
+    <div class="bbs-table-card">
+
+
+        <div class="bbs-table-title">
+
+            <i class="fas fa-table"></i>
+
+            Employee Daily Status
+
+            <span>
+                |
+                {{ month_name }}
+                {{ selected_year }}
+            </span>
+
+        </div>
+
+
+        {% if rows %}
+
+
+            <div class="bbs-table-wrapper">
+
+
+                <table class="bbs-compliance-table">
+
+
+                    <!-- =================================================
+                         HEADER
+                         ================================================= -->
+
+                    <thead>
+
+                        <tr>
+
+
+                            <th class="employee-name-column">
+                                Employee Name
+                            </th>
+
+
+                            <th class="card-column">
+                                Card No.
+                            </th>
+
+
+                            {% for day in days %}
+
+                                <th class="day-column">
+
+                                    {{ day|stringformat:"02d" }}
+
+                                </th>
+
+                            {% endfor %}
+
+
+                            <th>
+                                Filled
+                            </th>
+
+
+                            <th>
+                                Required
+                            </th>
+
+
+                            <th>
+                                Compliance
+                            </th>
+
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- =================================================
+                         BODY
+                         ================================================= -->
+
+                    <tbody>
+
+
+                        {% for row in rows %}
+
+
+                            <tr>
+
+
+                                <!-- EMPLOYEE -->
+
+                                <td class="employee-name-column">
+
+                                    {{ row.employee_name }}
+
+                                </td>
+
+
+                                <!-- CARD -->
+
+                                <td class="card-column">
+
+                                    {{ row.card_no }}
+
+                                </td>
+
+
+                                <!-- DAY STATUS -->
+
+                                {% for day_status in row.day_statuses %}
+
+
+                                    {% if day_status.status == "submitted" %}
+
+
+                                        <td
+                                            class="status-submitted"
+                                            title="BBS submitted"
+                                        >
+                                            ✓
+                                        </td>
+
+
+                                    {% elif day_status.status == "missing" %}
+
+
+                                        <td
+                                            class="status-missing"
+                                            title="BBS not submitted"
+                                        >
+                                            ×
+                                        </td>
+
+
+                                    {% else %}
+
+
+                                        <td
+                                            class="status-future"
+                                            title="Future date"
+                                        >
+                                            -
+                                        </td>
+
+
+                                    {% endif %}
+
+
+                                {% endfor %}
+
+
+                                <!-- FILLED -->
+
+                                <td>
+
+                                    {{ row.submitted_count }}
+
+                                </td>
+
+
+                                <!-- REQUIRED -->
+
+                                <td>
+
+                                    {{ row.applicable_days }}
+
+                                </td>
+
+
+                                <!-- COMPLIANCE -->
+
+                                <td>
+
+
+                                    {% if row.compliance_percentage >= 90 %}
+
+
+                                        <span class="compliance-good">
+
+                                            {{ row.compliance_percentage }}%
+
+                                        </span>
+
+
+                                    {% elif row.compliance_percentage >= 75 %}
+
+
+                                        <span class="compliance-medium">
+
+                                            {{ row.compliance_percentage }}%
+
+                                        </span>
+
+
+                                    {% else %}
+
+
+                                        <span class="compliance-low">
+
+                                            {{ row.compliance_percentage }}%
+
+                                        </span>
+
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+            <!-- ========================================================
+                 LEGEND
+                 ======================================================== -->
+
+            <div class="bbs-legend">
+
+
+                <div class="legend-item">
+
+                    <span class="
+                        legend-box
+                        legend-submitted
+                    ">
+                        ✓
+                    </span>
+
+                    Submitted
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="
+                        legend-box
+                        legend-missing
+                    ">
+                        ×
+                    </span>
+
+                    Not Submitted
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="
+                        legend-box
+                        legend-future
+                    ">
+                        -
+                    </span>
+
+                    Future Date
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    Applicable Days:
+                    <strong>
+                        {{ applicable_days }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- ========================================================
+                 EMPTY STATE
+                 ======================================================== -->
+
+            <div class="bbs-empty">
+
+                <i class="fas fa-clipboard-list"></i>
+
+                No BBS submissions were found for
+
+                <strong>
+                    {{ month_name }}
+                    {{ selected_year }}
+                </strong>.
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

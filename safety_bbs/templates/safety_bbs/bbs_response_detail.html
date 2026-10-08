@@ -1,0 +1,1631 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+BBS Response Detail | JKOMS
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ==================================================
+   PAGE
+================================================== */
+
+.bbs-detail-page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px 0;
+}
+
+
+/* ==================================================
+   TOOLBAR
+================================================== */
+
+.bbs-detail-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.bbs-back-button,
+.bbs-print-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 8px 16px;
+
+    border-radius: 10px;
+
+    font-size: .84rem;
+    font-weight: 650;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.bbs-back-button {
+    color: #334d42;
+    background: #fff;
+
+    border:
+        1px solid rgba(51,77,66,.20);
+}
+
+.bbs-back-button:hover {
+    color: #334d42;
+    background: #f8f9fa;
+
+    text-decoration: none;
+}
+
+.bbs-print-button {
+    color: #334d42;
+    background: #ffeb00;
+
+    border: none;
+}
+
+.bbs-print-button:hover {
+    background: #f1dd00;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   BBS CARD
+================================================== */
+
+.bbs-response-card {
+    padding: 20px;
+    margin-bottom: 30px;
+
+    background: #fff;
+
+    border:
+        1px solid rgba(51,77,66,.12);
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.12);
+}
+
+
+/* ==================================================
+   ORIGINAL BBS HEADER
+================================================== */
+
+.bbs-response-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 15px;
+    margin-bottom: 18px;
+
+    background: #f3dd59;
+}
+
+.bbs-response-header h1 {
+    margin: 0;
+
+    color: #555;
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.bbs-response-header small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #7a5d00;
+}
+
+.bbs-reference {
+    color: #665500;
+
+    font-size: .8rem;
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+
+/* ==================================================
+   RESPONSIVE DETAIL ROWS
+================================================== */
+
+.bbs-detail-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(150px, 1fr)
+        );
+
+    gap: 12px;
+
+    margin-bottom: 12px;
+}
+
+.bbs-detail-col {
+    min-width: 0;
+}
+
+
+/* ==================================================
+   FIELD LABELS
+================================================== */
+
+.bbs-field-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #555;
+
+    font-size: .78rem;
+    font-weight: 600;
+
+    line-height: 1.2;
+}
+
+
+/* ==================================================
+   COMPACT FIELD VALUES
+
+   Short values use only the height required
+   by their actual content.
+================================================== */
+
+.bbs-field-value {
+    width: 100%;
+
+    min-height: 0;
+
+    padding: 6px 9px;
+
+    color: #333;
+    background: #fafafa;
+
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+
+    font-size: .84rem;
+    line-height: 1.25;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+
+    box-sizing: border-box;
+}
+
+
+/* ==================================================
+   LONG TEXT VALUES
+================================================== */
+
+.bbs-text-value {
+    min-height: 45px;
+
+    padding: 8px 10px;
+
+    line-height: 1.4;
+
+    white-space: pre-wrap;
+}
+
+
+/* ==================================================
+   EMPLOYEE DETAILS
+================================================== */
+
+.bbs-employee-block {
+    padding: 12px;
+
+    margin-bottom: 14px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+}
+
+.bbs-employee-title {
+    margin-bottom: 9px;
+
+    color: #555;
+
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   NOTE
+================================================== */
+
+.bbs-note {
+    margin: 10px 0 14px;
+
+    color: #666;
+
+    font-size: .8rem;
+    font-style: italic;
+}
+
+
+/* ==================================================
+   BBS SECTIONS
+================================================== */
+
+.bbs-section {
+    padding: 12px;
+
+    margin-top: 14px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+}
+
+.bbs-section-title {
+    margin-bottom: 8px;
+
+    color: #555;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   TAGS
+================================================== */
+
+.bbs-tags {
+    display: flex;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+
+    margin: 6px 0 10px;
+}
+
+.bbs-tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 8px;
+
+    color: #334d42;
+
+    background:
+        rgba(255,235,0,.25);
+
+    border-radius: 14px;
+
+    font-size: .74rem;
+    font-weight: 600;
+
+    line-height: 1.2;
+}
+
+.bbs-safe {
+    color: #198754;
+
+    background:
+        rgba(25,135,84,.10);
+}
+
+.bbs-risk {
+    color: #dc2626;
+
+    background:
+        rgba(220,38,38,.08);
+}
+
+
+/* ==================================================
+   CRITICAL BEHAVIOUR TABLE
+================================================== */
+
+.bbs-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.bbs-check-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 12px;
+}
+
+.bbs-check-table th,
+.bbs-check-table td {
+    padding: 7px 9px;
+
+    border: 1px solid #ccc;
+
+    font-size: .82rem;
+    line-height: 1.25;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.bbs-check-table th:first-child,
+.bbs-check-table td:first-child {
+    width: 70%;
+
+    text-align: left;
+}
+
+.bbs-check-table th {
+    color: #334d42;
+
+    background: #f8f9fa;
+
+    font-weight: 650;
+}
+
+
+/* ==================================================
+   CHECKLIST STATUS
+================================================== */
+
+.check-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 8px;
+
+    border-radius: 14px;
+
+    font-size: .74rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.check-safe {
+    color: #198754;
+
+    background:
+        rgba(25,135,84,.10);
+}
+
+.check-risk {
+    color: #dc2626;
+
+    background:
+        rgba(220,38,38,.08);
+}
+
+.check-na {
+    color: #6c757d;
+
+    background: #f1f3f5;
+}
+
+
+/* ==================================================
+   SIGNATURES
+================================================== */
+
+.bbs-signature-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 25px;
+
+    margin-top: 18px;
+}
+
+.bbs-signature {
+    min-width: 0;
+}
+
+.bbs-signature-value {
+    min-height: 0;
+
+    padding: 5px 3px;
+
+    border-bottom: 1px solid #777;
+
+    font-size: .84rem;
+    line-height: 1.25;
+}
+
+
+/* ==================================================
+   SYSTEM INFORMATION
+================================================== */
+
+.bbs-system-info {
+    display: flex;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+
+    padding: 10px 12px;
+    margin-top: 18px;
+
+    color: rgba(51,77,66,.70);
+    background: #f8f9fa;
+
+    border-radius: 8px;
+
+    font-size: .75rem;
+}
+
+.bbs-system-info strong {
+    color: #334d42;
+}
+
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 767.98px) {
+
+    .bbs-detail-page {
+        padding: 10px 0;
+    }
+
+    .bbs-response-card {
+        padding: 15px;
+    }
+
+    .bbs-response-header {
+        display: block;
+    }
+
+    .bbs-response-header h1 {
+        font-size: 22px;
+    }
+
+    .bbs-reference {
+        display: block;
+
+        margin-top: 7px;
+    }
+
+    .bbs-detail-row {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 10px;
+    }
+
+    .bbs-field-value {
+        padding: 6px 8px;
+
+        font-size: .82rem;
+    }
+
+    .bbs-signature-row {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 480px) {
+
+    .bbs-detail-toolbar {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .bbs-detail-row {
+        grid-template-columns: 1fr;
+    }
+
+    .bbs-back-button,
+    .bbs-print-button {
+        width: 100%;
+    }
+}
+
+
+/* ==================================================
+   PRINT
+================================================== */
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 8mm;
+    }
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: #fff !important;
+    }
+
+    /*
+     * Hide JKOMS navigation and screen actions.
+     * Adjust selectors only if your base.html uses
+     * different navigation class names.
+     */
+
+    header,
+    nav,
+    aside,
+    .navbar,
+    .sidebar,
+    .module-navbar,
+    .topbar,
+    .bbs-detail-toolbar,
+    .bbs-system-info {
+        display: none !important;
+    }
+
+    main,
+    .content,
+    .content-wrapper,
+    .main-content,
+    .page-content {
+        width: 100% !important;
+        max-width: none !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .bbs-detail-page {
+        width: 100%;
+        max-width: none;
+
+        margin: 0;
+        padding: 0;
+    }
+
+    .bbs-response-card {
+        width: 100%;
+
+        margin: 0;
+        padding: 7mm;
+
+        background: #fff;
+
+        border: 1px solid #777;
+        border-radius: 0;
+
+        box-shadow: none;
+
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /*
+     * Front Card = Page 1
+     * Back Card  = Page 2
+     */
+
+    .bbs-response-card +
+    .bbs-response-card {
+        page-break-before: always;
+        break-before: page;
+    }
+
+    .bbs-response-header {
+        padding: 10px;
+
+        background: #f3dd59 !important;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .bbs-response-header h1 {
+        font-size: 19pt;
+    }
+
+    .bbs-field-value {
+        padding: 4px 6px;
+
+        color: #000;
+        background: transparent;
+
+        font-size: 8.5pt;
+    }
+
+    .bbs-text-value {
+        min-height: 35px;
+    }
+
+    .bbs-employee-block,
+    .bbs-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .bbs-section {
+        padding: 8px;
+
+        margin-top: 10px;
+    }
+
+    .bbs-section-title {
+        font-size: 11pt;
+    }
+
+    .bbs-check-table {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .bbs-check-table th,
+    .bbs-check-table td {
+        padding: 5px;
+
+        font-size: 8pt;
+    }
+
+    .bbs-tag,
+    .bbs-safe,
+    .bbs-risk,
+    .check-status {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .bbs-signature-value {
+        min-height: 22px;
+
+        color: #000;
+    }
+}
+
+</style>
+
+
+<div class="bbs-detail-page">
+
+
+    <!-- ================================================================
+         TOOLBAR
+         ================================================================ -->
+
+    <div class="bbs-detail-toolbar">
+
+        <a href="{% url 'safety_bbs:bbs_response_list' %}" class="bbs-back-button">
+            <i class="fas fa-arrow-left"></i>
+
+            Back to Responses
+        </a>
+
+
+        <button
+            type="button"
+            class="bbs-print-button"
+            onclick="window.print();"
+        >
+            <i class="fas fa-print"></i>
+
+            Print BBS Card
+        </button>
+
+    </div>
+
+
+    <!-- ================================================================
+         FRONT PAGE
+         ================================================================ -->
+
+    <div class="bbs-response-card">
+
+
+        <!-- HEADER -->
+
+        <div class="bbs-response-header">
+
+            <div>
+
+                <h1>
+                    BBS OBSERVATION CARD
+                </h1>
+
+                <small>
+                    JK Tyre &amp; Industries Ltd |
+                    Behaviour Based Safety Programme
+                </small>
+
+            </div>
+
+
+            <div class="bbs-reference">
+                EHS-BBS-CARD-01 Rev.01
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             EMPLOYEE DETAILS
+             ============================================================ -->
+
+        <div class="bbs-employee-block">
+
+            <div class="bbs-employee-title">
+                Employee Details
+            </div>
+
+
+            <div class="bbs-detail-row">
+
+
+                <div class="bbs-detail-col">
+
+                    <span class="bbs-field-label">
+                        Employee Name
+                    </span>
+
+                    <div class="bbs-field-value">
+                        {{ observation.employee_name }}
+                    </div>
+
+                </div>
+
+
+                <div class="bbs-detail-col">
+
+                    <span class="bbs-field-label">
+                        Card No.
+                    </span>
+
+                    <div class="bbs-field-value">
+                        {{ observation.card_no }}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             OBSERVATION DETAILS
+             ============================================================ -->
+
+        <div class="bbs-detail-row">
+
+
+            <div class="bbs-detail-col">
+
+                <span class="bbs-field-label">
+                    Date
+                </span>
+
+                <div class="bbs-field-value">
+                    {{ observation.observation_date|date:"d-M-Y" }}
+                </div>
+
+            </div>
+
+
+            <div class="bbs-detail-col">
+
+                <span class="bbs-field-label">
+                    Time
+                </span>
+
+                <div class="bbs-field-value">
+                    {{ observation.observation_time|time:"H:i" }}
+                </div>
+
+            </div>
+
+
+            <div class="bbs-detail-col">
+
+                <span class="bbs-field-label">
+                    Shift
+                </span>
+
+                <div class="bbs-field-value">
+                    {{ observation.get_shift_display }}
+                </div>
+
+            </div>
+
+
+            <div class="bbs-detail-col">
+
+                <span class="bbs-field-label">
+                    Area
+                </span>
+
+                <div class="bbs-field-value">
+                    {{ observation.area }}
+                </div>
+
+            </div>
+
+
+            <div class="bbs-detail-col">
+
+                <span class="bbs-field-label">
+                    Observer
+                </span>
+
+                <div class="bbs-field-value">
+                    {{ observation.observer_name|default:"-" }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <p class="bbs-note">
+            No name required from the observed employee.
+            Data is used only for trend analysis, never for discipline.
+        </p>
+
+
+        <!-- ============================================================
+             A. ACTIVATOR
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                A. ACTIVATOR
+            </div>
+
+
+            <span class="bbs-field-label">
+
+                What prompted the behaviour
+                (sign, instruction, condition, habit)?
+
+            </span>
+
+
+            <div class="
+                bbs-field-value
+                bbs-text-value
+            ">
+                {{ observation.activator|default:"-" }}
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             B. BEHAVIOUR
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                B. BEHAVIOUR
+            </div>
+
+
+            <span class="bbs-field-label">
+                Observation Type
+            </span>
+
+
+            <div class="bbs-tags">
+
+                {% if observation.behaviour_type == "AT_RISK" %}
+
+                    <span class="
+                        bbs-tag
+                        bbs-risk
+                    ">
+                        At-Risk Act
+                    </span>
+
+                {% else %}
+
+                    <span class="
+                        bbs-tag
+                        bbs-safe
+                    ">
+                        Safe Act
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <span class="bbs-field-label">
+                Category
+            </span>
+
+
+            <div class="bbs-tags">
+
+                {% for category in observation.behaviour_categories %}
+
+                    <span class="bbs-tag">
+
+                        {% if category == "PPE" %}
+
+                            PPE
+
+                        {% elif category == "GUARDING_LOTO" %}
+
+                            Guarding / LOTO
+
+                        {% elif category == "ERGONOMICS" %}
+
+                            Position / Ergonomics
+
+                        {% elif category == "TOOLS_EQUIPMENT" %}
+
+                            Tools / Equipment
+
+                        {% elif category == "HOUSEKEEPING" %}
+
+                            Housekeeping
+
+                        {% elif category == "PERMIT" %}
+
+                            Permit
+
+                        {% else %}
+
+                            {{ category }}
+
+                        {% endif %}
+
+                    </span>
+
+                {% empty %}
+
+                    <span>
+                        -
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <span class="bbs-field-label">
+                Behaviour Description
+            </span>
+
+
+            <div class="
+                bbs-field-value
+                bbs-text-value
+            ">
+                {{ observation.behaviour_description|default:"-" }}
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             C. CONSEQUENCE
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                C. CONSEQUENCE
+            </div>
+
+
+            <span class="bbs-field-label">
+                Consequence / Feedback
+            </span>
+
+
+            <div class="bbs-tags">
+
+                {% for consequence in observation.consequences %}
+
+                    <span class="bbs-tag">
+
+                        {% if consequence == "POSITIVE_REINFORCEMENT" %}
+
+                            Positive Reinforcement / Praised
+
+                        {% elif consequence == "ON_SPOT_COACHING" %}
+
+                            On-Spot Coaching Given
+
+                        {% elif consequence == "CORRECTIVE_ACTION" %}
+
+                            Corrective Action Required
+
+                        {% elif consequence == "NEAR_MISS_HAZARD" %}
+
+                            Near-Miss / Hazard Reported
+
+                        {% else %}
+
+                            {{ consequence }}
+
+                        {% endif %}
+
+                    </span>
+
+                {% empty %}
+
+                    <span>
+                        -
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <span class="bbs-field-label">
+                Feedback Given on the Spot
+            </span>
+
+
+            <div class="
+                bbs-field-value
+                bbs-text-value
+            ">
+                {{ observation.feedback|default:"-" }}
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================================================================
+         BACK PAGE
+         ================================================================ -->
+
+    <div class="bbs-response-card">
+
+
+        <!-- HEADER -->
+
+        <div class="bbs-response-header">
+
+            <div>
+
+                <h1>
+                    BBS OBSERVATION CARD - BACK
+                </h1>
+
+                <small>
+                    Critical Behaviour Checklist
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <h3 style="font-size:1rem; color:#555;">
+
+            Tally of observations this round
+            (mark each act seen)
+
+        </h3>
+
+
+        <!-- ============================================================
+             CRITICAL BEHAVIOUR CHECKLIST
+             ============================================================ -->
+
+        <div class="bbs-table-wrapper">
+
+            <table class="bbs-check-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Behaviour
+                        </th>
+
+                        <th>
+                            Result
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <!-- PPE -->
+
+                    <tr>
+
+                        <td>
+                            PPE compliance
+                            (helmet, gloves, goggles, footwear)
+                        </td>
+
+                        <td>
+
+                            {% if observation.ppe_status == "SAFE" %}
+
+                                <span class="
+                                    check-status
+                                    check-safe
+                                ">
+                                    Safe
+                                </span>
+
+                            {% elif observation.ppe_status == "AT_RISK" %}
+
+                                <span class="
+                                    check-status
+                                    check-risk
+                                ">
+                                    At-Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="
+                                    check-status
+                                    check-na
+                                ">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- GUARDING / LOTO -->
+
+                    <tr>
+
+                        <td>
+                            Machine guarding / LOTO in place &amp; used
+                        </td>
+
+                        <td>
+
+                            {% if observation.guarding_loto_status == "SAFE" %}
+
+                                <span class="
+                                    check-status
+                                    check-safe
+                                ">
+                                    Safe
+                                </span>
+
+                            {% elif observation.guarding_loto_status == "AT_RISK" %}
+
+                                <span class="
+                                    check-status
+                                    check-risk
+                                ">
+                                    At-Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="
+                                    check-status
+                                    check-na
+                                ">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ERGONOMICS -->
+
+                    <tr>
+
+                        <td>
+                            Body position, ergonomics,
+                            pinch points avoided
+                        </td>
+
+                        <td>
+
+                            {% if observation.ergonomics_status == "SAFE" %}
+
+                                <span class="
+                                    check-status
+                                    check-safe
+                                ">
+                                    Safe
+                                </span>
+
+                            {% elif observation.ergonomics_status == "AT_RISK" %}
+
+                                <span class="
+                                    check-status
+                                    check-risk
+                                ">
+                                    At-Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="
+                                    check-status
+                                    check-na
+                                ">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- TOOLS -->
+
+                    <tr>
+
+                        <td>
+                            Correct tool / equipment for task
+                        </td>
+
+                        <td>
+
+                            {% if observation.tools_equipment_status == "SAFE" %}
+
+                                <span class="
+                                    check-status
+                                    check-safe
+                                ">
+                                    Safe
+                                </span>
+
+                            {% elif observation.tools_equipment_status == "AT_RISK" %}
+
+                                <span class="
+                                    check-status
+                                    check-risk
+                                ">
+                                    At-Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="
+                                    check-status
+                                    check-na
+                                ">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- HOUSEKEEPING -->
+
+                    <tr>
+
+                        <td>
+                            Housekeeping
+                            (walkways, spills, storage)
+                        </td>
+
+                        <td>
+
+                            {% if observation.housekeeping_status == "SAFE" %}
+
+                                <span class="
+                                    check-status
+                                    check-safe
+                                ">
+                                    Safe
+                                </span>
+
+                            {% elif observation.housekeeping_status == "AT_RISK" %}
+
+                                <span class="
+                                    check-status
+                                    check-risk
+                                ">
+                                    At-Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="
+                                    check-status
+                                    check-na
+                                ">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- PERMIT -->
+
+                    <tr>
+
+                        <td>
+                            Permit-to-work / procedure followed
+                        </td>
+
+                        <td>
+
+                            {% if observation.permit_procedure_status == "SAFE" %}
+
+                                <span class="
+                                    check-status
+                                    check-safe
+                                ">
+                                    Safe
+                                </span>
+
+                            {% elif observation.permit_procedure_status == "AT_RISK" %}
+
+                                <span class="
+                                    check-status
+                                    check-risk
+                                ">
+                                    At-Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="
+                                    check-status
+                                    check-na
+                                ">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ============================================================
+             ROOT CAUSES
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                If At-Risk, Likely Root Cause
+            </div>
+
+
+            <div class="bbs-tags">
+
+                {% for root_cause in observation.root_causes %}
+
+                    <span class="bbs-tag">
+
+                        {% if root_cause == "TIME_PRESSURE" %}
+
+                            Time Pressure
+
+                        {% elif root_cause == "TRAINING_GAP" %}
+
+                            Training Gap
+
+                        {% elif root_cause == "TOOL_EQUIPMENT_ISSUE" %}
+
+                            Tool / Equipment Issue
+
+                        {% elif root_cause == "PROCEDURE_UNCLEAR" %}
+
+                            Procedure Unclear
+
+                        {% elif root_cause == "COMPLACENCY" %}
+
+                            Complacency
+
+                        {% elif root_cause == "OTHER" %}
+
+                            Other
+
+                        {% else %}
+
+                            {{ root_cause }}
+
+                        {% endif %}
+
+                    </span>
+
+                {% empty %}
+
+                    <span>
+                        -
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            {% if observation.root_cause_other %}
+
+                <span class="bbs-field-label">
+                    Other Root Cause
+                </span>
+
+                <div class="bbs-field-value">
+                    {{ observation.root_cause_other }}
+                </div>
+
+            {% endif %}
+
+
+            <div style="margin-top:10px;">
+
+                <span class="bbs-field-label">
+                    Corrective / Preventive Action
+                </span>
+
+                <div class="
+                    bbs-field-value
+                    bbs-text-value
+                ">
+                    {{ observation.corrective_action|default:"-" }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             SIGNATURES
+             ============================================================ -->
+
+        <div class="bbs-signature-row">
+
+
+            <div class="bbs-signature">
+
+                <span class="bbs-field-label">
+                    Observer Sign
+                </span>
+
+                <div class="bbs-signature-value">
+                    {{ observation.observer_sign|default:"" }}
+                </div>
+
+            </div>
+
+
+            <div class="bbs-signature">
+
+                <span class="bbs-field-label">
+                    Supervisor Sign
+                </span>
+
+                <div class="bbs-signature-value">
+                    {{ observation.supervisor_sign|default:"" }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ============================================================
+             SYSTEM INFO
+             ============================================================ -->
+
+        <div class="bbs-system-info">
+
+            <div>
+
+                <strong>
+                    Submitted:
+                </strong>
+
+                {{ observation.submitted_at|date:"d-M-Y H:i:s" }}
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Last Updated:
+                </strong>
+
+                {{ observation.updated_at|date:"d-M-Y H:i:s" }}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

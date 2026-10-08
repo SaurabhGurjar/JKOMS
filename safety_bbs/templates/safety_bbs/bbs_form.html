@@ -1,0 +1,1102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+BBS Observation Card | LTPOMS
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /*
+     * Styles intentionally retain the layout and appearance
+     * of the original BBS form.
+     *
+     * They are scoped under .bbs-container to reduce clashes
+     * with the global LTPOMS base template.
+     */
+
+    .bbs-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .bbs-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .bbs-header {
+        background: #f3dd59;
+        padding: 15px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-bottom: 20px;
+    }
+
+    .bbs-header h1 {
+        font-size: 32px;
+        font-weight: bold;
+        color: #555;
+        margin: 0;
+    }
+
+    .bbs-header small {
+        display: block;
+        color: #7a5d00;
+    }
+
+    .bbs-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .bbs-col {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .bbs-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .bbs-container input[type="text"],
+    .bbs-container input[type="date"],
+    .bbs-container input[type="time"],
+    .bbs-container textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .bbs-container textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    .bbs-section {
+        border: 1px solid #d9d9d9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .bbs-section-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 10px;
+    }
+    
+    .bbs-checkbox-group > div {
+       display: flex;
+        flex-wrap: wrap;
+        gap: 20px; 
+    }
+
+    .bbs-checkbox-group ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    .bbs-checkbox-group li {
+        list-style: none;
+    }
+
+    .bbs-checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    .bbs-container input[type="radio"],
+    .bbs-container input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+    }
+
+    .bbs-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .bbs-table {
+        width: 100%;
+        min-width: 650px;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    .bbs-table th,
+    .bbs-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .bbs-table th:first-child,
+    .bbs-table td:first-child {
+        text-align: left;
+    }
+
+    .bbs-table ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .bbs-table li {
+        list-style: none;
+    }
+
+    .bbs-table label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    .bbs-note {
+        margin: 15px 0;
+        font-style: italic;
+        color: #666;
+    }
+
+    .bbs-signature-row {
+        display: flex;
+        gap: 40px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .bbs-signature {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .bbs-signature input {
+        border: none !important;
+        border-bottom: 1px solid #000 !important;
+        border-radius: 0 !important;
+    }
+
+    .bbs-submit-button {
+        background: #f3dd59;
+        border: none;
+
+        padding: 12px 25px;
+
+        font-weight: bold;
+        cursor: pointer;
+
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .bbs-submit-button:hover {
+        background: #e5cc42;
+    }
+
+    .bbs-required {
+        color: #b42318;
+    }
+
+    .bbs-error {
+        color: #b42318;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .bbs-error ul,
+    .bbs-form-errors ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .bbs-form-errors {
+        background: #fef3f2;
+        border: 1px solid #fecdca;
+        color: #b42318;
+
+        padding: 12px 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    /*
+     * Added only because daily compliance requires
+     * Employee Name + Card No.
+     */
+
+    .bbs-employee-details {
+        border: 1px solid #d9d9d9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .bbs-employee-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 12px;
+    }
+
+
+    @media (max-width: 700px) {
+
+        .bbs-container {
+            padding: 10px;
+        }
+
+        .bbs-header {
+            display: block;
+        }
+
+        .bbs-header h1 {
+            font-size: 24px;
+        }
+
+        .bbs-header-reference {
+            margin-top: 8px;
+        }
+
+        .bbs-col {
+            min-width: 100%;
+        }
+
+        .bbs-checkbox-group ul {
+            display: block;
+        }
+
+        .bbs-checkbox-group li {
+            margin-bottom: 8px;
+        }
+
+        .bbs-submit-button {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+<div class="bbs-container">
+
+
+<form method="post" novalidate>
+
+    {% csrf_token %}
+
+
+    {% if form.non_field_errors %}
+
+        <div class="bbs-form-errors">
+
+            {{ form.non_field_errors }}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- ================================================================
+         FRONT PAGE
+         ================================================================ -->
+
+    <div class="bbs-card">
+
+
+        <div class="bbs-header">
+
+            <div>
+
+                <h1>
+                    BBS OBSERVATION CARD
+                </h1>
+
+                <small>
+                    JK Tyre &amp; Industries Ltd |
+                    Behaviour Based Safety Programme
+                </small>
+
+            </div>
+
+
+            <div class="bbs-header-reference">
+                EHS-BBS-CARD-01 Rev.01
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             EMPLOYEE DETAILS
+
+             Added for LTPOMS daily compliance tracking.
+             Observed employee remains anonymous.
+             ============================================================ -->
+
+        <div class="bbs-employee-details">
+
+            <div class="bbs-employee-title">
+                Employee Details
+            </div>
+
+
+            <div class="bbs-row">
+
+
+                <div class="bbs-col">
+
+                    <label
+                        for="{{ form.employee_name.id_for_label }}"
+                    >
+                        Employee Name
+
+                        <span class="bbs-required">
+                            *
+                        </span>
+                    </label>
+
+                    {{ form.employee_name }}
+
+                    {% if form.employee_name.errors %}
+                        <div class="bbs-error">
+                            {{ form.employee_name.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="bbs-col">
+
+                    <label
+                        for="{{ form.card_no.id_for_label }}"
+                    >
+                        Card No.
+
+                        <span class="bbs-required">
+                            *
+                        </span>
+                    </label>
+
+                    {{ form.card_no }}
+
+                    {% if form.card_no.errors %}
+                        <div class="bbs-error">
+                            {{ form.card_no.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================================
+             DATE / TIME / SHIFT
+             ============================================================ -->
+
+        <div class="bbs-row">
+
+
+            <div class="bbs-col">
+
+                <label
+                    for="{{ form.observation_date.id_for_label }}"
+                >
+                    Date
+                </label>
+
+                {{ form.observation_date }}
+
+                {% if form.observation_date.errors %}
+                    <div class="bbs-error">
+                        {{ form.observation_date.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="bbs-col">
+
+                <label
+                    for="{{ form.observation_time.id_for_label }}"
+                >
+                    Time
+                </label>
+
+                {{ form.observation_time }}
+
+                {% if form.observation_time.errors %}
+                    <div class="bbs-error">
+                        {{ form.observation_time.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="bbs-col">
+
+                <label>
+                    Shift
+                </label>
+
+                <div class="bbs-checkbox-group">
+                    {{ form.shift }}
+                </div>
+
+                {% if form.shift.errors %}
+                    <div class="bbs-error">
+                        {{ form.shift.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ============================================================
+             AREA / OBSERVER
+             ============================================================ -->
+
+        <div class="bbs-row">
+
+
+            <div class="bbs-col">
+
+                <label
+                    for="{{ form.area.id_for_label }}"
+                >
+                    Area
+                </label>
+
+                {{ form.area }}
+
+                {% if form.area.errors %}
+                    <div class="bbs-error">
+                        {{ form.area.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="bbs-col">
+
+                <label
+                    for="{{ form.observer_name.id_for_label }}"
+                >
+                    Observer (Optional)
+                </label>
+
+                {{ form.observer_name }}
+
+                {% if form.observer_name.errors %}
+                    <div class="bbs-error">
+                        {{ form.observer_name.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <p class="bbs-note">
+
+            No name required from the observed employee.
+            Data is used only for trend analysis,
+            never for discipline.
+
+        </p>
+
+
+        <!-- ============================================================
+             A. ACTIVATOR
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                A. ACTIVATOR
+            </div>
+
+
+            <label
+                for="{{ form.activator.id_for_label }}"
+            >
+                What prompted the behaviour
+                (sign, instruction, condition, habit)?
+            </label>
+
+
+            {{ form.activator }}
+
+
+            {% if form.activator.errors %}
+                <div class="bbs-error">
+                    {{ form.activator.errors }}
+                </div>
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================================================
+             B. BEHAVIOUR
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                B. BEHAVIOUR
+            </div>
+
+
+            <div class="bbs-checkbox-group">
+
+                {{ form.behaviour_type }}
+
+            </div>
+
+
+            {% if form.behaviour_type.errors %}
+                <div class="bbs-error">
+                    {{ form.behaviour_type.errors }}
+                </div>
+            {% endif %}
+
+
+            <label>
+                Category
+            </label>
+
+
+            <div class="bbs-checkbox-group">
+
+                {{ form.behaviour_categories }}
+
+            </div>
+
+
+            {% if form.behaviour_categories.errors %}
+                <div class="bbs-error">
+                    {{ form.behaviour_categories.errors }}
+                </div>
+            {% endif %}
+
+
+            {{ form.behaviour_description }}
+
+
+            {% if form.behaviour_description.errors %}
+                <div class="bbs-error">
+                    {{ form.behaviour_description.errors }}
+                </div>
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================================================
+             C. CONSEQUENCE
+             ============================================================ -->
+
+        <div class="bbs-section">
+
+            <div class="bbs-section-title">
+                C. CONSEQUENCE
+            </div>
+
+
+            <div class="bbs-checkbox-group">
+
+                {{ form.consequences }}
+
+            </div>
+
+
+            {% if form.consequences.errors %}
+                <div class="bbs-error">
+                    {{ form.consequences.errors }}
+                </div>
+            {% endif %}
+
+
+            {{ form.feedback }}
+
+
+            {% if form.feedback.errors %}
+                <div class="bbs-error">
+                    {{ form.feedback.errors }}
+                </div>
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================================================================
+         BACK PAGE
+         ================================================================ -->
+
+    <div class="bbs-card">
+
+
+        <div class="bbs-header">
+
+            <div>
+
+                <h1>
+                    BBS OBSERVATION CARD - BACK
+                </h1>
+
+                <small>
+                    Critical Behaviour Checklist
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <h3>
+            Tally of observations this round
+            (mark each act seen)
+        </h3>
+
+
+        <div class="bbs-table-wrapper">
+
+            <table class="bbs-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Behaviour
+                        </th>
+
+                        <th>
+                            Safe / At-Risk / N/A
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            PPE compliance
+                            (helmet, gloves, goggles, footwear)
+                        </td>
+
+                        <td class="bbs-checkbox-group">
+
+                            {{ form.ppe_status }}
+
+                            {% if form.ppe_status.errors %}
+                                <div class="bbs-error">
+                                    {{ form.ppe_status.errors }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Machine guarding / LOTO
+                            in place &amp; used
+                        </td>
+
+                        <td class="bbs-checkbox-group">
+
+                            {{ form.guarding_loto_status }}
+
+                            {% if form.guarding_loto_status.errors %}
+                                <div class="bbs-error">
+                                    {{ form.guarding_loto_status.errors }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Body position, ergonomics,
+                            pinch points avoided
+                        </td>
+
+                        <td class="bbs-checkbox-group">
+
+                            {{ form.ergonomics_status }}
+
+                            {% if form.ergonomics_status.errors %}
+                                <div class="bbs-error">
+                                    {{ form.ergonomics_status.errors }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Correct tool / equipment for task
+                        </td>
+
+                        <td class="bbs-checkbox-group">
+
+                            {{ form.tools_equipment_status }}
+
+                            {% if form.tools_equipment_status.errors %}
+                                <div class="bbs-error">
+                                    {{ form.tools_equipment_status.errors }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Housekeeping
+                            (walkways, spills, storage)
+                        </td>
+
+                        <td class="bbs-checkbox-group">
+
+                            {{ form.housekeeping_status }}
+
+                            {% if form.housekeeping_status.errors %}
+                                <div class="bbs-error">
+                                    {{ form.housekeeping_status.errors }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Permit-to-work /
+                            procedure followed
+                        </td>
+
+                        <td class="bbs-checkbox-group">
+
+                            {{ form.permit_procedure_status }}
+
+                            {% if form.permit_procedure_status.errors %}
+                                <div class="bbs-error">
+                                    {{ form.permit_procedure_status.errors }}
+                                </div>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ============================================================
+             ROOT CAUSE
+             ============================================================ -->
+
+        <h3 style="margin-top:25px;">
+
+            If At-Risk, likely root cause
+
+        </h3>
+
+
+        <div class="bbs-checkbox-group">
+
+            {{ form.root_causes }}
+
+        </div>
+
+
+        {% if form.root_causes.errors %}
+
+            <div class="bbs-error">
+                {{ form.root_causes.errors }}
+            </div>
+
+        {% endif %}
+
+
+        <!-- ============================================================
+             OTHER ROOT CAUSE
+             ============================================================ -->
+
+        <div
+            id="other-root-cause"
+            style="margin-top:15px;"
+        >
+
+            <label
+                for="{{ form.root_cause_other.id_for_label }}"
+            >
+                Other Root Cause
+            </label>
+
+
+            {{ form.root_cause_other }}
+
+
+            {% if form.root_cause_other.errors %}
+
+                <div class="bbs-error">
+                    {{ form.root_cause_other.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================================================
+             CORRECTIVE ACTION
+             ============================================================ -->
+
+        <div style="margin-top:20px;">
+
+            <label
+                for="{{ form.corrective_action.id_for_label }}"
+            >
+                Corrective / Preventive Action
+            </label>
+
+
+            {{ form.corrective_action }}
+
+
+            {% if form.corrective_action.errors %}
+
+                <div class="bbs-error">
+                    {{ form.corrective_action.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================================================
+             SIGNATURE
+             ============================================================ -->
+
+        <div class="bbs-signature-row">
+
+
+            <div class="bbs-signature">
+
+                <label
+                    for="{{ form.observer_sign.id_for_label }}"
+                >
+                    Observer Sign
+                </label>
+
+
+                {{ form.observer_sign }}
+
+
+                {% if form.observer_sign.errors %}
+
+                    <div class="bbs-error">
+                        {{ form.observer_sign.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="bbs-signature">
+
+                <label
+                    for="{{ form.supervisor_sign.id_for_label }}"
+                >
+                    Supervisor Sign
+                </label>
+
+
+                {{ form.supervisor_sign }}
+
+
+                {% if form.supervisor_sign.errors %}
+
+                    <div class="bbs-error">
+                        {{ form.supervisor_sign.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ============================================================
+             SUBMIT
+             ============================================================ -->
+
+        <button
+            type="submit"
+            class="bbs-submit-button"
+        >
+            Submit Observation
+        </button>
+
+
+    </div>
+
+
+</form>
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const otherContainer =
+            document.getElementById(
+                "other-root-cause"
+            );
+
+        const rootCauseInputs =
+            document.querySelectorAll(
+                'input[name="root_causes"]'
+            );
+
+
+        function updateOtherField() {
+
+            let selected = false;
+
+
+            rootCauseInputs.forEach(
+                function (input) {
+
+                    if (
+                        input.value === "OTHER"
+                        &&
+                        input.checked
+                    ) {
+                        selected = true;
+                    }
+
+                }
+            );
+
+
+            if (otherContainer) {
+
+                otherContainer.style.display =
+                    selected
+                        ? "block"
+                        : "none";
+
+            }
+
+        }
+
+
+        rootCauseInputs.forEach(
+            function (input) {
+
+                input.addEventListener(
+                    "change",
+                    updateOtherField
+                );
+
+            }
+        );
+
+
+        updateOtherField();
+
+    }
+);
+
+</script>
+
+{% endblock %}

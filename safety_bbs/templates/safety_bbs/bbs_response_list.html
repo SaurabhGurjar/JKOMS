@@ -1,0 +1,1004 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+BBS Form Responses | LTPOMS
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ==================================================
+   BBS FORM RESPONSES
+   LTPOMS / LTPOMS THEME
+================================================== */
+
+.response-page {
+    padding: 20px 0;
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.response-header {
+    padding: 30px 35px;
+    margin-bottom: 24px;
+
+    color: #fff;
+
+    background: linear-gradient(
+        135deg,
+        #334d42 0%,
+        #446055 100%
+    );
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 25px rgba(51, 77, 66, .15);
+}
+
+.response-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.response-header h2 {
+    margin: 0;
+
+    color: #ffeb00;
+
+    font-weight: 700;
+}
+
+.response-header p {
+    margin: 6px 0 0;
+
+    color: rgba(255, 255, 255, .75);
+}
+
+.response-header-icon {
+    color: #ffeb00;
+
+    font-size: 50px;
+}
+
+
+/* ==================================================
+   FILTER
+================================================== */
+
+.response-filter-card {
+    margin-bottom: 22px;
+    padding: 18px 22px;
+
+    background: #fff;
+
+    border:
+        1px solid rgba(51, 77, 66, .12);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px rgba(51, 77, 66, .06);
+}
+
+.response-filters {
+    display: flex;
+    align-items: end;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.response-field label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: rgba(51, 77, 66, .70);
+
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.response-field input,
+.response-field select {
+    height: 40px;
+
+    padding: 0 12px;
+
+    color: #334d42;
+    background: #fff;
+
+    border:
+        1px solid rgba(51, 77, 66, .20);
+
+    border-radius: 10px;
+
+    outline: none;
+}
+
+.response-field input:focus,
+.response-field select:focus {
+    border-color: #334d42;
+
+    box-shadow:
+        0 0 0 3px rgba(51, 77, 66, .08);
+}
+
+.response-search {
+    min-width: 250px;
+}
+
+
+/* ==================================================
+   FILTER BUTTON
+================================================== */
+
+.response-filter-button {
+    height: 40px;
+
+    padding: 0 20px;
+
+    color: #fff;
+    background: #334d42;
+
+    border: 0;
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.response-filter-button:hover {
+    background: #446055;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   CLEAR FILTER BUTTON
+================================================== */
+
+.response-clear-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    height: 40px;
+
+    padding: 0 16px;
+
+    color: #334d42;
+    background: #fff;
+
+    border:
+        1px solid rgba(51, 77, 66, .20);
+
+    border-radius: 10px;
+
+    font-size: .85rem;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.response-clear-button:hover {
+    color: #334d42;
+    background: #f8f9fa;
+
+    text-decoration: none;
+}
+
+
+/* ==================================================
+   TABLE CARD
+================================================== */
+
+.response-card {
+    background: #fff;
+
+    border:
+        1px solid rgba(51, 77, 66, .12);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 25px rgba(51, 77, 66, .06);
+}
+
+.response-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px 22px;
+
+    color: #334d42;
+    background: rgba(51, 77, 66, .04);
+
+    border-bottom:
+        1px solid rgba(51, 77, 66, .10);
+
+    font-weight: 650;
+}
+
+.response-count {
+    padding: 5px 10px;
+
+    color: #334d42;
+
+    background:
+        rgba(255, 235, 0, .25);
+
+    border-radius: 20px;
+
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   TABLE WRAPPER
+================================================== */
+
+.response-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(51, 77, 66, .35)
+        #f5f5f5;
+}
+
+.response-table-wrapper::-webkit-scrollbar {
+    height: 9px;
+}
+
+.response-table-wrapper::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+.response-table-wrapper::-webkit-scrollbar-thumb {
+    background:
+        rgba(51, 77, 66, .35);
+
+    border-radius: 10px;
+}
+
+
+/* ==================================================
+   TABLE
+================================================== */
+
+.response-table {
+    width: 100%;
+
+    min-width: 1100px;
+
+    border-collapse: collapse;
+}
+
+.response-table th,
+.response-table td {
+    padding: 11px 12px;
+
+    border-bottom:
+        1px solid rgba(51, 77, 66, .08);
+
+    vertical-align: middle;
+}
+
+.response-table th {
+    color: #334d42;
+    background: #f8f9fa;
+
+    font-size: .8rem;
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+.response-table td {
+    color: #334d42;
+
+    font-size: .83rem;
+}
+
+.response-table tbody tr {
+    transition:
+        background-color .2s ease;
+}
+
+.response-table tbody tr:hover {
+    background: #fbfcfb;
+}
+
+
+/* ==================================================
+   BADGES
+================================================== */
+
+.badge-safe,
+.badge-risk {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: .72rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.badge-safe {
+    color: #198754;
+
+    background:
+        rgba(25, 135, 84, .10);
+}
+
+.badge-risk {
+    color: #dc2626;
+
+    background:
+        rgba(220, 38, 38, .08);
+}
+
+
+/* ==================================================
+   VIEW BUTTON
+================================================== */
+
+.response-view {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 7px 11px;
+
+    color: #334d42;
+    background: #ffeb00;
+
+    border-radius: 8px;
+
+    font-size: .75rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.response-view:hover {
+    color: #334d42;
+    background: #f1dd00;
+
+    text-decoration: none;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   EMPTY
+================================================== */
+
+.response-empty {
+    padding: 50px 20px;
+
+    color: rgba(51, 77, 66, .60);
+
+    text-align: center;
+}
+
+.response-empty i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: rgba(51, 77, 66, .30);
+
+    font-size: 36px;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 767.98px) {
+
+    .response-page {
+        padding: 10px 0;
+    }
+
+    .response-header {
+        padding: 22px;
+    }
+
+    .response-header-icon {
+        display: none;
+    }
+
+    .response-filters {
+        display: block;
+    }
+
+    .response-field {
+        margin-bottom: 10px;
+    }
+
+    .response-field input,
+    .response-field select,
+    .response-filter-button,
+    .response-clear-button {
+        width: 100%;
+    }
+
+    .response-search {
+        min-width: 0;
+    }
+
+    .response-filter-button,
+    .response-clear-button {
+        margin-bottom: 8px;
+    }
+}
+
+</style>
+
+
+<div class="response-page px-3 py-4">
+
+
+    <!-- ================================================================
+         HEADER
+         ================================================================ -->
+
+    <div class="response-header">
+
+        <div class="response-header-content">
+
+            <div>
+
+                <h2>
+
+                    <i class="fas fa-clipboard-list me-2"></i>
+
+                    BBS Form Responses
+
+                </h2>
+
+
+                <p>
+
+                    Review Behaviour Based Safety observations
+                    submitted through LTPOMS.
+
+                </p>
+
+            </div>
+
+
+            <div class="response-header-icon">
+
+                <i class="fas fa-file-alt"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================================
+         FILTERS
+         ================================================================ -->
+
+    <div class="response-filter-card">
+
+        <form
+            method="get"
+            class="response-filters"
+        >
+
+
+            <!-- SEARCH -->
+
+            <div class="response-field">
+
+                <label for="response-search">
+
+                    <i class="fas fa-search me-1"></i>
+
+                    Search
+
+                </label>
+
+
+                <input
+                    id="response-search"
+                    type="text"
+                    name="search"
+                    value="{{ search_query }}"
+                    class="response-search"
+                    placeholder="Name, card no., area..."
+                >
+
+            </div>
+
+
+            <!-- MONTH -->
+
+            <div class="response-field">
+
+                <label for="response-month">
+
+                    Month
+
+                </label>
+
+
+                <select
+                    id="response-month"
+                    name="month"
+                >
+
+                    {% for month in months %}
+
+                        <option
+                            value="{{ month.number }}"
+                            {% if month.number == selected_month %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ month.name }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+            <!-- YEAR -->
+
+            <div class="response-field">
+
+                <label for="response-year">
+                    Year
+                </label>
+
+                <select
+                    id="response-year"
+                    name="year"
+                >
+
+                    {% for year in years %}
+
+                        <option
+                            value="{{ year }}"
+                            {% if year == selected_year %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ year }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- SHIFT -->
+
+            <div class="response-field">
+
+                <label for="response-shift">
+                    Shift
+                </label>
+
+                <select
+                    id="response-shift"
+                    name="shift"
+                >
+
+                    <option value="">
+                        All
+                    </option>
+
+                    {% for value, label in shift_choices %}
+
+                        <option
+                            value="{{ value }}"
+                            {% if shift_filter == value %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ label }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- BEHAVIOUR -->
+
+            <div class="response-field">
+
+                <label for="response-behaviour">
+                    Behaviour
+                </label>
+
+                <select
+                    id="response-behaviour"
+                    name="behaviour"
+                >
+
+                    <option value="">
+                        All
+                    </option>
+
+                    {% for value, label in behaviour_choices %}
+
+                        <option
+                            value="{{ value }}"
+                            {% if behaviour_filter == value %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ label }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- AT-RISK -->
+
+            <div class="response-field">
+
+                <label for="response-risk">
+                    At-Risk
+                </label>
+
+                <select
+                    id="response-risk"
+                    name="risk"
+                >
+
+                    <option value="">
+                        All
+                    </option>
+
+                    <option
+                        value="yes"
+                        {% if risk_filter == "yes" %}
+                            selected
+                        {% endif %}
+                    >
+                        At-Risk Only
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- APPLY FILTER -->
+
+            <button
+                type="submit"
+                class="response-filter-button"
+            >
+                <i class="fas fa-filter me-1"></i>
+                Apply
+            </button>
+
+
+            <!-- CLEAR FILTER -->
+
+            <a href="{% url 'safety_bbs:bbs_response_list' %}" class="btn btn-secondary">
+                <i class="fas fa-times me-1"></i>
+                Clear
+            </a>
+
+            <a href="{% url 'safety_bbs:bbs_response_export' %}?month={{ selected_month }}&year={{ selected_year }}&search={{ search_query|urlencode }}&shift={{ shift_filter|urlencode }}&behaviour={{ behaviour_filter|urlencode }}&risk={{ risk_filter|urlencode }}" class="btn btn-primary">
+            <i class="fas fa-file-excel"></i>
+                Download Excel
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================================================================
+         RESPONSES
+         ================================================================ -->
+
+    <div class="response-card">
+
+
+        <!-- HEADER -->
+
+        <div class="response-card-header">
+
+            <span>
+
+                <i class="fas fa-list me-1"></i>
+
+                Submitted Responses
+
+            </span>
+
+
+            <span class="response-count">
+
+                {{ response_count }}
+                Response{{ response_count|pluralize }}
+
+            </span>
+
+        </div>
+
+
+        <!-- ============================================================
+             RESPONSE TABLE
+             ============================================================ -->
+
+        {% if responses %}
+
+
+            <div class="response-table-wrapper">
+
+                <table class="response-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th>
+                                Card No.
+                            </th>
+
+                            <th>
+                                Shift
+                            </th>
+
+                            <th>
+                                Area
+                            </th>
+
+                            <th>
+                                Behaviour
+                            </th>
+
+                            <th>
+                                At-Risk
+                            </th>
+
+                            <th>
+                                Submitted
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for response in responses %}
+
+                            <tr>
+
+
+                                <!-- DATE -->
+
+                                <td>
+                                    {{ response.observation_date|date:"d-M-Y" }}
+                                </td>
+
+
+                                <!-- TIME -->
+
+                                <td>
+                                    {{ response.observation_time|time:"H:i" }}
+                                </td>
+
+
+                                <!-- EMPLOYEE -->
+
+                                <td>
+
+                                    <strong>
+                                        {{ response.employee_name }}
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- CARD NO -->
+
+                                <td>
+                                    {{ response.card_no }}
+                                </td>
+
+
+                                <!-- SHIFT -->
+
+                                <td>
+                                    {{ response.get_shift_display }}
+                                </td>
+
+
+                                <!-- AREA -->
+
+                                <td>
+                                    {{ response.area }}
+                                </td>
+
+
+                                <!-- BEHAVIOUR -->
+
+                                <td>
+
+                                    {% if response.behaviour_type == "AT_RISK" %}
+
+                                        <span class="badge-risk">
+                                            At-Risk Act
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge-safe">
+                                            Safe Act
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- OVERALL AT-RISK -->
+
+                                <td>
+
+                                    {% if response.is_at_risk %}
+
+                                        <span class="badge-risk">
+                                            Yes
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge-safe">
+                                            No
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- SUBMITTED DATE/TIME -->
+
+                                <td>
+
+                                    {{ response.submitted_at|date:"d-M-Y H:i" }}
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    <a href="{% url 'safety_bbs:bbs_response_detail' response.pk %}" class="btn bbs-action-button">
+                                        <i class="fas fa-eye"></i>
+
+                                        View
+                                    </a>
+
+                                </td>
+
+
+                            </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- ============================================================
+                 EMPTY STATE
+                 ============================================================ -->
+
+            <div class="response-empty">
+
+                <i class="fas fa-clipboard-list"></i>
+
+                <div>
+                    No BBS responses found for the selected filters.
+                </div>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
