@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "safety/safety_base.html" %}
 {% load static %}
 
 {% block title %}
@@ -6,7 +6,7 @@ BBS Compliance Dashboard | JKOMS
 {% endblock %}
 
 
-{% block content %}
+{% block safety_content %}
 
 <style>
 
@@ -25,6 +25,11 @@ BBS Compliance Dashboard | JKOMS
 ================================================== */
 
 .bbs-dashboard-header {
+    padding: 30px 35px;
+    margin-bottom: 24px;
+
+    color: #ffffff;
+
     background: linear-gradient(
         135deg,
         #334d42 0%,
@@ -32,19 +37,16 @@ BBS Compliance Dashboard | JKOMS
     );
 
     border-radius: 20px;
-    padding: 30px 35px;
-    margin-bottom: 24px;
-
-    color: #fff;
 
     box-shadow:
-        0 12px 25px rgba(51,77,66,.15);
+        0 12px 25px rgba(51, 77, 66, .15);
 }
 
 .bbs-dashboard-header-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+
     gap: 20px;
 }
 
@@ -60,13 +62,14 @@ BBS Compliance Dashboard | JKOMS
 .bbs-dashboard-title p {
     margin: 7px 0 0;
 
-    color: rgba(255,255,255,.75);
+    color: rgba(255, 255, 255, .75);
 
     font-size: .92rem;
 }
 
 .bbs-dashboard-icon {
     color: #ffeb00;
+
     font-size: 54px;
 }
 
@@ -78,11 +81,10 @@ BBS Compliance Dashboard | JKOMS
 .bbs-kpis {
     display: grid;
 
-    grid-template-columns:
-        repeat(
-            4,
-            minmax(160px,1fr)
-        );
+    grid-template-columns: repeat(
+        4,
+        minmax(160px, 1fr)
+    );
 
     gap: 18px;
 
@@ -92,17 +94,19 @@ BBS Compliance Dashboard | JKOMS
 .bbs-kpi {
     position: relative;
 
-    background: #fff;
-
-    border:
-        1px solid rgba(51,77,66,.12);
-
-    border-radius: 20px;
+    min-height: 145px;
 
     padding: 22px;
 
+    background: #ffffff;
+
+    border:
+        1px solid rgba(51, 77, 66, .12);
+
+    border-radius: 20px;
+
     box-shadow:
-        0 8px 25px rgba(51,77,66,.06);
+        0 8px 25px rgba(51, 77, 66, .06);
 
     transition:
         transform .3s ease,
@@ -113,31 +117,36 @@ BBS Compliance Dashboard | JKOMS
     transform: translateY(-4px);
 
     box-shadow:
-        0 12px 28px rgba(51,77,66,.12);
+        0 12px 28px rgba(51, 77, 66, .12);
 }
 
 .bbs-kpi-label {
+    max-width: calc(100% - 65px);
+
     margin-bottom: 7px;
 
-    color: rgba(51,77,66,.65);
+    color: rgba(51, 77, 66, .65);
 
     font-size: .85rem;
     font-weight: 600;
 }
 
 .bbs-kpi-value {
+    max-width: calc(100% - 65px);
+
     color: #334d42;
 
     font-size: 2rem;
     font-weight: 700;
-
     line-height: 1.2;
 }
 
 .bbs-kpi-description {
+    max-width: calc(100% - 65px);
+
     margin-top: 6px;
 
-    color: rgba(51,77,66,.55);
+    color: rgba(51, 77, 66, .55);
 
     font-size: .78rem;
 }
@@ -148,12 +157,12 @@ BBS Compliance Dashboard | JKOMS
     top: 20px;
     right: 20px;
 
-    width: 52px;
-    height: 52px;
-
     display: flex;
     align-items: center;
     justify-content: center;
+
+    width: 52px;
+    height: 52px;
 
     border-radius: 15px;
 
@@ -161,23 +170,27 @@ BBS Compliance Dashboard | JKOMS
 }
 
 .bbs-icon-yellow {
-    background: rgba(255,235,0,.25);
     color: #334d42;
+
+    background: rgba(255, 235, 0, .25);
 }
 
 .bbs-icon-green {
-    background: rgba(25,135,84,.13);
     color: #198754;
+
+    background: rgba(25, 135, 84, .13);
 }
 
 .bbs-icon-orange {
-    background: rgba(217,119,6,.13);
     color: #d97706;
+
+    background: rgba(217, 119, 6, .13);
 }
 
 .bbs-icon-blue {
-    background: rgba(59,130,246,.13);
     color: #2563eb;
+
+    background: rgba(59, 130, 246, .13);
 }
 
 
@@ -186,24 +199,22 @@ BBS Compliance Dashboard | JKOMS
 ================================================== */
 
 .bbs-filter-card {
-    background: #fff;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+
+    background: #ffffff;
 
     border:
-        1px solid rgba(51,77,66,.12);
+        1px solid rgba(51, 77, 66, .12);
 
     border-radius: 20px;
 
-    padding: 18px 22px;
-
-    margin-bottom: 24px;
-
     box-shadow:
-        0 8px 25px rgba(51,77,66,.06);
+        0 8px 25px rgba(51, 77, 66, .06);
 }
 
 .bbs-filter-form {
     display: flex;
-
     align-items: end;
 
     gap: 12px;
@@ -216,7 +227,7 @@ BBS Compliance Dashboard | JKOMS
 
     margin-bottom: 6px;
 
-    color: rgba(51,77,66,.70);
+    color: rgba(51, 77, 66, .70);
 
     font-size: .82rem;
     font-weight: 600;
@@ -229,10 +240,10 @@ BBS Compliance Dashboard | JKOMS
     padding: 0 12px;
 
     color: #334d42;
-    background: #fff;
+    background: #ffffff;
 
     border:
-        1px solid rgba(51,77,66,.20);
+        1px solid rgba(51, 77, 66, .20);
 
     border-radius: 10px;
 
@@ -243,7 +254,7 @@ BBS Compliance Dashboard | JKOMS
     border-color: #334d42;
 
     box-shadow:
-        0 0 0 3px rgba(51,77,66,.08);
+        0 0 0 3px rgba(51, 77, 66, .08);
 }
 
 
@@ -252,11 +263,17 @@ BBS Compliance Dashboard | JKOMS
 ================================================== */
 
 .bbs-filter-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
     height: 40px;
 
     padding: 0 20px;
 
-    color: #fff;
+    color: #ffffff;
     background: #334d42;
 
     border: none;
@@ -285,7 +302,6 @@ BBS Compliance Dashboard | JKOMS
 
 .bbs-export-button {
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
 
@@ -294,7 +310,6 @@ BBS Compliance Dashboard | JKOMS
     height: 40px;
 
     padding: 0 20px;
-
     margin-left: auto;
 
     color: #334d42;
@@ -327,22 +342,21 @@ BBS Compliance Dashboard | JKOMS
 ================================================== */
 
 .bbs-table-card {
-    background: #fff;
+    background: #ffffff;
 
     border:
-        1px solid rgba(51,77,66,.12);
+        1px solid rgba(51, 77, 66, .12);
 
     border-radius: 20px;
 
     overflow: hidden;
 
     box-shadow:
-        0 8px 25px rgba(51,77,66,.06);
+        0 8px 25px rgba(51, 77, 66, .06);
 }
 
 .bbs-table-title {
     display: flex;
-
     align-items: center;
 
     gap: 8px;
@@ -350,16 +364,22 @@ BBS Compliance Dashboard | JKOMS
     padding: 18px 22px;
 
     color: #334d42;
-    background: rgba(51,77,66,.04);
+    background: rgba(51, 77, 66, .04);
 
     border-bottom:
-        1px solid rgba(51,77,66,.10);
+        1px solid rgba(51, 77, 66, .10);
 
     font-weight: 650;
 }
 
 .bbs-table-title i {
     color: #334d42;
+}
+
+.bbs-table-period {
+    color: rgba(51, 77, 66, .65);
+
+    font-weight: 500;
 }
 
 
@@ -375,7 +395,7 @@ BBS Compliance Dashboard | JKOMS
     scrollbar-width: thin;
 
     scrollbar-color:
-        rgba(51,77,66,.35)
+        rgba(51, 77, 66, .35)
         #f5f5f5;
 }
 
@@ -388,7 +408,7 @@ BBS Compliance Dashboard | JKOMS
 }
 
 .bbs-table-wrapper::-webkit-scrollbar-thumb {
-    background: rgba(51,77,66,.35);
+    background: rgba(51, 77, 66, .35);
 
     border-radius: 10px;
 }
@@ -414,10 +434,10 @@ BBS Compliance Dashboard | JKOMS
     padding: 9px 6px;
 
     border-right:
-        1px solid rgba(51,77,66,.08);
+        1px solid rgba(51, 77, 66, .08);
 
     border-bottom:
-        1px solid rgba(51,77,66,.08);
+        1px solid rgba(51, 77, 66, .08);
 
     text-align: center;
     vertical-align: middle;
@@ -440,7 +460,7 @@ BBS Compliance Dashboard | JKOMS
 
 
 /* ==================================================
-   STICKY EMPLOYEE NAME
+   STICKY EMPLOYEE COLUMNS
 ================================================== */
 
 .employee-name-column {
@@ -448,34 +468,32 @@ BBS Compliance Dashboard | JKOMS
 
     left: 0;
 
-    min-width: 190px;
     width: 190px;
+    min-width: 190px;
     max-width: 190px;
 
     color: #334d42;
-    background: #fff;
+    background: #ffffff;
 
     text-align: left !important;
 
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     z-index: 3;
 }
-
-
-/* ==================================================
-   STICKY CARD NO
-================================================== */
 
 .card-column {
     position: sticky;
 
     left: 190px;
 
-    min-width: 95px;
     width: 95px;
+    min-width: 95px;
     max-width: 95px;
 
     color: #334d42;
-    background: #fff;
+    background: #ffffff;
 
     z-index: 3;
 }
@@ -487,14 +505,9 @@ th.card-column {
     z-index: 5;
 }
 
-
-/* ==================================================
-   DAYS
-================================================== */
-
 .day-column {
-    min-width: 37px;
     width: 37px;
+    min-width: 37px;
 }
 
 
@@ -520,7 +533,7 @@ th.card-column {
 
 .status-submitted {
     color: #198754;
-    background: rgba(25,135,84,.10);
+    background: rgba(25, 135, 84, .10);
 
     font-size: 16px;
     font-weight: 700;
@@ -528,7 +541,7 @@ th.card-column {
 
 .status-missing {
     color: #dc2626;
-    background: rgba(220,38,38,.08);
+    background: rgba(220, 38, 38, .08);
 
     font-size: 16px;
     font-weight: 700;
@@ -539,17 +552,14 @@ th.card-column {
     background: #f8f9fa;
 }
 
-
-/* Preserve status backgrounds on row hover */
-
 .bbs-compliance-table tbody tr:hover
 .status-submitted {
-    background: rgba(25,135,84,.10);
+    background: rgba(25, 135, 84, .10);
 }
 
 .bbs-compliance-table tbody tr:hover
 .status-missing {
-    background: rgba(220,38,38,.08);
+    background: rgba(220, 38, 38, .08);
 }
 
 .bbs-compliance-table tbody tr:hover
@@ -587,7 +597,6 @@ th.card-column {
 
 .bbs-legend {
     display: flex;
-
     align-items: center;
 
     gap: 18px;
@@ -596,17 +605,16 @@ th.card-column {
 
     padding: 14px 22px;
 
-    color: rgba(51,77,66,.70);
+    color: rgba(51, 77, 66, .70);
 
     border-top:
-        1px solid rgba(51,77,66,.08);
+        1px solid rgba(51, 77, 66, .08);
 
     font-size: .8rem;
 }
 
 .legend-item {
     display: flex;
-
     align-items: center;
 
     gap: 6px;
@@ -614,7 +622,6 @@ th.card-column {
 
 .legend-box {
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
 
@@ -629,12 +636,12 @@ th.card-column {
 
 .legend-submitted {
     color: #198754;
-    background: rgba(25,135,84,.10);
+    background: rgba(25, 135, 84, .10);
 }
 
 .legend-missing {
     color: #dc2626;
-    background: rgba(220,38,38,.08);
+    background: rgba(220, 38, 38, .08);
 }
 
 .legend-future {
@@ -650,7 +657,7 @@ th.card-column {
 .bbs-empty {
     padding: 60px 20px;
 
-    color: rgba(51,77,66,.65);
+    color: rgba(51, 77, 66, .65);
 
     text-align: center;
 }
@@ -660,7 +667,7 @@ th.card-column {
 
     margin-bottom: 12px;
 
-    color: rgba(51,77,66,.30);
+    color: rgba(51, 77, 66, .30);
 
     font-size: 36px;
 }
@@ -673,11 +680,10 @@ th.card-column {
 @media (max-width: 991.98px) {
 
     .bbs-kpis {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(140px,1fr)
-            );
+        grid-template-columns: repeat(
+            2,
+            minmax(140px, 1fr)
+        );
     }
 
     .bbs-dashboard {
@@ -780,12 +786,12 @@ th.card-column {
     <div class="bbs-kpis">
 
 
-        <!-- EMPLOYEES -->
+        <!-- RESPONDENTS -->
 
         <div class="bbs-kpi">
 
             <div class="bbs-kpi-label">
-                Employees
+                Respondents
             </div>
 
             <div class="bbs-kpi-value">
@@ -793,7 +799,7 @@ th.card-column {
             </div>
 
             <div class="bbs-kpi-description">
-                Employees in selected period
+                Card numbers with responses in the selected period
             </div>
 
             <div class="
@@ -849,7 +855,7 @@ th.card-column {
             </div>
 
             <div class="bbs-kpi-description">
-                BBS forms not yet submitted
+                Known respondents not submitted today
             </div>
 
             <div class="
@@ -877,7 +883,7 @@ th.card-column {
             </div>
 
             <div class="bbs-kpi-description">
-                Compliance for applicable days
+                Compliance among known BBS respondents
             </div>
 
             <div class="
@@ -890,7 +896,6 @@ th.card-column {
             </div>
 
         </div>
-
 
     </div>
 
@@ -905,7 +910,6 @@ th.card-column {
             method="get"
             class="bbs-filter-form"
         >
-
 
             <!-- MONTH -->
 
@@ -984,26 +988,22 @@ th.card-column {
                 class="bbs-filter-button"
             >
 
-                <i class="fas fa-filter me-1"></i>
+                <i class="fas fa-filter"></i>
 
                 Apply
 
             </button>
 
 
-            <!-- ========================================================
-                 EXCEL
-
-                 Replace href="#" once bbs_monthly_export
-                 has been implemented.
-                 ======================================================== -->
+            <!-- EXCEL EXPORT -->
 
             <a href="{% url 'safety_bbs:bbs_monthly_export' %}?month={{ selected_month }}&year={{ selected_year }}" class="btn btn-primary">
+
                 <i class="fas fa-file-excel"></i>
 
                 Download Excel
-            </a>
 
+            </a>
 
         </form>
 
@@ -1016,14 +1016,13 @@ th.card-column {
 
     <div class="bbs-table-card">
 
-
         <div class="bbs-table-title">
 
             <i class="fas fa-table"></i>
 
             Employee Daily Status
 
-            <span>
+            <span class="bbs-table-period">
                 |
                 {{ month_name }}
                 {{ selected_year }}
@@ -1034,26 +1033,17 @@ th.card-column {
 
         {% if rows %}
 
-
             <div class="bbs-table-wrapper">
 
-
                 <table class="bbs-compliance-table">
-
-
-                    <!-- =================================================
-                         HEADER
-                         ================================================= -->
 
                     <thead>
 
                         <tr>
 
-
                             <th class="employee-name-column">
                                 Employee Name
                             </th>
-
 
                             <th class="card-column">
                                 Card No.
@@ -1063,9 +1053,7 @@ th.card-column {
                             {% for day in days %}
 
                                 <th class="day-column">
-
                                     {{ day|stringformat:"02d" }}
-
                                 </th>
 
                             {% endfor %}
@@ -1075,60 +1063,47 @@ th.card-column {
                                 Filled
                             </th>
 
-
                             <th>
                                 Required
                             </th>
 
-
                             <th>
                                 Compliance
                             </th>
-
 
                         </tr>
 
                     </thead>
 
 
-                    <!-- =================================================
-                         BODY
-                         ================================================= -->
-
                     <tbody>
-
 
                         {% for row in rows %}
 
-
                             <tr>
-
 
                                 <!-- EMPLOYEE -->
 
-                                <td class="employee-name-column">
-
+                                <td
+                                    class="employee-name-column"
+                                    title="{{ row.employee_name }}"
+                                >
                                     {{ row.employee_name }}
-
                                 </td>
 
 
-                                <!-- CARD -->
+                                <!-- CARD NUMBER -->
 
                                 <td class="card-column">
-
                                     {{ row.card_no }}
-
                                 </td>
 
 
-                                <!-- DAY STATUS -->
+                                <!-- DAY-WISE STATUS -->
 
                                 {% for day_status in row.day_statuses %}
 
-
                                     {% if day_status.status == "submitted" %}
-
 
                                         <td
                                             class="status-submitted"
@@ -1137,9 +1112,7 @@ th.card-column {
                                             ✓
                                         </td>
 
-
                                     {% elif day_status.status == "missing" %}
-
 
                                         <td
                                             class="status-missing"
@@ -1148,9 +1121,7 @@ th.card-column {
                                             ×
                                         </td>
 
-
                                     {% else %}
-
 
                                         <td
                                             class="status-future"
@@ -1159,9 +1130,7 @@ th.card-column {
                                             -
                                         </td>
 
-
                                     {% endif %}
-
 
                                 {% endfor %}
 
@@ -1169,18 +1138,14 @@ th.card-column {
                                 <!-- FILLED -->
 
                                 <td>
-
                                     {{ row.submitted_count }}
-
                                 </td>
 
 
                                 <!-- REQUIRED -->
 
                                 <td>
-
                                     {{ row.applicable_days }}
-
                                 </td>
 
 
@@ -1188,54 +1153,35 @@ th.card-column {
 
                                 <td>
 
-
                                     {% if row.compliance_percentage >= 90 %}
 
-
                                         <span class="compliance-good">
-
                                             {{ row.compliance_percentage }}%
-
                                         </span>
-
 
                                     {% elif row.compliance_percentage >= 75 %}
 
-
                                         <span class="compliance-medium">
-
                                             {{ row.compliance_percentage }}%
-
                                         </span>
-
 
                                     {% else %}
 
-
                                         <span class="compliance-low">
-
                                             {{ row.compliance_percentage }}%
-
                                         </span>
-
 
                                     {% endif %}
 
-
                                 </td>
-
 
                             </tr>
 
-
                         {% endfor %}
-
 
                     </tbody>
 
-
                 </table>
-
 
             </div>
 
@@ -1245,7 +1191,6 @@ th.card-column {
                  ======================================================== -->
 
             <div class="bbs-legend">
-
 
                 <div class="legend-item">
 
@@ -1292,18 +1237,17 @@ th.card-column {
                 <div class="legend-item">
 
                     Applicable Days:
+
                     <strong>
                         {{ applicable_days }}
                     </strong>
 
                 </div>
 
-
             </div>
 
 
         {% else %}
-
 
             <!-- ========================================================
                  EMPTY STATE
@@ -1322,12 +1266,9 @@ th.card-column {
 
             </div>
 
-
         {% endif %}
 
-
     </div>
-
 
 </div>
 

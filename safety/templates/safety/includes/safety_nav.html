@@ -1,0 +1,154 @@
+<nav class="module-navbar">
+
+    <div class="container-fluid px-3 px-lg-4">
+
+        <div class="module-nav-wrapper">
+
+            <!-- =====================================================
+                 MODULE HEADING
+                 ===================================================== -->
+
+            <div class="module-nav-heading">
+
+                <i class="fa-solid fa-shield-halved me-2"></i>
+
+                <span>
+                    Safety Module
+                </span>
+
+            </div>
+
+
+            <!-- =====================================================
+                 MODULE LINKS
+                 ===================================================== -->
+
+            <div class="module-nav-links">
+
+
+                <!-- =================================================
+                     COMPLIANCE DASHBOARD
+                     ================================================= -->
+
+                <a class="module-nav-link {% if active_page == 'bbs_dashboard' %}active{% endif %}" href="{% url 'safety_bbs:bbs_dashboard' %}">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    <span>
+                        Compliance
+                    </span>
+
+                </a>
+
+
+                <!-- =================================================
+                     FORM RESPONSES
+                     Active for list and detail pages
+                     ================================================= -->
+
+                <a class="module-nav-link {% if active_page == 'bbs_response_list' %}active{% endif %}" href="{% url 'safety_bbs:bbs_response_list' %}">
+
+                    <i class="fa-solid fa-file-circle-check"></i>
+
+                    <span>
+                        Responses
+                    </span>
+
+                </a>
+
+
+                <!-- =================================================
+                     DOWNLOADS
+                     ================================================= -->
+
+                <div class="dropdown module-nav-dropdown">
+
+                    <button
+                        class="
+                            module-nav-link
+                            dropdown-toggle
+                            {% if active_page == 'bbs_monthly_export' or active_page == 'bbs_response_export' %}
+                                active
+                            {% endif %}
+                        "
+                        type="button"
+                        id="downloadsDropdown"
+                        data-bs-toggle="dropdown"
+                        data-bs-boundary="viewport"
+                        aria-expanded="false"
+                    >
+
+                        <i class="fa-solid fa-download"></i>
+
+                        <span>
+                            Downloads
+                        </span>
+
+                    </button>
+
+
+                    <ul
+                        class="dropdown-menu module-dropdown-menu"
+                        aria-labelledby="downloadsDropdown"
+                    >
+
+                        <li>
+
+                            <a href="{% url 'safety_bbs:bbs_monthly_export' %}" class="dropdown-item">
+
+                                <i class="
+                                    fa-solid
+                                    fa-file-excel
+                                    text-secondary
+                                    me-2
+                                "></i>
+
+                                <span>
+                                    Compliance Excel
+                                </span>
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="{% url 'safety_bbs:bbs_response_export' %}" class="dropdown-item">
+
+                                <i class="
+                                    fa-solid
+                                    fa-table-list
+                                    text-secondary
+                                    me-2
+                                "></i>
+
+                                <span>
+                                    Response Details Excel
+                                </span>
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <a class="module-nav-link {% if active_page == 'bbs_create' %}active{% endif %}" href="{% url 'safety_bbs:bbs_create' %}">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    <span>
+                        Form
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

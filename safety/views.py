@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 
-# Create your views here.
+
+def dashboard(request):
+    """
+    Safety module landing page.
+
+    Redirects to the protected BBS compliance dashboard.
+    """
+
+    return redirect(
+        "safety_bbs:bbs_dashboard"
+    )

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+Safety Module | JKOMS
+{% endblock %}
+
+
+{% block extra_css %}
+
+    {{ block.super }}
+
+    {# Common Safety CSS can be added here later #}
+
+    {% block safety_extra_css %}
+    {% endblock %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="safety-module">
+
+        {% include "safety/includes/safety_nav.html" %}
+
+        {% block safety_content %}
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+    {{ block.super }}
+
+    {% block safety_extra_js %}
+    {% endblock %}
+
+{% endblock %}

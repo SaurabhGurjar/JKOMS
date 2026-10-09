@@ -46,6 +46,8 @@ urlpatterns = [
             ),
     ),
     path("quality/", include("quality.urls")),
+    path("safety/", include("safety.urls"),
+    ),
     path(
         "safety/bbs/",
         include("safety_bbs.urls"),
