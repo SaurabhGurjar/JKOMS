@@ -369,6 +369,7 @@ INSTALLED_APPS = [
     "quality",
     "safety",
     "safety_bbs",
+    "quality_capa"
 ]
 
 
