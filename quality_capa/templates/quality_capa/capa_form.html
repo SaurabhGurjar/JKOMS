@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'edit' %}Edit {{ capa.capa_number }}{% else %}Create CAPA{% endif %} | LTPOMS{% endblock %}
+
+{% block extra_css %}
+<style>
+  .capa-form-shell { padding: 24px 0 40px; }
+  .form-section { border-left: 4px solid var(--accent); }
+  .form-section-title { color: var(--secondary); font-weight: 800; }
+  .errorlist { color: var(--error); list-style: none; margin: .35rem 0 0; padding: 0; font-size: .84rem; }
+  .required-field::after { color: var(--error); content: " *"; }
+  .checkbox-grid #id_management_systems { display: grid; gap: .4rem 1rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+  .checkbox-grid #id_management_systems > div label { align-items: center; display: flex; gap: .5rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container-fluid px-3 px-lg-4 capa-form-shell">
+  <section class="page-header mb-4 d-flex flex-column flex-lg-row justify-content-between gap-3">
+    <div>
+      <div class="small text-uppercase fw-semibold mb-1" style="color: var(--accent);">CAPA Management</div>
+      <h1 class="h3 mb-2">{% if mode == 'edit' %}Edit {{ capa.capa_number }}{% else %}Create CAPA{% endif %}</h1>
+      <p>Complete the applicable fixed CAPA fields. Optional information may be added as the investigation progresses.</p>
+    </div>
+    <a href="{% if capa %}{% url 'quality_capa:detail' capa.pk %}{% else %}{% url 'quality_capa:list' %}{% endif %}" class="btn btn-outline-light align-self-lg-center"><i class="fa-solid fa-arrow-left me-2"></i>Back</a>
+  </section>
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+
+    <section class="glass-card form-section p-3 p-lg-4 mb-4">
+      <h2 class="h5 form-section-title mb-3"><i class="fa-solid fa-circle-info me-2"></i>CAPA identification</h2>
+      <div class="row g-3">
+        {% include "quality_capa/includes/field.html" with field=form.title col="col-12" %}
+        {% include "quality_capa/includes/field.html" with field=form.capa_type col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.source col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.category col="col-md-4" %}
+        {% if form.organization_unit %}{% include "quality_capa/includes/field.html" with field=form.organization_unit col="col-md-6" %}{% endif %}
+        {% include "quality_capa/includes/field.html" with field=form.originating_organization_unit col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.location_text col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.nonconformity_number col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.nonconformance_category col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.is_repeated_nonconformance col="col-md-4" %}
+        <div class="col-12 checkbox-grid"><label class="form-label">{{ form.management_systems.label }}</label>{{ form.management_systems }}{{ form.management_systems.errors }}</div>
+      </div>
+    </section>
+
+    <section class="glass-card form-section p-3 p-lg-4 mb-4">
+      <h2 class="h5 form-section-title mb-3"><i class="fa-solid fa-sitemap me-2"></i>Ownership and audit information</h2>
+      <div class="row g-3">
+        {% include "quality_capa/includes/field.html" with field=form.owner_position col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.owner_employee col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.reported_by_employee col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.audit_date col="col-md-3" %}
+        {% include "quality_capa/includes/field.html" with field=form.section_area_audited col="col-md-3" %}
+        {% include "quality_capa/includes/field.html" with field=form.auditor_name col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.auditor_signature col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.auditee_name col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.auditee_signature col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.clause_reference col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.document_reference col="col-md-6" %}
+      </div>
+    </section>
+
+    <section class="glass-card form-section p-3 p-lg-4 mb-4">
+      <h2 class="h5 form-section-title mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i>Non-conformance and containment</h2>
+      <div class="row g-3">
+        {% include "quality_capa/includes/field.html" with field=form.occurrence_date col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.detection_date col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.target_completion_date col="col-md-4" %}
+        {% include "quality_capa/includes/field.html" with field=form.problem_description col="col-12" %}
+        {% include "quality_capa/includes/field.html" with field=form.correction_containment_action col="col-12" %}
+        {% include "quality_capa/includes/field.html" with field=form.immediate_correction col="col-12" %}
+        {% include "quality_capa/includes/field.html" with field=form.scope col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.impact_description col="col-md-6" %}
+        {% include "quality_capa/includes/field.html" with field=form.source_reference col="col-md-6" %}
+      </div>
+    </section>
+
+    <section class="glass-card form-section p-3 p-lg-4 mb-4">
+      <h2 class="h5 form-section-title mb-3"><i class="fa-solid fa-chart-line me-2"></i>Impact and risk</h2>
+      <div class="row g-3">
+        {% include "quality_capa/includes/field.html" with field=form.priority col="col-md-3" %}
+        {% include "quality_capa/includes/field.html" with field=form.severity_score col="col-md-3" %}
+        {% include "quality_capa/includes/field.html" with field=form.occurrence_score col="col-md-3" %}
+        {% include "quality_capa/includes/field.html" with field=form.detection_score col="col-md-3" %}
+        {% for field in form %}{% if field.name == 'regulatory_impact' or field.name == 'customer_impact' or field.name == 'safety_impact' or field.name == 'production_impact' or field.name == 'financial_impact' %}<div class="col-sm-6 col-lg"><div class="form-check mt-2">{{ field }}<label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label></div>{{ field.errors }}</div>{% endif %}{% endfor %}
+      </div>
+    </section>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+      <a href="{% if capa %}{% url 'quality_capa:detail' capa.pk %}{% else %}{% url 'quality_capa:list' %}{% endif %}" class="btn btn-outline-primary px-4">Cancel</a>
+      <button class="btn btn-primary px-4" type="submit"><i class="fa-solid fa-floppy-disk me-2"></i>{% if mode == 'edit' %}Save changes{% else %}Create draft CAPA{% endif %}</button>
+    </div>
+  </form>
+</main>
+{% endblock %}

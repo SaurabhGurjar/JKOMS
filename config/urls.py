@@ -52,4 +52,11 @@ urlpatterns = [
         "safety/bbs/",
         include("safety_bbs.urls"),
     ),
+    path(
+        "quality/capa/",
+        include(
+            "quality_capa.urls",
+            namespace="quality_capa",
+        ),
+    ),
 ]

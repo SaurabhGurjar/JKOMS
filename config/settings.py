@@ -369,7 +369,7 @@ INSTALLED_APPS = [
     "quality",
     "safety",
     "safety_bbs",
-    "quality_capa"
+    "quality_capa",
 ]
 
 
@@ -652,9 +652,9 @@ SERVER_EMAIL = os.environ.get(
 
 LOGIN_URL = "login"
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "dashboard:my_work"
 
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = "dashboard:home"
 
 
 # =============================================================================

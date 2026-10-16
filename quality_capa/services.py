@@ -922,7 +922,7 @@ def _start_capa_workflow(
         status=WorkflowInstance.Status.IN_PROGRESS,
         started_by=user,
     )
-    capa.workflow_instance = instance
+    capa.workflow_instance_id = instance.pk
     capa.save(update_fields=["workflow_instance", "updated_at"])
     return instance
 
@@ -1012,56 +1012,81 @@ def _require_step_authority(user, instance, capa):
 
 
 def _perform_workflow_transition(*, instance, user, capa, action, comments):
+    """Perform one configured workflow transition with safe row locking.
+
+    The WorkflowInstance row is locked independently. The nullable current_step
+    relation is loaded in a separate query to avoid PostgreSQL applying
+    FOR UPDATE to the nullable side of an outer join.
+    """
     instance = (
         WorkflowInstance.objects
         .select_for_update()
-        .select_related(
-            "workflow_definition",
-            "current_step__required_permission",
-            "current_step__required_role",
-        )
+        .select_related("workflow_definition__module")
         .get(pk=instance.pk)
     )
+
+    if not instance.current_step_id:
+        raise CAPATransitionError(
+            "The workflow instance has no current step."
+        )
+
+    current_step = (
+        WorkflowStep.objects
+        .select_related("required_permission", "required_role")
+        .get(pk=instance.current_step_id)
+    )
+    instance.current_step = current_step
+
     _require_step_authority(user, instance, capa)
+
     transitions = list(
         WorkflowTransition.objects
         .select_related("from_step", "to_step")
         .filter(
             workflow_definition=instance.workflow_definition,
-            from_step=instance.current_step,
+            from_step=current_step,
             action=action,
             is_active=True,
         )
         .order_by("pk")[:2]
     )
+
     if not transitions:
         raise CAPATransitionError(
             f"No active workflow transition exists for action {action!r} "
-            f"from step {instance.current_step.code!r}."
+            f"from step {current_step.code!r}."
         )
+
     if len(transitions) > 1:
         raise CAPAConfigurationError(
             f"Multiple workflow transitions are configured for action {action!r} "
-            f"from step {instance.current_step.code!r}. "
+            f"from step {current_step.code!r}. "
             "Conditional transition resolution is not configured."
         )
-    transition = transitions[0]
+
+    workflow_transition = transitions[0]
     workflow_action = WorkflowAction.objects.create(
         workflow_instance=instance,
-        workflow_step=instance.current_step,
+        workflow_step=current_step,
         action=action,
         acted_by=user,
         acted_as_position=get_primary_position(user),
         comments=comments,
     )
-    instance.current_step = transition.to_step
-    if transition.to_step is None or transition.to_step.step_type == WorkflowStep.StepType.END:
+
+    next_step = workflow_transition.to_step
+    instance.current_step = next_step
+
+    if next_step is None or next_step.step_type == WorkflowStep.StepType.END:
         instance.status = WorkflowInstance.Status.COMPLETED
         instance.completed_at = timezone.now()
     else:
         instance.status = WorkflowInstance.Status.IN_PROGRESS
         instance.completed_at = None
-    instance.save(update_fields=["current_step", "status", "completed_at"])
+
+    instance.save(
+        update_fields=["current_step", "status", "completed_at"]
+    )
     return workflow_action, instance
 
 
@@ -1079,7 +1104,7 @@ def transition_capa(
     capa = (
         CAPA.objects
         .select_for_update()
-        .select_related("organization_unit", "workflow_instance__current_step")
+        .select_related("organization_unit")
         .get(pk=capa_id)
     )
 

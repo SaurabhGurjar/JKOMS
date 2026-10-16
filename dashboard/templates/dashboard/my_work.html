@@ -1,0 +1,453 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Work | LTPOMS{% endblock %}
+
+{% block extra_css %}
+<style>
+  .workspace-shell {
+    padding: 24px 0 40px;
+  }
+
+  .workspace-banner {
+    padding: 30px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #334d42 0%, #446055 100%);
+    border-left: 6px solid #ffeb00;
+    border-radius: 20px;
+    box-shadow: 0 12px 25px rgba(51, 77, 66, 0.15);
+  }
+
+  .workspace-banner h1 {
+    color: #ffffff;
+    font-weight: 750;
+  }
+
+  .workspace-banner .workspace-name {
+    color: #ffeb00;
+  }
+
+  .workspace-profile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.9rem;
+  }
+
+  .workspace-summary {
+    position: relative;
+    min-height: 125px;
+    padding: 22px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid rgba(51, 77, 66, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.06);
+  }
+
+  .workspace-summary-label {
+    color: rgba(51, 77, 66, 0.65);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .workspace-summary-value {
+    margin-top: 4px;
+    color: #334d42;
+    font-size: 2rem;
+    font-weight: 800;
+  }
+
+  .workspace-summary-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    color: #334d42;
+    background: rgba(255, 235, 0, 0.28);
+    border-radius: 16px;
+    font-size: 1.25rem;
+  }
+
+  .workspace-card {
+    background: #ffffff;
+    border: 1px solid rgba(51, 77, 66, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.06);
+    overflow: hidden;
+  }
+
+  .workspace-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 22px;
+    color: #334d42;
+    background: rgba(51, 77, 66, 0.04);
+    border-bottom: 1px solid rgba(51, 77, 66, 0.1);
+    font-weight: 750;
+  }
+
+  .module-card {
+    position: relative;
+    min-height: 190px;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid rgba(51, 77, 66, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(51, 77, 66, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(51, 77, 66, 0.12);
+  }
+
+  .module-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    margin-bottom: 16px;
+    color: #334d42;
+    background: rgba(255, 235, 0, 0.28);
+    border-radius: 15px;
+    font-size: 1.25rem;
+  }
+
+  .module-title {
+    color: #334d42;
+    font-weight: 800;
+  }
+
+  .module-description {
+    min-height: 42px;
+    color: rgba(51, 77, 66, 0.68);
+    font-size: 0.87rem;
+  }
+
+  .module-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 14px;
+    font-size: 0.82rem;
+  }
+
+  .task-overdue {
+    background: rgba(220, 38, 38, 0.05);
+  }
+
+  .task-module {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #334d42;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .quick-action {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    color: #334d42;
+    background: rgba(255, 235, 0, 0.14);
+    border: 1px solid rgba(255, 235, 0, 0.4);
+    border-radius: 12px;
+  }
+
+  .quick-action:hover {
+    color: #334d42;
+    background: rgba(255, 235, 0, 0.28);
+  }
+
+  .quick-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    background: #ffeb00;
+    border-radius: 11px;
+  }
+
+  .workspace-table th {
+    padding: 13px 15px;
+    color: #334d42;
+    background: #f8f9fa;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .workspace-table td {
+    padding: 14px 15px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 767.98px) {
+    .workspace-banner {
+      padding: 22px;
+    }
+
+    .workspace-summary,
+    .workspace-card,
+    .module-card {
+      border-radius: 16px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include "dashboard/includes/my_workspace_nav.html" %}
+
+<main class="container-fluid px-3 px-lg-4 workspace-shell">
+  <section class="workspace-banner mb-4">
+    <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+      <div>
+        <div class="small text-uppercase fw-semibold mb-1" style="color: #ffeb00;">
+          My LTPOMS Workspace
+        </div>
+
+        <h1 class="h3 mb-2">
+          Welcome,
+          <span class="workspace-name">
+            {% if request.user.get_full_name %}
+              {{ request.user.get_full_name }}
+            {% else %}
+              {{ request.user.username }}
+            {% endif %}
+          </span>
+        </h1>
+
+        <div class="workspace-profile">
+          {% if user_employee %}
+            <span>
+              <i class="fa-solid fa-id-badge me-1" aria-hidden="true"></i>
+              {{ user_employee.employee_code }}
+            </span>
+          {% endif %}
+
+          {% if primary_position %}
+            <span>
+              <i class="fa-solid fa-user-tie me-1" aria-hidden="true"></i>
+              {{ primary_position }}
+            </span>
+
+            {% if primary_position.organization_unit %}
+              <span>
+                <i class="fa-solid fa-sitemap me-1" aria-hidden="true"></i>
+                {{ primary_position.organization_unit }}
+              </span>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+      <a class="btn btn-outline-light" href="{% url 'dashboard:home' %}">
+        <i class="fa-solid fa-house me-2" aria-hidden="true"></i>
+        Application Home
+      </a>
+    </div>
+  </section>
+
+  <section class="row g-4 mb-4" aria-label="Workspace summary">
+    <div class="col-xl-3 col-md-6">
+      <div class="workspace-summary h-100">
+        <div class="workspace-summary-icon">
+          <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+        </div>
+        <div class="workspace-summary-label">Pending Tasks</div>
+        <div class="workspace-summary-value">{{ workspace_totals.pending|default:0 }}</div>
+        <div class="text-muted small">Items requiring your action</div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="workspace-summary h-100">
+        <div class="workspace-summary-icon" style="color: #dc2626; background: rgba(220, 38, 38, 0.12);">
+          <i class="fa-solid fa-clock" aria-hidden="true"></i>
+        </div>
+        <div class="workspace-summary-label">Overdue</div>
+        <div class="workspace-summary-value">{{ workspace_totals.overdue|default:0 }}</div>
+        <div class="text-muted small">Tasks beyond the due date</div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="workspace-summary h-100">
+        <div class="workspace-summary-icon" style="color: #ffffff; background: #334d42;">
+          <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+        </div>
+        <div class="workspace-summary-label">Owned Records</div>
+        <div class="workspace-summary-value">{{ workspace_totals.owned|default:0 }}</div>
+        <div class="text-muted small">Active records owned or created by you</div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="workspace-summary h-100">
+        <div class="workspace-summary-icon" style="color: #2563eb; background: rgba(37, 99, 235, 0.12);">
+          <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+        </div>
+        <div class="workspace-summary-label">Accessible Modules</div>
+        <div class="workspace-summary-value">{{ workspace_totals.modules|default:0 }}</div>
+        <div class="text-muted small">Modules available to your roles</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row g-4 mb-4">
+    <div class="col-xl-8">
+      <div id="workspace-pending-tasks" class="workspace-card h-100">
+        <div class="workspace-card-header">
+          <div>
+            <i class="fa-solid fa-clipboard-check text-warning me-2" aria-hidden="true"></i>
+            My Pending Work
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover workspace-table mb-0">
+            <thead>
+              <tr>
+                <th>Module</th>
+                <th>Record</th>
+                <th>Required Action</th>
+                <th>Due Date</th>
+                <th class="text-end">Open</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in workspace_tasks %}
+                <tr{% if task.is_overdue %} class="task-overdue"{% endif %}>
+                  <td>
+                    <span class="task-module">
+                      <i class="{{ task.module_icon|default:'fa-solid fa-cube' }}" aria-hidden="true"></i>
+                      {{ task.module_name }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="fw-semibold">{{ task.record_number }}</div>
+                    <small class="text-muted">{{ task.title|truncatechars:55 }}</small>
+                  </td>
+                  <td>
+                    {{ task.task }}
+                    {% if task.workflow_step %}
+                      <div class="small text-muted">{{ task.workflow_step }}</div>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if task.due_date %}
+                      {{ task.due_date|date:"d M Y" }}
+                    {% else %}
+                      -
+                    {% endif %}
+                    {% if task.is_overdue %}
+                      <div class="small text-danger fw-semibold">Overdue</div>
+                    {% endif %}
+                  </td>
+                  <td class="text-end">
+                    <a class="btn btn-sm btn-primary" href="{{ task.url }}">Open</a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center py-5">
+                    <i class="fa-regular fa-circle-check fa-2x text-success mb-3" aria-hidden="true"></i>
+                    <div class="fw-semibold">No pending work</div>
+                    <div class="text-muted">No workflow tasks currently require your action.</div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-4">
+      <div class="workspace-card h-100">
+        <div class="workspace-card-header">
+          <div>
+            <i class="fa-solid fa-bolt text-warning me-2" aria-hidden="true"></i>
+            Quick Actions
+          </div>
+        </div>
+
+        <div class="p-3">
+          <div class="d-grid gap-3">
+            {% for action in workspace_quick_actions %}
+              <a class="quick-action" href="{{ action.url }}">
+                <span class="quick-action-icon">
+                  <i class="{{ action.icon|default:'fa-solid fa-bolt' }}" aria-hidden="true"></i>
+                </span>
+                <span>
+                  <span class="d-block fw-semibold">{{ action.label }}</span>
+                  <small class="text-muted">{{ action.description }}</small>
+                </span>
+              </a>
+            {% empty %}
+              <div class="text-center text-muted py-4">
+                No quick actions are available for your current roles.
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-4" aria-labelledby="accessible-modules-heading">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 id="accessible-modules-heading" class="h5 mb-0">
+        <i class="fa-solid fa-table-cells-large me-2" aria-hidden="true"></i>
+        My Accessible Modules
+      </h2>
+    </div>
+
+    <div class="row g-4">
+      {% for module in workspace_modules %}
+        <div class="col-xxl-3 col-xl-4 col-md-6">
+          <a href="{{ module.url }}" class="d-block h-100">
+            <article class="module-card h-100">
+              <div class="module-icon">
+                <i class="{{ module.icon|default:'fa-solid fa-cube' }}" aria-hidden="true"></i>
+              </div>
+              <h3 class="h6 module-title">{{ module.name }}</h3>
+              <p class="module-description mb-0">{{ module.description }}</p>
+              <div class="module-metrics">
+                <span>Open: <strong>{{ module.open|default:0 }}</strong></span>
+                <span>Pending: <strong>{{ module.pending|default:0 }}</strong></span>
+                <span{% if module.overdue %} class="text-danger"{% endif %}>
+                  Overdue: <strong>{{ module.overdue|default:0 }}</strong>
+                </span>
+              </div>
+            </article>
+          </a>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <div class="alert alert-info">
+            No LTPOMS modules are currently assigned to your user, roles, or positions.
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

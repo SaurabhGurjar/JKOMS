@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}CAPA Register | LTPOMS{% endblock %}
+
+{% block extra_css %}
+<style>
+  .capa-shell { padding: 24px 0 40px; }
+  .capa-toolbar { gap: .75rem; }
+  .capa-kpi { min-height: 112px; }
+  .capa-kpi .kpi-label { color: var(--muted-text); font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .capa-kpi .kpi-value { color: var(--secondary); font-weight: 800; }
+  .capa-table th { color: var(--secondary); background: rgba(51, 77, 66, .07); border-bottom: 2px solid rgba(51, 77, 66, .16); font-size: .78rem; text-transform: uppercase; white-space: nowrap; }
+  .capa-table td { vertical-align: middle; }
+  .capa-number { color: var(--secondary); font-weight: 700; }
+  .status-badge { border: 1px solid rgba(51, 77, 66, .15); border-radius: 999px; display: inline-flex; font-size: .75rem; font-weight: 700; padding: .35rem .65rem; white-space: nowrap; }
+  .status-DRAFT { background: #eef0ef; }
+  .status-SUBMITTED, .status-UNDER_REVIEW { background: #e9f2ff; color: #245a9a; }
+  .status-ROOT_CAUSE_ANALYSIS, .status-ACTION_PLAN_REVIEW { background: #fff3cd; color: #765b00; }
+  .status-ACTION_IN_PROGRESS, .status-VERIFICATION { background: #dff6f3; color: #17695f; }
+  .status-EFFECTIVENESS_REVIEW { background: #e9e1f8; color: #5e3d8f; }
+  .status-CLOSED { background: #dff1e4; color: #246536; }
+  .status-REJECTED, .status-CANCELLED { background: #fde8e8; color: #a22020; }
+  .priority-CRITICAL { color: #b91c1c; font-weight: 800; }
+  .priority-HIGH { color: #c2410c; font-weight: 700; }
+  .priority-MEDIUM { color: #8a6d00; font-weight: 700; }
+  .priority-LOW { color: #276749; font-weight: 700; }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container-fluid px-3 px-lg-4 capa-shell">
+  <section class="page-header mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+    <div>
+      <div class="small text-uppercase fw-semibold mb-1" style="color: var(--accent);">Quality Management</div>
+      <h1 class="h3 mb-2"><i class="fa-solid fa-list-check me-2"></i>CAPA Register</h1>
+      <p>Corrective and preventive action records available within the assigned organizational scope.</p>
+    </div>
+    <a href="{% url 'quality_capa:create' %}" class="btn btn-primary px-4">
+      <i class="fa-solid fa-plus me-2"></i>Create CAPA
+    </a>
+  </section>
+
+  <section class="glass-card p-3 p-lg-4 mb-4">
+    <form method="get" class="row g-3 align-items-end">
+      <div class="col-12 col-lg-5">
+        <label for="search" class="form-label">Search</label>
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input id="search" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="CAPA number, title or NC number">
+        </div>
+      </div>
+      <div class="col-6 col-lg-2">
+        <label for="status" class="form-label">Status</label>
+        <select id="status" name="status" class="form-select">
+          <option value="">All statuses</option>
+          {% for value, label in status_choices %}
+            <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-6 col-lg-2">
+        <label for="priority" class="form-label">Priority</label>
+        <select id="priority" name="priority" class="form-select">
+          <option value="">All priorities</option>
+          {% for value, label in priority_choices %}
+            <option value="{{ value }}" {% if request.GET.priority == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12 col-lg-3 d-flex capa-toolbar">
+        <button class="btn btn-secondary flex-grow-1" type="submit"><i class="fa-solid fa-filter me-2"></i>Apply</button>
+        <a class="btn btn-outline-primary" href="{% url 'quality_capa:list' %}" title="Clear filters"><i class="fa-solid fa-rotate-left"></i></a>
+      </div>
+    </form>
+  </section>
+
+  <section class="glass-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-hover capa-table mb-0">
+        <thead>
+          <tr>
+            <th>CAPA No.</th><th>Title</th><th>Unit</th><th>Status</th><th>Priority</th><th>Owner</th><th>Target</th><th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for capa in page_obj %}
+          <tr>
+            <td><a class="capa-number" href="{% url 'quality_capa:detail' capa.pk %}">{{ capa.capa_number }}</a></td>
+            <td>
+              <div class="fw-semibold">{{ capa.title }}</div>
+              {% if capa.nonconformity_number %}<small class="text-muted">NC: {{ capa.nonconformity_number }}</small>{% endif %}
+            </td>
+            <td>{{ capa.organization_unit }}</td>
+            <td><span class="status-badge status-{{ capa.status }}">{{ capa.get_status_display }}</span></td>
+            <td><span class="priority-{{ capa.priority }}">{{ capa.get_priority_display }}</span></td>
+            <td>{{ capa.owner_employee|default:"Not assigned" }}</td>
+            <td>
+              {{ capa.target_completion_date|date:"d M Y"|default:"-" }}
+              {% if capa.is_overdue %}<div class="small text-danger fw-semibold">Overdue</div>{% endif %}
+            </td>
+            <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{% url 'quality_capa:detail' capa.pk %}">Open</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center py-5"><i class="fa-regular fa-folder-open fa-2x mb-3 text-muted"></i><div class="fw-semibold">No CAPA records found</div><div class="text-muted">Change the filters or create a new CAPA.</div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="p-3 border-top" aria-label="CAPA pagination">
+      <ul class="pagination justify-content-end mb-0">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&priority={{ request.GET.priority|urlencode }}">Previous</a></li>{% endif %}
+        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&priority={{ request.GET.priority|urlencode }}">Next</a></li>{% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}
